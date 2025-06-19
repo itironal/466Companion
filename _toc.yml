@@ -1,0 +1,19 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+chapters:
+- file: newCh1
+- file: newCh2
+- file: newCh3
+#- file: newCh4
+#- file: newCh10
+#- file: 466-L6
+#- file: 466-L7
+#- file: 466-L8
+#- file: 466-L9
+#- file: 466-L10
+#- file: 466-L11
+#- file: 466-L12
+#- file: 466-L13
