@@ -1,0 +1,161 @@
+Traceback (most recent call last):
+  File "/opt/miniconda3/lib/python3.9/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/opt/miniconda3/lib/python3.9/site-packages/nbclient/client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/opt/miniconda3/lib/python3.9/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/opt/miniconda3/lib/python3.9/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/opt/miniconda3/lib/python3.9/asyncio/base_events.py", line 642, in run_until_complete
+    return future.result()
+  File "/opt/miniconda3/lib/python3.9/site-packages/nbclient/client.py", line 663, in async_execute
+    await self.async_execute_cell(
+  File "/opt/miniconda3/lib/python3.9/site-packages/nbclient/client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/opt/miniconda3/lib/python3.9/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+# Polygon approximation by splitting
+import numpy as np
+import matplotlib.pyplot as plt
+from skimage import color, filters, measure, morphology, io
+
+def perpendicular_distance(point, line_start, line_end):
+    if np.all(line_start == line_end):
+        return np.linalg.norm(point - line_start)
+    line = line_end - line_start
+    t = np.dot(point - line_start, line) / np.dot(line, line)
+    t = np.clip(t, 0, 1)
+    projection = line_start + t * line
+    return np.linalg.norm(point - projection)
+
+def split_polygon(points, start_idx, end_idx, threshold, result):
+    start_point = points[start_idx]
+    end_point = points[end_idx]
+    max_distance = -1
+    index_of_max = -1
+    for i in range(start_idx + 1, end_idx):
+        dist = perpendicular_distance(points[i], start_point, end_point)
+        if dist > max_distance:
+            max_distance = dist
+            index_of_max = i
+    if max_distance > threshold:
+        split_polygon(points, start_idx, index_of_max, threshold, result)
+        split_polygon(points, index_of_max, end_idx, threshold, result)
+    else:
+        result.append(end_idx)
+
+def polygon_approximation_with_splitting(boundary_points, threshold):
+    result = [0]
+    split_polygon(boundary_points, 0, len(boundary_points) - 1, threshold, result)
+    return boundary_points[result]
+
+image_rgb = io.imread("20.jpg")  
+image_rgb = image_rgb[500:1350, 600:1400]
+# Convert to grayscale
+gray = color.rgb2gray(image_rgb)
+
+# Apply thresholding (Otsu)
+thresh = filters.threshold_otsu(gray)
+binary = gray < thresh  # Invert if needed depending on your object
+
+# Clean mask
+binary = morphology.remove_small_objects(binary, min_size=500)
+binary = morphology.binary_closing(binary, morphology.disk(3))
+binary = morphology.remove_small_holes(binary, area_threshold=1000)
+
+# Find contours
+contours = measure.find_contours(binary, 0.5)
+contour = max(contours, key=len)  # largest one
+
+# Downsample for speed
+contour = contour[::5]
+
+# Polygon approximation
+threshold = 10.0
+approx_polygon = polygon_approximation_with_splitting(contour, threshold)
+
+# Plot original and approximated contours separately
+fig, axes = plt.subplots(1, 2, figsize=(14, 7))
+
+# Original Boundary Visualization
+plt.subplot(1, 2, 1)
+plt.imshow(image_rgb)
+plt.plot(contour[:, 1], contour[:, 0], linestyle='--', color='blue', linewidth=1.5)
+plt.title("Original Boundary")
+plt.axis('off')
+
+# Approximated Polygon Visualization
+plt.subplot(1, 2, 2)
+plt.imshow(image_rgb)
+plt.plot([p[1] for p in approx_polygon], [p[0] for p in approx_polygon], 'ro-', linewidth=2)
+plt.title("Approximated Polygon")
+plt.axis('off')
+
+plt.tight_layout()
+plt.show()
+
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mFileNotFoundError[0m                         Traceback (most recent call last)
+Input [0;32mIn [1][0m, in [0;36m<cell line: 36>[0;34m()[0m
+[1;32m     33[0m     split_polygon(boundary_points, [38;5;241m0[39m, [38;5;28mlen[39m(boundary_points) [38;5;241m-[39m [38;5;241m1[39m, threshold, result)
+[1;32m     34[0m     [38;5;28;01mreturn[39;00m boundary_points[result]
+[0;32m---> 36[0m image_rgb [38;5;241m=[39m [43mio[49m[38;5;241;43m.[39;49m[43mimread[49m[43m([49m[38;5;124;43m"[39;49m[38;5;124;43m20.jpg[39;49m[38;5;124;43m"[39;49m[43m)[49m  
+[1;32m     37[0m image_rgb [38;5;241m=[39m image_rgb[[38;5;241m500[39m:[38;5;241m1350[39m, [38;5;241m600[39m:[38;5;241m1400[39m]
+[1;32m     38[0m [38;5;66;03m# Convert to grayscale[39;00m
+
+File [0;32m/opt/miniconda3/lib/python3.9/site-packages/skimage/io/_io.py:53[0m, in [0;36mimread[0;34m(fname, as_gray, plugin, **plugin_args)[0m
+[1;32m     50[0m         plugin [38;5;241m=[39m [38;5;124m'[39m[38;5;124mtifffile[39m[38;5;124m'[39m
+[1;32m     52[0m [38;5;28;01mwith[39;00m file_or_url_context(fname) [38;5;28;01mas[39;00m fname:
+[0;32m---> 53[0m     img [38;5;241m=[39m [43mcall_plugin[49m[43m([49m[38;5;124;43m'[39;49m[38;5;124;43mimread[39;49m[38;5;124;43m'[39;49m[43m,[49m[43m [49m[43mfname[49m[43m,[49m[43m [49m[43mplugin[49m[38;5;241;43m=[39;49m[43mplugin[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mplugin_args[49m[43m)[49m
+[1;32m     55[0m [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m [38;5;28mhasattr[39m(img, [38;5;124m'[39m[38;5;124mndim[39m[38;5;124m'[39m):
+[1;32m     56[0m     [38;5;28;01mreturn[39;00m img
+
+File [0;32m/opt/miniconda3/lib/python3.9/site-packages/skimage/io/manage_plugins.py:207[0m, in [0;36mcall_plugin[0;34m(kind, *args, **kwargs)[0m
+[1;32m    203[0m     [38;5;28;01mexcept[39;00m [38;5;167;01mIndexError[39;00m:
+[1;32m    204[0m         [38;5;28;01mraise[39;00m [38;5;167;01mRuntimeError[39;00m([38;5;124m'[39m[38;5;124mCould not find the plugin [39m[38;5;124m"[39m[38;5;132;01m%s[39;00m[38;5;124m"[39m[38;5;124m for [39m[38;5;132;01m%s[39;00m[38;5;124m.[39m[38;5;124m'[39m [38;5;241m%[39m
+[1;32m    205[0m                            (plugin, kind))
+[0;32m--> 207[0m [38;5;28;01mreturn[39;00m [43mfunc[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+
+File [0;32m/opt/miniconda3/lib/python3.9/site-packages/skimage/io/_plugins/imageio_plugin.py:15[0m, in [0;36mimread[0;34m(*args, **kwargs)[0m
+[1;32m     13[0m [38;5;129m@wraps[39m(imageio_imread)
+[1;32m     14[0m [38;5;28;01mdef[39;00m [38;5;21mimread[39m([38;5;241m*[39margs, [38;5;241m*[39m[38;5;241m*[39mkwargs):
+[0;32m---> 15[0m     [38;5;28;01mreturn[39;00m np[38;5;241m.[39masarray([43mimageio_imread[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m)
+
+File [0;32m/opt/miniconda3/lib/python3.9/site-packages/imageio/v2.py:200[0m, in [0;36mimread[0;34m(uri, format, **kwargs)[0m
+[1;32m    197[0m imopen_args [38;5;241m=[39m decypher_format_arg([38;5;28mformat[39m)
+[1;32m    198[0m imopen_args[[38;5;124m"[39m[38;5;124mlegacy_mode[39m[38;5;124m"[39m] [38;5;241m=[39m [38;5;28;01mTrue[39;00m
+[0;32m--> 200[0m [38;5;28;01mwith[39;00m [43mimopen[49m[43m([49m[43muri[49m[43m,[49m[43m [49m[38;5;124;43m"[39;49m[38;5;124;43mri[39;49m[38;5;124;43m"[39;49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mimopen_args[49m[43m)[49m [38;5;28;01mas[39;00m file:
+[1;32m    201[0m     [38;5;28;01mreturn[39;00m file[38;5;241m.[39mread(index[38;5;241m=[39m[38;5;241m0[39m, [38;5;241m*[39m[38;5;241m*[39mkwargs)
+
+File [0;32m/opt/miniconda3/lib/python3.9/site-packages/imageio/core/imopen.py:118[0m, in [0;36mimopen[0;34m(uri, io_mode, plugin, extension, format_hint, legacy_mode, **kwargs)[0m
+[1;32m    116[0m     request[38;5;241m.[39mformat_hint [38;5;241m=[39m format_hint
+[1;32m    117[0m [38;5;28;01melse[39;00m:
+[0;32m--> 118[0m     request [38;5;241m=[39m [43mRequest[49m[43m([49m[43muri[49m[43m,[49m[43m [49m[43mio_mode[49m[43m,[49m[43m [49m[43mformat_hint[49m[38;5;241;43m=[39;49m[43mformat_hint[49m[43m,[49m[43m [49m[43mextension[49m[38;5;241;43m=[39;49m[43mextension[49m[43m)[49m
+[1;32m    120[0m source [38;5;241m=[39m [38;5;124m"[39m[38;5;124m<bytes>[39m[38;5;124m"[39m [38;5;28;01mif[39;00m [38;5;28misinstance[39m(uri, [38;5;28mbytes[39m) [38;5;28;01melse[39;00m uri
+[1;32m    122[0m [38;5;66;03m# fast-path based on plugin[39;00m
+[1;32m    123[0m [38;5;66;03m# (except in legacy mode)[39;00m
+
+File [0;32m/opt/miniconda3/lib/python3.9/site-packages/imageio/core/request.py:248[0m, in [0;36mRequest.__init__[0;34m(self, uri, mode, extension, format_hint, **kwargs)[0m
+[1;32m    245[0m     [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m([38;5;124mf[39m[38;5;124m"[39m[38;5;124mInvalid Request.Mode: [39m[38;5;132;01m{[39;00mmode[38;5;132;01m}[39;00m[38;5;124m"[39m)
+[1;32m    247[0m [38;5;66;03m# Parse what was given[39;00m
+[0;32m--> 248[0m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_parse_uri[49m[43m([49m[43muri[49m[43m)[49m
+[1;32m    250[0m [38;5;66;03m# Set extension[39;00m
+[1;32m    251[0m [38;5;28;01mif[39;00m extension [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m:
+
+File [0;32m/opt/miniconda3/lib/python3.9/site-packages/imageio/core/request.py:407[0m, in [0;36mRequest._parse_uri[0;34m(self, uri)[0m
+[1;32m    404[0m [38;5;28;01mif[39;00m is_read_request:
+[1;32m    405[0m     [38;5;66;03m# Reading: check that the file exists (but is allowed a dir)[39;00m
+[1;32m    406[0m     [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m os[38;5;241m.[39mpath[38;5;241m.[39mexists(fn):
+[0;32m--> 407[0m         [38;5;28;01mraise[39;00m [38;5;167;01mFileNotFoundError[39;00m([38;5;124m"[39m[38;5;124mNo such file: [39m[38;5;124m'[39m[38;5;132;01m%s[39;00m[38;5;124m'[39m[38;5;124m"[39m [38;5;241m%[39m fn)
+[1;32m    408[0m [38;5;28;01melse[39;00m:
+[1;32m    409[0m     [38;5;66;03m# Writing: check that the directory to write to does exist[39;00m
+[1;32m    410[0m     dn [38;5;241m=[39m os[38;5;241m.[39mpath[38;5;241m.[39mdirname(fn)
+
+[0;31mFileNotFoundError[0m: No such file: '/Users/itir/Documents/466CompanionBook/466Companion/20.jpg'
+FileNotFoundError: No such file: '/Users/itir/Documents/466CompanionBook/466Companion/20.jpg'
+

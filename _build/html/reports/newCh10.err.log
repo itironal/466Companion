@@ -1,0 +1,92 @@
+Traceback (most recent call last):
+  File "/opt/miniconda3/lib/python3.9/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/opt/miniconda3/lib/python3.9/site-packages/nbclient/client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/opt/miniconda3/lib/python3.9/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/opt/miniconda3/lib/python3.9/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/opt/miniconda3/lib/python3.9/asyncio/base_events.py", line 642, in run_until_complete
+    return future.result()
+  File "/opt/miniconda3/lib/python3.9/site-packages/nbclient/client.py", line 663, in async_execute
+    await self.async_execute_cell(
+  File "/opt/miniconda3/lib/python3.9/site-packages/nbclient/client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/opt/miniconda3/lib/python3.9/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+# Dilation
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+from skimage.morphology import square, binary_dilation
+
+# Load the image
+image_path = "kilim1.png"  
+grayscale_image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+_, binary_image = cv2.threshold(grayscale_image, 127, 255, cv2.THRESH_BINARY)
+
+# Convert the high-res image to binary (thresholding)
+binary_image = cv2.bitwise_not(binary_image)
+
+# Define RGB values for white and burgundy
+white_rgb = [255, 255, 255]  
+burgundy_rgb = [128, 0, 32]     
+
+# Create a color image from the binary image
+colored_binary_image = np.zeros((binary_image.shape[0], binary_image.shape[1], 3), dtype=np.uint8)
+colored_binary_image[binary_image == 255] = white_rgb  
+colored_binary_image[binary_image == 0] = burgundy_rgb    
+
+output_filename = "kilim_bordo.png"
+cv2.imwrite(output_filename, cv2.cvtColor(colored_binary_image, cv2.COLOR_RGB2BGR))  # Save in BGR format for OpenCV
+
+
+# Define the filter size
+filter_size = 5
+se = square(filter_size)
+
+# Perform the binary operation on the high-res image
+output_image = binary_dilation(binary_image, se)
+
+# Convert processed binary output to RGB for saving
+output_image_rgb = np.zeros((output_image.shape[0], output_image.shape[1], 3), dtype=np.uint8)
+output_image_rgb[output_image == 0] = burgundy_rgb    
+output_image_rgb[output_image == 1] = white_rgb     
+
+# Display the colored binary and dilated images
+plt.figure(figsize=(10, 7))
+
+plt.subplot(1, 2, 1)
+plt.title("Colored Binary Image", fontsize=14)
+plt.imshow(colored_binary_image)
+plt.axis('off')
+
+plt.subplot(1, 2, 2)
+plt.title(f"Dilation with Filter Size {filter_size}", fontsize=14)
+plt.imshow(output_image_rgb)
+plt.axis('off')
+
+# Save the high-res output image as a PNG file with the color mapping
+operation_name='dilation'
+output_filename = f"{operation_name}_{filter_size}.png"
+cv2.imwrite(output_filename, cv2.cvtColor(output_image_rgb, cv2.COLOR_RGB2BGR))  # Save in BGR format for OpenCV
+
+plt.show()
+
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mAttributeError[0m                            Traceback (most recent call last)
+Input [0;32mIn [1][0m, in [0;36m<cell line: 20>[0;34m()[0m
+[1;32m     17[0m burgundy_rgb [38;5;241m=[39m [[38;5;241m128[39m, [38;5;241m0[39m, [38;5;241m32[39m]     
+[1;32m     19[0m [38;5;66;03m# Create a color image from the binary image[39;00m
+[0;32m---> 20[0m colored_binary_image [38;5;241m=[39m np[38;5;241m.[39mzeros(([43mbinary_image[49m[38;5;241;43m.[39;49m[43mshape[49m[[38;5;241m0[39m], binary_image[38;5;241m.[39mshape[[38;5;241m1[39m], [38;5;241m3[39m), dtype[38;5;241m=[39mnp[38;5;241m.[39muint8)
+[1;32m     21[0m colored_binary_image[binary_image [38;5;241m==[39m [38;5;241m255[39m] [38;5;241m=[39m white_rgb  
+[1;32m     22[0m colored_binary_image[binary_image [38;5;241m==[39m [38;5;241m0[39m] [38;5;241m=[39m burgundy_rgb    
+
+[0;31mAttributeError[0m: 'NoneType' object has no attribute 'shape'
+AttributeError: 'NoneType' object has no attribute 'shape'
+
