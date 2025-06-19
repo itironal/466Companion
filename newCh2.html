@@ -1,0 +1,622 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Chapter 2 Human Visual System and Image Perception &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'newCh2';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Chapter 3: Mathematical Tools for Image Processing" href="newCh3.html" />
+    <link rel="prev" title="Chapter 1 Introduction" href="newCh1.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">My sample book</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to your Jupyter Book
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="newCh1.html"><strong>Chapter 1 Introduction</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Chapter 2 Human Visual System and Image Perception</strong></a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="newCh3.html">Chapter 3: Mathematical Tools for Image Processing</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=lab/tree/newCh2.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/executablebooks/jupyter-book/blob/master/newCh2.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/newCh2.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Chapter 2 Human Visual System and Image Perception</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Chapter 2 Human Visual System and Image Perception</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-1-the-experiment-about-the-decomposition-of-white-light-by-isaac-newton"><strong>Video 2.1: The experiment about the decomposition of white light by Isaac Newton.</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-2-alhazen-not-available"><strong>Video 2.2: Alhazen (not available)</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-3-the-history-of-light"><strong>Video 2.3: The history of light</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-4-how-your-eyes-make-sense-of-the-world"><strong>Video 2.4: How your eyes make sense of the world</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-5-color-perception-based-on-surroundings"><strong>Video 2.5: Color perception based on surroundings</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-6-how-signal-travels-through-a-neuron"><strong>Video 2.6: How signal travels through a neuron</strong></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-2-1"><strong>Programming exercise 2.1:</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-7-working-principle-of-a-single-pixel-camera-not-available"><strong>Video 2.7: Working principle of a single pixel camera (not available)</strong></a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="chapter-2-human-visual-system-and-image-perception">
+<h1><strong>Chapter 2 Human Visual System and Image Perception</strong><a class="headerlink" href="#chapter-2-human-visual-system-and-image-perception" title="Permalink to this heading">#</a></h1>
+<p>This is the companion file for Chapter 2.</p>
+<section id="video-2-1-the-experiment-about-the-decomposition-of-white-light-by-isaac-newton">
+<h2><strong>Video 2.1: The experiment about the decomposition of white light by Isaac Newton.</strong><a class="headerlink" href="#video-2-1-the-experiment-about-the-decomposition-of-white-light-by-isaac-newton" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://www.youtube.com/watch?v=6_HroTxaZe0"><img alt="The experiment about the decomposition of white light by Isaac Newton" src="https://img.youtube.com/vi/6_HroTxaZe0/0.jpg" /></a></p>
+<p><em>The experiment about the decomposition of white light by Isaac Newton.</em></p>
+</section>
+<section id="video-2-2-alhazen-not-available">
+<h2><strong>Video 2.2: Alhazen (not available)</strong><a class="headerlink" href="#video-2-2-alhazen-not-available" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://www.youtube.com/watch?v=5h6795eqhgU"><img alt="Alhazen was a great scientist of Medieval Islam. He is the first to bring scientific methodologies to study and understand the laws of nature." src="https://img.youtube.com/vi/5h6795eqhgU/0.jpg" /></a></p>
+</section>
+<section id="video-2-3-the-history-of-light">
+<h2><strong>Video 2.3: The history of light</strong><a class="headerlink" href="#video-2-3-the-history-of-light" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://www.youtube.com/watch?v=OLCqaWaV6jA"><img alt="The history of light" src="https://img.youtube.com/vi/OLCqaWaV6jA/0.jpg" /></a></p>
+<p><em>The history of light.</em></p>
+</section>
+<section id="video-2-4-how-your-eyes-make-sense-of-the-world">
+<h2><strong>Video 2.4: How your eyes make sense of the world</strong><a class="headerlink" href="#video-2-4-how-your-eyes-make-sense-of-the-world" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://www.youtube.com/watch?v=hsh2kPdgazo"><img alt="This video illustrates how our eyes work to generate a digital image out of visible light." src="https://img.youtube.com/vi/hsh2kPdgazo/0.jpg" /></a></p>
+<p><em>This video illustrates how our eyes work to generate a digital image out of visible light.</em></p>
+</section>
+<section id="video-2-5-color-perception-based-on-surroundings">
+<h2><strong>Video 2.5: Color perception based on surroundings</strong><a class="headerlink" href="#video-2-5-color-perception-based-on-surroundings" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://www.youtube.com/watch?v=n_5g9URYGo4"><img alt="When the color is coded in the brain, it is coded with respect to its surroundings. Carefully, watch the video and observe how you perceive the exact same color as different, when the background changes." src="https://img.youtube.com/vi/n_5g9URYGo4/0.jpg" /></a></p>
+<p><em>When the color is coded in the brain, it is coded with respect to its surroundings. Carefully, watch the video and observe how you perceive the exact same color as different, when the background changes.</em></p>
+</section>
+<section id="video-2-6-how-signal-travels-through-a-neuron">
+<h2><strong>Video 2.6: How signal travels through a neuron</strong><a class="headerlink" href="#video-2-6-how-signal-travels-through-a-neuron" title="Permalink to this heading">#</a></h2>
+<figure>
+    <p align="center">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/b2ctEsGEpe0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </p>
+    <figcaption>
+        Learn more about how signal travels through a neuron.
+    </figcaption>
+</figure></section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="programming-exercise-2-1">
+<h1><strong>Programming exercise 2.1:</strong><a class="headerlink" href="#programming-exercise-2-1" title="Permalink to this heading">#</a></h1>
+<p>Let us present two spots of light, each with an intensity of 100 units, to an observer. Suppose that the Just Noticeable Difference (JND) threshold is ( \Delta I(100) = 10 ) to discriminate the brightness levels of two spots. If the light intensity of the two spots were 150 units, what is the corresponding ( \Delta I(150) )?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">IPython</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Math</span><span class="p">,</span> <span class="n">Markdown</span>
+
+<span class="c1"># Define the initial intensity and JND for the example</span>
+<span class="n">initial_intensity_1</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">delta_I_1</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="c1"># Calculate k (the constant)</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">delta_I_1</span> <span class="o">/</span> <span class="n">initial_intensity_1</span>
+
+<span class="c1"># New intensity to evaluate</span>
+<span class="n">initial_intensity_2</span> <span class="o">=</span> <span class="mi">150</span>
+
+<span class="c1"># Calculate the JND for the new intensity using Weber&#39;s Law</span>
+<span class="n">delta_I_2</span> <span class="o">=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">initial_intensity_2</span>
+
+<span class="c1"># Display the results using Math for proper formula rendering</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;**Weber&#39;s Law Calculation:**&quot;</span><span class="p">))</span>
+
+<span class="c1"># Display each part of the calculation step-by-step</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;k = </span><span class="se">\\</span><span class="s2">frac</span><span class="se">{{\\</span><span class="s2">Delta I(I_1)</span><span class="se">}}{{</span><span class="s2">I_1</span><span class="se">}}</span><span class="s2"> = </span><span class="se">\\</span><span class="s2">frac</span><span class="se">{{</span><span class="si">{</span><span class="n">delta_I_1</span><span class="si">}</span><span class="se">}}{{</span><span class="si">{</span><span class="n">initial_intensity_1</span><span class="si">}</span><span class="se">}}</span><span class="s2"> = </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Delta I(I_2) = k </span><span class="se">\\</span><span class="s2">times I_2 = </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> </span><span class="se">\\</span><span class="s2">times </span><span class="si">{</span><span class="n">initial_intensity_2</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">delta_I_2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+
+<span class="c1"># Display final result</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;Thus, the corresponding JND threshold for an intensity of 150 units is&quot;</span><span class="p">))</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Delta I(150) = </span><span class="si">{</span><span class="n">delta_I_2</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<p><strong>Weber’s Law Calculation:</strong></p>
+<div class="output text_latex math notranslate nohighlight">
+\[\displaystyle k = \frac{\Delta I(I_1)}{I_1} = \frac{10}{100} = 0.1\]</div>
+<div class="output text_latex math notranslate nohighlight">
+\[\displaystyle \Delta I(I_2) = k \times I_2 = 0.1 \times 150 = 15.0\]</div>
+<p>Thus, the corresponding JND threshold for an intensity of 150 units is</p>
+<div class="output text_latex math notranslate nohighlight">
+\[\displaystyle \Delta I(150) = 15.0.\]</div>
+</div>
+</div>
+<section id="video-2-7-working-principle-of-a-single-pixel-camera-not-available">
+<h2><strong>Video 2.7: Working principle of a single pixel camera (not available)</strong><a class="headerlink" href="#video-2-7-working-principle-of-a-single-pixel-camera-not-available" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://www.youtube.com/watch?v=y-jIzuHBJTo"><img alt="A short video which explains the working principle of a single pixel camera." src="https://img.youtube.com/vi/y-jIzuHBJTo/0.jpg" /></a></p>
+<p><em>A short video which explains the working principle of a single pixel camera.</em></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "executablebooks/jupyter-book",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="newCh1.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Chapter 1 Introduction</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="newCh3.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 3: Mathematical Tools for Image Processing</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Chapter 2 Human Visual System and Image Perception</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-1-the-experiment-about-the-decomposition-of-white-light-by-isaac-newton"><strong>Video 2.1: The experiment about the decomposition of white light by Isaac Newton.</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-2-alhazen-not-available"><strong>Video 2.2: Alhazen (not available)</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-3-the-history-of-light"><strong>Video 2.3: The history of light</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-4-how-your-eyes-make-sense-of-the-world"><strong>Video 2.4: How your eyes make sense of the world</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-5-color-perception-based-on-surroundings"><strong>Video 2.5: Color perception based on surroundings</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-6-how-signal-travels-through-a-neuron"><strong>Video 2.6: How signal travels through a neuron</strong></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-2-1"><strong>Programming exercise 2.1:</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-7-working-principle-of-a-single-pixel-camera-not-available"><strong>Video 2.7: Working principle of a single pixel camera (not available)</strong></a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
