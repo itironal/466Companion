@@ -64,6 +64,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'newCh6';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Chapter 10: Morphological Image Processing" href="newCh10.html" />
+    <link rel="prev" title="Chapter 5: Spatial Image Enhancement by Filtering: Convolution" href="newCh5.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -134,8 +136,14 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+    
+    
+      
+    
+    
+    <img src="_static/ImageProcessingLogo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/ImageProcessingLogo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
   
-    <p class="title logo__title">My sample book</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -148,11 +156,18 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="newCh1.html"><strong>Chapter 1 Introduction</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh2.html"><strong>Chapter 2 Human Visual System and Image Perception</strong></a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="newCh3.html">Chapter 3: Mathematical Tools for Image Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh4.html">Chapter 4: Color Image Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh5.html">Chapter 5: Spatial Image Enhancement by Filtering: Convolution</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 6: Image Transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh10.html">Chapter 10: Morphological Image Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh11.html"><strong>Chapter 11 Image Segmentation</strong></a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="newCh13.html">Chapter 13:</a></li>
 </ul>
 
     </div>
@@ -207,7 +222,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=lab/tree/newCh6.ipynb" target="_blank"
+      <li><a href="https://mybinder.org/v2/gh/itironal/466Companion/master?urlpath=lab/tree/newCh6.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch onBinder"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -225,7 +240,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://colab.research.google.com/github/executablebooks/jupyter-book/blob/master/newCh6.ipynb" target="_blank"
+      <li><a href="https://colab.research.google.com/github/itironal/466Companion/blob/master/newCh6.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch onColab"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -684,6 +699,11 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Low pass filtering in the frequency spectrum </span>
 
+<span class="c1"># Load and preprocess the image</span>
+<span class="o">!</span>wget -cq https://raw.githubusercontent.com/hazalmogultay/466Images/master/W3/redmushroom.jpeg
+<span class="n">image_rgb</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;redmushroom.jpeg&#39;</span><span class="p">)[</span><span class="mi">800</span><span class="p">:</span><span class="mi">1311</span><span class="p">,</span> <span class="mi">513</span><span class="p">:</span><span class="mi">1024</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Load full RGB image</span>
+<span class="n">image_gray</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">rgb2gray</span><span class="p">(</span><span class="n">image_rgb</span><span class="p">)</span>  <span class="c1"># Convert to grayscale for frequency processing</span>
+
 <span class="c1"># Perform the Fourier Transform of the grayscale image to move to frequency domain</span>
 <span class="n">freq_image</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">image_gray</span><span class="p">)</span>
 
@@ -738,9 +758,9 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_48399/87284326.py:35: ComplexWarning: Casting complex values to real discards the imaginary part
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_57509/452095794.py:40: ComplexWarning: Casting complex values to real discards the imaginary part
   plt.imshow((10*np.log10(1 + freq_image)).astype(int), cmap=&#39;gray&#39;)
-/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_48399/87284326.py:47: ComplexWarning: Casting complex values to real discards the imaginary part
+/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_57509/452095794.py:52: ComplexWarning: Casting complex values to real discards the imaginary part
   plt.imshow((10*np.log10(1+ low_pass)).astype(int), cmap=&#39;gray&#39;)
 </pre></div>
 </div>
@@ -757,6 +777,11 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># High pass filtering in the frequency spectrum </span>
+
+<span class="c1"># Load and preprocess the image</span>
+<span class="o">!</span>wget -cq https://raw.githubusercontent.com/hazalmogultay/466Images/master/W3/redmushroom.jpeg
+<span class="n">image_rgb</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;redmushroom.jpeg&#39;</span><span class="p">)[</span><span class="mi">800</span><span class="p">:</span><span class="mi">1311</span><span class="p">,</span> <span class="mi">513</span><span class="p">:</span><span class="mi">1024</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Load full RGB image</span>
+<span class="n">image_gray</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">rgb2gray</span><span class="p">(</span><span class="n">image_rgb</span><span class="p">)</span>  <span class="c1"># Convert to grayscale for frequency processing</span>
 
 <span class="c1"># Perform the Fourier Transform of the grayscale image to move to frequency domain</span>
 <span class="n">freq_image</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">image_gray</span><span class="p">)</span>
@@ -810,9 +835,9 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_48399/1253848337.py:33: ComplexWarning: Casting complex values to real discards the imaginary part
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_57509/1248034969.py:38: ComplexWarning: Casting complex values to real discards the imaginary part
   plt.imshow((10*np.log10(1 + freq_image)).astype(int), cmap=&#39;gray&#39;)
-/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_48399/1253848337.py:45: ComplexWarning: Casting complex values to real discards the imaginary part
+/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_57509/1248034969.py:50: ComplexWarning: Casting complex values to real discards the imaginary part
   plt.imshow((10*np.log10(1+ high_pass)).astype(int), cmap=&#39;gray&#39;)
 </pre></div>
 </div>
@@ -829,6 +854,11 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Band pass filtering in the frequency spectrum </span>
+
+<span class="c1"># Load and preprocess the image</span>
+<span class="o">!</span>wget -cq https://raw.githubusercontent.com/hazalmogultay/466Images/master/W3/redmushroom.jpeg
+<span class="n">image_rgb</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;redmushroom.jpeg&#39;</span><span class="p">)[</span><span class="mi">800</span><span class="p">:</span><span class="mi">1311</span><span class="p">,</span> <span class="mi">513</span><span class="p">:</span><span class="mi">1024</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Load full RGB image</span>
+<span class="n">image_gray</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">rgb2gray</span><span class="p">(</span><span class="n">image_rgb</span><span class="p">)</span>  <span class="c1"># Convert to grayscale for frequency processing</span>
 
 <span class="c1"># Perform the Fourier Transform of the grayscale image to move to the frequency domain</span>
 <span class="n">freq_image</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">image_gray</span><span class="p">)</span>
@@ -889,9 +919,9 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_48399/3163777214.py:40: ComplexWarning: Casting complex values to real discards the imaginary part
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_57509/2906406773.py:45: ComplexWarning: Casting complex values to real discards the imaginary part
   plt.imshow((10*np.log10(1 + freq_image)).astype(int), cmap=&#39;gray&#39;)
-/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_48399/3163777214.py:52: ComplexWarning: Casting complex values to real discards the imaginary part
+/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_57509/2906406773.py:57: ComplexWarning: Casting complex values to real discards the imaginary part
   plt.imshow((10*np.log10(1+ band_pass)).astype(int), cmap=&#39;gray&#39;)
 </pre></div>
 </div>
@@ -905,7 +935,7 @@ document.write(`
     {
         requestKernel: true,
         binderOptions: {
-            repo: "executablebooks/jupyter-book",
+            repo: "itironal/466Companion",
             ref: "master",
         },
         codeMirrorConfig: {
@@ -932,6 +962,24 @@ document.write(`
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="newCh5.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chapter 5: Spatial Image Enhancement by Filtering: Convolution</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="newCh10.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 10: Morphological Image Processing</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div></div>
   
 </div>

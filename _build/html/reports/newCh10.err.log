@@ -17,76 +17,61 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-# Dilation
 import cv2
-import matplotlib.pyplot as plt
 import numpy as np
-from skimage.morphology import square, binary_dilation
+import matplotlib.pyplot as plt
+from skimage.morphology import opening, erosion, dilation, disk, closing
 
-# Load the image
-image_path = "kilim1.png"  
-grayscale_image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-_, binary_image = cv2.threshold(grayscale_image, 127, 255, cv2.THRESH_BINARY)
-
-# Convert the high-res image to binary (thresholding)
-binary_image = cv2.bitwise_not(binary_image)
-
-# Define RGB values for white and burgundy
-white_rgb = [255, 255, 255]  
-burgundy_rgb = [128, 0, 32]     
-
-# Create a color image from the binary image
-colored_binary_image = np.zeros((binary_image.shape[0], binary_image.shape[1], 3), dtype=np.uint8)
-colored_binary_image[binary_image == 255] = white_rgb  
-colored_binary_image[binary_image == 0] = burgundy_rgb    
-
-output_filename = "kilim_bordo.png"
-cv2.imwrite(output_filename, cv2.cvtColor(colored_binary_image, cv2.COLOR_RGB2BGR))  # Save in BGR format for OpenCV
+# Load Image
+#image_color = cv2.imread("coins2.jpg")
+#image_color = cv2.cvtColor(image_color, cv2.COLOR_BGR2RGB)
+#image_color = cv2.resize(image_color, None, fx=0.125, fy=0.125, interpolation=cv2.INTER_AREA)
+#image_color = image_color[115:, :]
+#cv2.imwrite("coins3.png", cv2.cvtColor(image_color, cv2.COLOR_RGB2BGR))
 
 
-# Define the filter size
-filter_size = 5
-se = square(filter_size)
+image = cv2.imread("images/coins3.png", cv2.IMREAD_GRAYSCALE)
+h, w = image.shape
+print(h,w)
 
-# Perform the binary operation on the high-res image
-output_image = binary_dilation(binary_image, se)
+# Apply Thresholding
+_, binary = cv2.threshold(image, 121, 255, cv2.THRESH_BINARY_INV)  # Invert for better processing
 
-# Convert processed binary output to RGB for saving
-output_image_rgb = np.zeros((output_image.shape[0], output_image.shape[1], 3), dtype=np.uint8)
-output_image_rgb[output_image == 0] = burgundy_rgb    
-output_image_rgb[output_image == 1] = white_rgb     
+# Remove Textures using Morphological Closing
+closed = closing(binary, disk(2))  # Adjust kernel size if needed
 
-# Display the colored binary and dilated images
-plt.figure(figsize=(10, 7))
 
-plt.subplot(1, 2, 1)
-plt.title("Colored Binary Image", fontsize=14)
-plt.imshow(colored_binary_image)
-plt.axis('off')
+# Remove Small Objects (Small Coins) using Erosion → Dilation
+eroded = erosion(closed, disk(32))
+dilated = dilation(eroded, disk(33))
 
-plt.subplot(1, 2, 2)
-plt.title(f"Dilation with Filter Size {filter_size}", fontsize=14)
-plt.imshow(output_image_rgb)
-plt.axis('off')
 
-# Save the high-res output image as a PNG file with the color mapping
-operation_name='dilation'
-output_filename = f"{operation_name}_{filter_size}.png"
-cv2.imwrite(output_filename, cv2.cvtColor(output_image_rgb, cv2.COLOR_RGB2BGR))  # Save in BGR format for OpenCV
+# Display the final image
+plt.figure(figsize=(15, 8))
+plt.subplot(151), plt.imshow(image_color, cmap="gray")
+plt.title('Input image', fontsize=14), plt.axis('off')
+plt.subplot(152), plt.imshow(closed, cmap="gray")
+plt.title('Binary image', fontsize=14), plt.axis('off')
+plt.subplot(153), plt.imshow(eroded, cmap="gray")
+plt.title('Eroded', fontsize=14), plt.axis('off')
+plt.subplot(154), plt.imshow(dilated, cmap="gray")
+plt.title('Only large coins', fontsize=14), plt.axis('off')
 
+plt.axis("off")
 plt.show()
+
 
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mAttributeError[0m                            Traceback (most recent call last)
-Input [0;32mIn [1][0m, in [0;36m<cell line: 20>[0;34m()[0m
-[1;32m     17[0m burgundy_rgb [38;5;241m=[39m [[38;5;241m128[39m, [38;5;241m0[39m, [38;5;241m32[39m]     
-[1;32m     19[0m [38;5;66;03m# Create a color image from the binary image[39;00m
-[0;32m---> 20[0m colored_binary_image [38;5;241m=[39m np[38;5;241m.[39mzeros(([43mbinary_image[49m[38;5;241;43m.[39;49m[43mshape[49m[[38;5;241m0[39m], binary_image[38;5;241m.[39mshape[[38;5;241m1[39m], [38;5;241m3[39m), dtype[38;5;241m=[39mnp[38;5;241m.[39muint8)
-[1;32m     21[0m colored_binary_image[binary_image [38;5;241m==[39m [38;5;241m255[39m] [38;5;241m=[39m white_rgb  
-[1;32m     22[0m colored_binary_image[binary_image [38;5;241m==[39m [38;5;241m0[39m] [38;5;241m=[39m burgundy_rgb    
+[0;31mNameError[0m                                 Traceback (most recent call last)
+Input [0;32mIn [18][0m, in [0;36m<cell line: 32>[0;34m()[0m
+[1;32m     30[0m [38;5;66;03m# Display the final image[39;00m
+[1;32m     31[0m plt[38;5;241m.[39mfigure(figsize[38;5;241m=[39m([38;5;241m15[39m, [38;5;241m8[39m))
+[0;32m---> 32[0m plt[38;5;241m.[39msubplot([38;5;241m151[39m), plt[38;5;241m.[39mimshow([43mimage_color[49m, cmap[38;5;241m=[39m[38;5;124m"[39m[38;5;124mgray[39m[38;5;124m"[39m)
+[1;32m     33[0m plt[38;5;241m.[39mtitle([38;5;124m'[39m[38;5;124mInput image[39m[38;5;124m'[39m, fontsize[38;5;241m=[39m[38;5;241m14[39m), plt[38;5;241m.[39maxis([38;5;124m'[39m[38;5;124moff[39m[38;5;124m'[39m)
+[1;32m     34[0m plt[38;5;241m.[39msubplot([38;5;241m152[39m), plt[38;5;241m.[39mimshow(closed, cmap[38;5;241m=[39m[38;5;124m"[39m[38;5;124mgray[39m[38;5;124m"[39m)
 
-[0;31mAttributeError[0m: 'NoneType' object has no attribute 'shape'
-AttributeError: 'NoneType' object has no attribute 'shape'
+[0;31mNameError[0m: name 'image_color' is not defined
+NameError: name 'image_color' is not defined
 

@@ -64,6 +64,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'newCh4';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Chapter 5: Spatial Image Enhancement by Filtering: Convolution" href="newCh5.html" />
+    <link rel="prev" title="Chapter 3: Mathematical Tools for Image Processing" href="newCh3.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -134,8 +136,14 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+    
+    
+      
+    
+    
+    <img src="_static/ImageProcessingLogo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/ImageProcessingLogo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
   
-    <p class="title logo__title">My sample book</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -148,11 +156,18 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="newCh1.html"><strong>Chapter 1 Introduction</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh2.html"><strong>Chapter 2 Human Visual System and Image Perception</strong></a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="newCh3.html">Chapter 3: Mathematical Tools for Image Processing</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 4: Color Image Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh5.html">Chapter 5: Spatial Image Enhancement by Filtering: Convolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh6.html">Chapter 6: Image Transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh10.html">Chapter 10: Morphological Image Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh11.html"><strong>Chapter 11 Image Segmentation</strong></a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="newCh13.html">Chapter 13:</a></li>
 </ul>
 
     </div>
@@ -207,7 +222,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=lab/tree/newCh4.ipynb" target="_blank"
+      <li><a href="https://mybinder.org/v2/gh/itironal/466Companion/master?urlpath=lab/tree/newCh4.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch onBinder"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -225,7 +240,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://colab.research.google.com/github/executablebooks/jupyter-book/blob/master/newCh4.ipynb" target="_blank"
+      <li><a href="https://colab.research.google.com/github/itironal/466Companion/blob/master/newCh4.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch onColab"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -545,585 +560,15 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
-
-<span class="c1"># Function to generate a smooth RGB color cube</span>
-<span class="k">def</span> <span class="nf">generate_color_cube</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
-    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">),</span> 
-        <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">),</span> 
-        <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">),</span> 
-        <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span>
-
-<span class="c1"># Function to generate a quantized RGB color cube (216 colors)</span>
-<span class="k">def</span> <span class="nf">generate_quantized_color_cube</span><span class="p">():</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>  <span class="c1"># 6 levels for each channel (0, 51, 102, ..., 255 normalized to 0-1)</span>
-    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span>
-
-<span class="c1"># Generate smooth RGB color cube</span>
-<span class="n">size</span> <span class="o">=</span> <span class="mi">32</span>
-<span class="n">r_smooth</span><span class="p">,</span> <span class="n">g_smooth</span><span class="p">,</span> <span class="n">b_smooth</span> <span class="o">=</span> <span class="n">generate_color_cube</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
-
-<span class="c1"># Generate quantized RGB color cube</span>
-<span class="n">r_quantized</span><span class="p">,</span> <span class="n">g_quantized</span><span class="p">,</span> <span class="n">b_quantized</span> <span class="o">=</span> <span class="n">generate_quantized_color_cube</span><span class="p">()</span>
-
-<span class="c1"># Flatten the smooth color cube for visualization</span>
-<span class="n">colors_smooth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">r_smooth</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">g_smooth</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">b_smooth</span><span class="o">.</span><span class="n">flatten</span><span class="p">()),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">x_smooth</span><span class="p">,</span> <span class="n">y_smooth</span><span class="p">,</span> <span class="n">z_smooth</span> <span class="o">=</span> <span class="n">r_smooth</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">g_smooth</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">b_smooth</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-
-<span class="c1"># Flatten the quantized color cube for visualization</span>
-<span class="n">colors_quantized</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">r_quantized</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">g_quantized</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">b_quantized</span><span class="o">.</span><span class="n">flatten</span><span class="p">()),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">x_quantized</span><span class="p">,</span> <span class="n">y_quantized</span><span class="p">,</span> <span class="n">z_quantized</span> <span class="o">=</span> <span class="n">r_quantized</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">g_quantized</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">b_quantized</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-
-<span class="c1"># Plot the smooth RGB color cube</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
-<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
-
-<span class="c1"># Smooth cube scatter</span>
-<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_smooth</span><span class="p">,</span> <span class="n">y_smooth</span><span class="p">,</span> <span class="n">z_smooth</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">colors_smooth</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
-<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Red&#39;</span><span class="p">)</span>
-<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Green&#39;</span><span class="p">)</span>
-<span class="n">ax1</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;Blue&#39;</span><span class="p">)</span>
-<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Smooth RGB Color Cube&#39;</span><span class="p">)</span>
-<span class="n">ax1</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>  <span class="c1"># Tilted view</span>
-
-<span class="c1"># Plot the quantized RGB color cube</span>
-<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
-
-<span class="c1"># Increase scatter size to remove spaces</span>
-<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_quantized</span><span class="p">,</span> <span class="n">y_quantized</span><span class="p">,</span> <span class="n">z_quantized</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">colors_quantized</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>  <span class="c1"># Increased size</span>
-<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Red&#39;</span><span class="p">)</span>
-<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Green&#39;</span><span class="p">)</span>
-<span class="n">ax2</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;Blue&#39;</span><span class="p">)</span>
-<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Quantized RGB Color Cube (216 Colors, No Spaces)&#39;</span><span class="p">)</span>
-<span class="n">ax2</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>  <span class="c1"># Tilted view</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/10c84f2c7417d9ecad109017b589848a2c71fa2966423724d9ce8ba9cd83fb99.png" src="_images/10c84f2c7417d9ecad109017b589848a2c71fa2966423724d9ce8ba9cd83fb99.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d.art3d</span> <span class="kn">import</span> <span class="n">Poly3DCollection</span>
-
-<span class="c1"># Function to generate quantized RGB color cube (216 colors)</span>
-<span class="k">def</span> <span class="nf">generate_quantized_color_cube</span><span class="p">():</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>  <span class="c1"># 6 levels for each channel (0, 51, 102, ..., 255 normalized to 0-1)</span>
-    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">g</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">b</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-
-<span class="c1"># Generate quantized RGB color cube</span>
-<span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">generate_quantized_color_cube</span><span class="p">()</span>
-<span class="n">colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="c1"># Function to add cubes to the 3D plot</span>
-<span class="k">def</span> <span class="nf">add_cubes</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
-    <span class="n">half_size</span> <span class="o">=</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span>
-    <span class="c1"># Define the 8 vertices of a cube</span>
-    <span class="k">for</span> <span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">ci</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
-        <span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">[</span><span class="n">xi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">yi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">zi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">xi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">yi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">zi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">xi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">yi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">zi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">xi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">yi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">zi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">xi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">yi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">zi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">xi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">yi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">zi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">xi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">yi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">zi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">xi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">yi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">zi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">]</span>
-        <span class="p">]</span>
-        
-        <span class="c1"># Define the 6 faces of the cube using the 8 vertices</span>
-        <span class="n">faces</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">[</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">3</span><span class="p">]],</span>  <span class="c1"># Bottom</span>
-            <span class="p">[</span><span class="n">vertices</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">7</span><span class="p">]],</span>  <span class="c1"># Top</span>
-            <span class="p">[</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">4</span><span class="p">]],</span>  <span class="c1"># Front</span>
-            <span class="p">[</span><span class="n">vertices</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">6</span><span class="p">]],</span>  <span class="c1"># Back</span>
-            <span class="p">[</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">4</span><span class="p">]],</span>  <span class="c1"># Left</span>
-            <span class="p">[</span><span class="n">vertices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">5</span><span class="p">]]</span>   <span class="c1"># Right</span>
-        <span class="p">]</span>
-        
-        <span class="c1"># Create the cube and add it to the plot</span>
-        <span class="n">cube</span> <span class="o">=</span> <span class="n">Poly3DCollection</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">ci</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">add_collection3d</span><span class="p">(</span><span class="n">cube</span><span class="p">)</span>
-
-<span class="c1"># Plot the quantized RGB color cube</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
-
-<span class="c1"># Add cube scatter points</span>
-<span class="n">add_cubes</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mf">0.13</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
-
-<span class="c1"># Set labels and plot properties</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Red&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Green&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;Blue&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Quantized RGB Color Cube (216 Colors, Cube Scatter)&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>  <span class="c1"># Tilted view</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/a5a990f86fb29f1c16a0bd6f00a292c6841a4a5516215b903112b1887794b9e9.png" src="_images/a5a990f86fb29f1c16a0bd6f00a292c6841a4a5516215b903112b1887794b9e9.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d.art3d</span> <span class="kn">import</span> <span class="n">Poly3DCollection</span>
-
-<span class="c1"># Function to generate smooth RGB color cube</span>
-<span class="k">def</span> <span class="nf">generate_smooth_color_cube</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
-    <span class="c1"># Generate a grid of RGB values with smooth transitions</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">resolution</span><span class="p">)</span>
-    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">g</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">b</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-
-<span class="c1"># Generate smooth RGB color cube</span>
-<span class="n">resolution</span> <span class="o">=</span> <span class="mi">30</span>  <span class="c1"># You can adjust the resolution for smoother or coarser transitions</span>
-<span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">generate_smooth_color_cube</span><span class="p">(</span><span class="n">resolution</span><span class="p">)</span>
-<span class="n">colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="c1"># Function to add cubes to the 3D plot</span>
-<span class="k">def</span> <span class="nf">add_cubes</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
-    <span class="n">half_size</span> <span class="o">=</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span>
-    <span class="c1"># Define the 8 vertices of a cube</span>
-    <span class="k">for</span> <span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">ci</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
-        <span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">[</span><span class="n">xi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">yi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">zi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">xi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">yi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">zi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">xi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">yi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">zi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">xi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">yi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">zi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">xi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">yi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">zi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">xi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">yi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">zi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">xi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">yi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">zi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">xi</span> <span class="o">-</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">yi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">,</span> <span class="n">zi</span> <span class="o">+</span> <span class="n">half_size</span><span class="p">]</span>
-        <span class="p">]</span>
-        
-        <span class="c1"># Define the 6 faces of the cube using the 8 vertices</span>
-        <span class="n">faces</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">[</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">3</span><span class="p">]],</span>  <span class="c1"># Bottom</span>
-            <span class="p">[</span><span class="n">vertices</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">7</span><span class="p">]],</span>  <span class="c1"># Top</span>
-            <span class="p">[</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">4</span><span class="p">]],</span>  <span class="c1"># Front</span>
-            <span class="p">[</span><span class="n">vertices</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">6</span><span class="p">]],</span>  <span class="c1"># Back</span>
-            <span class="p">[</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">4</span><span class="p">]],</span>  <span class="c1"># Left</span>
-            <span class="p">[</span><span class="n">vertices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">5</span><span class="p">]]</span>   <span class="c1"># Right</span>
-        <span class="p">]</span>
-        
-        <span class="c1"># Create the cube and add it to the plot</span>
-        <span class="n">cube</span> <span class="o">=</span> <span class="n">Poly3DCollection</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">ci</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">add_collection3d</span><span class="p">(</span><span class="n">cube</span><span class="p">)</span>
-
-<span class="c1"># Plot the smooth RGB color cube</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
-
-<span class="c1"># Add cube scatter points</span>
-<span class="n">add_cubes</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
-
-<span class="c1"># Set labels and plot properties</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Red&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Green&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;Blue&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Smooth RGB Color Cube (Smooth Transition, Cube Scatter)&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>  <span class="c1"># Tilted view</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">os</span>
-
-<span class="c1"># Load image (replace &#39;your_image.jpg&#39; with your image file)</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;cropped_kilim_image.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
-
-<span class="c1"># Split channels</span>
-<span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-
-<span class="c1"># Save channels</span>
-<span class="n">r</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;kilim_red_channel.png&#39;</span><span class="p">)</span>
-<span class="n">g</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;kilim_green_channel.png&#39;</span><span class="p">)</span>
-<span class="n">b</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;kilim_blue_channel.png&#39;</span><span class="p">)</span>
-
-<span class="c1"># Display channels</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Red Channel&#39;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Green Channel&#39;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
-<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Blue Channel&#39;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/267a841a58afa2c3cb9b5642be3aee0f45d496a0bc8453524222dc800b5990c7.png" src="_images/267a841a58afa2c3cb9b5642be3aee0f45d496a0bc8453524222dc800b5990c7.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="c1"># Load original image</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;cropped_kilim_image.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
-<span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-
-<span class="c1"># Convert to numpy arrays</span>
-<span class="n">r_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-<span class="n">g_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-<span class="n">b_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-
-<span class="c1"># Create versions with one channel zeroed</span>
-<span class="c1"># Red = 0</span>
-<span class="n">red_zero</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">r_np</span><span class="p">)),</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
-<span class="n">red_zero</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;kilim_red_zero.png&#39;</span><span class="p">)</span>
-
-<span class="c1"># Green = 0</span>
-<span class="n">green_zero</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">g_np</span><span class="p">)),</span> <span class="n">b</span><span class="p">))</span>
-<span class="n">green_zero</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;kilim_green_zero.png&#39;</span><span class="p">)</span>
-
-<span class="c1"># Blue = 0</span>
-<span class="n">blue_zero</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">b_np</span><span class="p">))))</span>
-<span class="n">blue_zero</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;kilim_blue_zero.png&#39;</span><span class="p">)</span>
-
-<span class="c1"># Display the images</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">red_zero</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Red = 0&#39;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">green_zero</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Green = 0&#39;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
-<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">blue_zero</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Blue = 0&#39;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/7d24f7606f3c44b7255cd8c506dd3a84e833cac035c847bd76e68d82a5a84154.png" src="_images/7d24f7606f3c44b7255cd8c506dd3a84e833cac035c847bd76e68d82a5a84154.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="c1"># Create a circular hue gradient with a very narrow ring</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;polar&#39;</span><span class="p">})</span>
-
-<span class="c1"># Number of slices</span>
-<span class="n">num_slices</span> <span class="o">=</span> <span class="mi">360</span>
-<span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">num_slices</span><span class="p">)</span>
-<span class="n">radii</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">num_slices</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.2</span>  <span class="c1"># Narrow ring thickness</span>
-<span class="n">hues</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-<span class="n">colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">hsv</span><span class="p">(</span><span class="n">hues</span><span class="p">)</span>
-
-<span class="c1"># Plot narrow wedges (very thin ring)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">num_slices</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
-
-<span class="c1"># Remove grid, ticks, and title</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
-
-<span class="c1"># Save the figure (no title)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;hue_circle_narrowest.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">Wedge</span>
-<span class="kn">from</span> <span class="nn">matplotlib.transforms</span> <span class="kn">import</span> <span class="n">Affine2D</span>  <span class="c1"># Correct import here</span>
-
-<span class="c1"># Ellipse parameters</span>
-<span class="n">width</span> <span class="o">=</span> <span class="mi">6</span>  <span class="c1"># horizontal axis length</span>
-<span class="n">height</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># vertical axis length</span>
-<span class="n">num_slices</span> <span class="o">=</span> <span class="mi">360</span>
-
-<span class="c1"># Create figure and axis</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
-
-<span class="c1"># Angle values for the hue (in degrees)</span>
-<span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">num_slices</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">hues</span> <span class="o">=</span> <span class="n">angles</span> <span class="o">/</span> <span class="mi">360</span>
-
-<span class="c1"># Draw colored wedges shaped into an ellipse</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">angle</span><span class="p">,</span> <span class="n">hue</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">angles</span><span class="p">,</span> <span class="n">hues</span><span class="p">)):</span>
-    <span class="n">wedge</span> <span class="o">=</span> <span class="n">Wedge</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-                  <span class="n">r</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                  <span class="n">theta1</span><span class="o">=</span><span class="n">angle</span><span class="p">,</span>
-                  <span class="n">theta2</span><span class="o">=</span><span class="n">angle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-                  <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># adjust thickness here</span>
-                  <span class="n">facecolor</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">hsv</span><span class="p">(</span><span class="n">hue</span><span class="p">),</span>
-                  <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
-
-    <span class="c1"># Apply affine transform to scale wedge into ellipse shape</span>
-    <span class="n">wedge</span><span class="o">.</span><span class="n">set_transform</span><span class="p">(</span><span class="n">wedge</span><span class="o">.</span><span class="n">get_transform</span><span class="p">()</span> <span class="o">+</span>
-                        <span class="n">Affine2D</span><span class="p">()</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
-                        <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="p">)</span>
-
-    <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">wedge</span><span class="p">)</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;hue_ellipse.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/4b4d60b9315f9531dd27c61bcdb21336bc2764dad0e0f44d69ac9a616d602392.png" src="_images/4b4d60b9315f9531dd27c61bcdb21336bc2764dad0e0f44d69ac9a616d602392.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">hsv_to_rgb</span>
-
-<span class="c1"># Image resolution</span>
-<span class="n">height</span> <span class="o">=</span> <span class="mi">300</span>  <span class="c1"># vertical (intensity)</span>
-<span class="n">width</span> <span class="o">=</span> <span class="mi">300</span>   <span class="c1"># horizontal (saturation)</span>
-
-<span class="c1"># Fixed magenta hue</span>
-<span class="n">hue</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">/</span> <span class="mi">6</span>  <span class="c1"># magenta in HSV (normalized [0,1])</span>
-
-<span class="c1"># Create blank image (white background)</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-
-<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
-    <span class="n">intensity</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">y</span> <span class="o">/</span> <span class="p">(</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># from 1 (top) to 0 (bottom)</span>
-
-    <span class="c1"># Max saturation for this row forms a triangle: max saturation shrinks linearly as y increases</span>
-    <span class="n">max_saturation</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">y</span> <span class="o">/</span> <span class="p">(</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># starts at 1 (top), goes to 0 (bottom)</span>
-
-    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">):</span>
-        <span class="c1"># Normalize x to [0,1], centered horizontally</span>
-        <span class="n">norm_x</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">((</span><span class="n">x</span> <span class="o">/</span> <span class="p">(</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>  <span class="c1"># 0 at center, 1 at edges</span>
-
-        <span class="k">if</span> <span class="n">norm_x</span> <span class="o">&lt;=</span> <span class="n">max_saturation</span><span class="p">:</span>
-            <span class="c1"># Saturation grows from center outwards up to max_saturation limit</span>
-            <span class="n">saturation</span> <span class="o">=</span> <span class="n">norm_x</span> <span class="o">/</span> <span class="n">max_saturation</span> <span class="k">if</span> <span class="n">max_saturation</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
-            <span class="n">image</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">hsv_to_rgb</span><span class="p">([</span><span class="n">hue</span><span class="p">,</span> <span class="n">saturation</span><span class="p">,</span> <span class="n">intensity</span><span class="p">])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Outside the triangle: white</span>
-            <span class="n">image</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-
-<span class="c1"># Plot and save</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;hsi_hexcone_blue_vertical_cut_triangle.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/95df5202e7c5b56de4e9562a4615302029eab0cdeff8cf6337f574a9360dfa35.png" src="_images/95df5202e7c5b56de4e9562a4615302029eab0cdeff8cf6337f574a9360dfa35.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">Wedge</span>
-<span class="kn">from</span> <span class="nn">matplotlib.transforms</span> <span class="kn">import</span> <span class="n">Affine2D</span>
-<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">hsv_to_rgb</span>
-
-<span class="c1"># Ellipse parameters</span>
-<span class="n">width</span> <span class="o">=</span> <span class="mi">6</span>  <span class="c1"># horizontal axis length</span>
-<span class="n">height</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># vertical axis length</span>
-<span class="n">num_slices</span> <span class="o">=</span> <span class="mi">360</span>
-
-<span class="c1"># Create figure and axis</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
-
-<span class="c1"># Angle values for the hue (in degrees)</span>
-<span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">num_slices</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">hues</span> <span class="o">=</span> <span class="n">angles</span> <span class="o">/</span> <span class="mi">360</span>
-
-<span class="c1"># Fixed intensity</span>
-<span class="n">intensity</span> <span class="o">=</span> <span class="mf">0.5</span>
-
-<span class="c1"># For each slice, vary saturation from 0 (center) to 1 (edge)</span>
-<span class="c1"># We&#39;ll draw each wedge with a &quot;width&quot; less than 1 to simulate saturation increasing radially.</span>
-<span class="c1"># To do this, we draw several concentric wedges for each angle with increasing saturation.</span>
-
-<span class="n">num_radial_steps</span> <span class="o">=</span> <span class="mi">50</span>  <span class="c1"># number of steps from center (sat=0) to edge (sat=1)</span>
-
-<span class="k">for</span> <span class="n">angle</span><span class="p">,</span> <span class="n">hue</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">angles</span><span class="p">,</span> <span class="n">hues</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_radial_steps</span><span class="p">):</span>
-        <span class="c1"># inner and outer radius for this step (normalized 0 to 1)</span>
-        <span class="n">r_inner</span> <span class="o">=</span> <span class="n">i</span> <span class="o">/</span> <span class="n">num_radial_steps</span>
-        <span class="n">r_outer</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">num_radial_steps</span>
-        
-        <span class="c1"># saturation proportional to outer radius</span>
-        <span class="n">saturation</span> <span class="o">=</span> <span class="n">r_outer</span>
-        
-        <span class="n">rgb_color</span> <span class="o">=</span> <span class="n">hsv_to_rgb</span><span class="p">([</span><span class="n">hue</span><span class="p">,</span> <span class="n">saturation</span><span class="p">,</span> <span class="n">intensity</span><span class="p">])</span>
-        
-        <span class="n">wedge</span> <span class="o">=</span> <span class="n">Wedge</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-                      <span class="n">r</span><span class="o">=</span><span class="n">r_outer</span><span class="p">,</span>
-                      <span class="n">theta1</span><span class="o">=</span><span class="n">angle</span><span class="p">,</span>
-                      <span class="n">theta2</span><span class="o">=</span><span class="n">angle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-                      <span class="n">width</span><span class="o">=</span><span class="n">r_outer</span> <span class="o">-</span> <span class="n">r_inner</span><span class="p">,</span>
-                      <span class="n">facecolor</span><span class="o">=</span><span class="n">rgb_color</span><span class="p">,</span>
-                      <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
-        
-        <span class="n">wedge</span><span class="o">.</span><span class="n">set_transform</span><span class="p">(</span><span class="n">wedge</span><span class="o">.</span><span class="n">get_transform</span><span class="p">()</span> <span class="o">+</span>
-                            <span class="n">Affine2D</span><span class="p">()</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span>
-                            <span class="n">ax</span><span class="o">.</span><span class="n">transData</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">wedge</span><span class="p">)</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;hue_ellipse_saturation_gradient_0.5intensity.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/5b43fb0435ae1f9c10ddb931b94cc71fa0758bd5e1832de155b835fe87e4e044.png" src="_images/5b43fb0435ae1f9c10ddb931b94cc71fa0758bd5e1832de155b835fe87e4e044.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">hsv_to_rgb</span>
-
-<span class="k">def</span> <span class="nf">generate_hsi_triangle_slice</span><span class="p">(</span><span class="n">hue</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">top_intensity</span><span class="p">,</span> <span class="n">bottom_intensity</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Generate an HSI vertical slice shaped as a triangle.</span>
-<span class="sd">    </span>
-<span class="sd">    Args:</span>
-<span class="sd">        hue: Hue value [0,1].</span>
-<span class="sd">        height: Image height (intensity direction).</span>
-<span class="sd">        width: Image width (saturation direction).</span>
-<span class="sd">        top_intensity: Intensity at top center.</span>
-<span class="sd">        bottom_intensity: Intensity at bottom center.</span>
-<span class="sd">    Returns:</span>
-<span class="sd">        RGB image as numpy array.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-    
-    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
-        <span class="c1"># Intensity changes linearly top to bottom</span>
-        <span class="n">intensity</span> <span class="o">=</span> <span class="n">top_intensity</span> <span class="o">+</span> <span class="p">(</span><span class="n">bottom_intensity</span> <span class="o">-</span> <span class="n">top_intensity</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">/</span> <span class="p">(</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
-        
-        <span class="c1"># Max saturation forms triangle: max saturation shrinks from edges to center as we go down</span>
-        <span class="n">max_saturation</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">y</span> <span class="o">/</span> <span class="p">(</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
-        
-        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">):</span>
-            <span class="n">norm_x</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">((</span><span class="n">x</span> <span class="o">/</span> <span class="p">(</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>  <span class="c1"># 0 at center, 1 at edges</span>
-            
-            <span class="k">if</span> <span class="n">norm_x</span> <span class="o">&lt;=</span> <span class="n">max_saturation</span><span class="p">:</span>
-                <span class="n">saturation</span> <span class="o">=</span> <span class="n">norm_x</span> <span class="o">/</span> <span class="n">max_saturation</span> <span class="k">if</span> <span class="n">max_saturation</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
-                <span class="n">image</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">hsv_to_rgb</span><span class="p">([</span><span class="n">hue</span><span class="p">,</span> <span class="n">saturation</span><span class="p">,</span> <span class="n">intensity</span><span class="p">])</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># Outside triangle is white</span>
-                <span class="n">image</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-                
-    <span class="k">return</span> <span class="n">image</span>
-
-<span class="n">height</span> <span class="o">=</span> <span class="mi">300</span>
-<span class="n">width</span> <span class="o">=</span> <span class="mi">300</span>
-<span class="n">hue_red</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># red</span>
-
-<span class="c1"># Upper cone: from mid-gray (intensity=0.5) at top to white (intensity=1.0) at bottom</span>
-<span class="n">upper_slice</span> <span class="o">=</span> <span class="n">generate_hsi_triangle_slice</span><span class="p">(</span><span class="n">hue_red</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">top_intensity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">bottom_intensity</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-
-<span class="c1"># Lower cone: from mid-gray (intensity=0.5) to black (intensity=0)</span>
-<span class="n">lower_slice</span> <span class="o">=</span> <span class="n">generate_hsi_triangle_slice</span><span class="p">(</span><span class="n">hue_red</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">top_intensity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">bottom_intensity</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
-
-<span class="c1"># Outside triangle in lower slice also white now (already set by default)</span>
-
-<span class="c1"># Plot results</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">upper_slice</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Upper Cone Slice: Mid-gray to White&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">lower_slice</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Lower Cone Slice: Mid-gray to Black&quot;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;hsi_double_cone_red_slices_white_bg.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/3e2d289fe023b85b5863b4533437e4f2199d28f737e2ca19b2cd3aeeda250089.png" src="_images/3e2d289fe023b85b5863b4533437e4f2199d28f737e2ca19b2cd3aeeda250089.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Pseudocoloring code</span>
 
 <span class="kn">import</span> <span class="nn">cv2</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="c1"># --- FILE NAMES ---</span>
-<span class="n">gray_image_filename</span> <span class="o">=</span> <span class="s2">&quot;cropped_kilim_image.png&quot;</span>    <span class="c1"># grayscale input</span>
-<span class="n">color_image_filename</span> <span class="o">=</span> <span class="s2">&quot;redmushroom_long.png&quot;</span>  <span class="c1"># color source image</span>
+<span class="n">gray_image_filename</span> <span class="o">=</span> <span class="s2">&quot;images/cropped_kilim_image.png&quot;</span>    <span class="c1"># grayscale input</span>
+<span class="n">color_image_filename</span> <span class="o">=</span> <span class="s2">&quot;images/redmushroom_long.png&quot;</span>  <span class="c1"># color source image</span>
 
 <span class="c1"># --- READ IMAGES ---</span>
 <span class="n">gray_img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">gray_image_filename</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
@@ -1177,16 +622,6 @@ document.write(`
 
 <span class="n">palette_filled</span> <span class="o">=</span> <span class="n">fill_palette</span><span class="p">(</span><span class="n">palette</span><span class="p">)</span>
 
-<span class="c1"># --- SAVE PALETTE VISUALIZATIONS ---</span>
-<span class="k">def</span> <span class="nf">save_palette_image</span><span class="p">(</span><span class="n">palette_array</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-    <span class="n">palette_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">50</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">):</span>
-        <span class="n">palette_img</span><span class="p">[:,</span> <span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">palette_array</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-    <span class="c1"># Convert RGB to BGR for saving with OpenCV</span>
-    <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">palette_img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>
-
-<span class="n">save_palette_image</span><span class="p">(</span><span class="n">palette</span><span class="p">,</span> <span class="s2">&quot;palette_raw.png&quot;</span><span class="p">)</span>
-<span class="n">save_palette_image</span><span class="p">(</span><span class="n">palette_filled</span><span class="p">,</span> <span class="s2">&quot;palette_filled.png&quot;</span><span class="p">)</span>
 
 <span class="c1"># --- APPLY PALETTE TO GRAYSCALE IMAGE ---</span>
 <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">gray_img</span><span class="o">.</span><span class="n">shape</span>
@@ -1197,15 +632,15 @@ document.write(`
         <span class="n">val</span> <span class="o">=</span> <span class="n">gray_img</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
         <span class="n">colored_img</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">palette_filled</span><span class="p">[</span><span class="n">val</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
 
-<span class="c1"># Save the pseudocolored image (convert RGB-&gt;BGR for OpenCV)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;pseudocolored.png&quot;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">colored_img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">colored_img</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>  <span class="c1"># Hide axis</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Pseudocolored Image&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
-</pre></div>
-</div>
+<img alt="_images/b28ca317104a89146e8168e82627fe8065f8036266262b99020593465a99340d.png" src="_images/b28ca317104a89146e8168e82627fe8065f8036266262b99020593465a99340d.png" />
 </div>
 </div>
 </section>
@@ -1215,7 +650,7 @@ document.write(`
     {
         requestKernel: true,
         binderOptions: {
-            repo: "executablebooks/jupyter-book",
+            repo: "itironal/466Companion",
             ref: "master",
         },
         codeMirrorConfig: {
@@ -1242,6 +677,24 @@ document.write(`
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="newCh3.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chapter 3: Mathematical Tools for Image Processing</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="newCh5.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 5: Spatial Image Enhancement by Filtering: Convolution</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div></div>
   
 </div>

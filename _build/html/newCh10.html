@@ -66,6 +66,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'newCh10';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Chapter 11 Image Segmentation" href="newCh11.html" />
+    <link rel="prev" title="Chapter 6: Image Transforms" href="newCh6.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -136,8 +138,14 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+    
+    
+      
+    
+    
+    <img src="_static/ImageProcessingLogo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/ImageProcessingLogo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
   
-    <p class="title logo__title">My sample book</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -150,11 +158,18 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="newCh1.html"><strong>Chapter 1 Introduction</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh2.html"><strong>Chapter 2 Human Visual System and Image Perception</strong></a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="newCh3.html">Chapter 3: Mathematical Tools for Image Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh4.html">Chapter 4: Color Image Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh5.html">Chapter 5: Spatial Image Enhancement by Filtering: Convolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh6.html">Chapter 6: Image Transforms</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 10: Morphological Image Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh11.html"><strong>Chapter 11 Image Segmentation</strong></a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="newCh13.html">Chapter 13:</a></li>
 </ul>
 
     </div>
@@ -209,7 +224,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=lab/tree/newCh10.ipynb" target="_blank"
+      <li><a href="https://mybinder.org/v2/gh/itironal/466Companion/master?urlpath=lab/tree/newCh10.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch onBinder"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -227,7 +242,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://colab.research.google.com/github/executablebooks/jupyter-book/blob/master/newCh10.ipynb" target="_blank"
+      <li><a href="https://colab.research.google.com/github/itironal/466Companion/blob/master/newCh10.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch onColab"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -427,7 +442,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">square</span><span class="p">,</span> <span class="n">binary_dilation</span>
 
 <span class="c1"># Load the image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;kilim1.png&quot;</span>  
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/kilim1.png&quot;</span>  
 <span class="n">grayscale_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
 <span class="n">_</span><span class="p">,</span> <span class="n">binary_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">threshold</span><span class="p">(</span><span class="n">grayscale_image</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">THRESH_BINARY</span><span class="p">)</span>
 
@@ -442,10 +457,6 @@ document.write(`
 <span class="n">colored_binary_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">binary_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">binary_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
 <span class="n">colored_binary_image</span><span class="p">[</span><span class="n">binary_image</span> <span class="o">==</span> <span class="mi">255</span><span class="p">]</span> <span class="o">=</span> <span class="n">white_rgb</span>  
 <span class="n">colored_binary_image</span><span class="p">[</span><span class="n">binary_image</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">burgundy_rgb</span>    
-
-<span class="n">output_filename</span> <span class="o">=</span> <span class="s2">&quot;kilim_bordo.png&quot;</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">output_filename</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">colored_binary_image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>  <span class="c1"># Save in BGR format for OpenCV</span>
-
 
 <span class="c1"># Define the filter size</span>
 <span class="n">filter_size</span> <span class="o">=</span> <span class="mi">5</span>
@@ -472,31 +483,12 @@ document.write(`
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
-<span class="c1"># Save the high-res output image as a PNG file with the color mapping</span>
-<span class="n">operation_name</span><span class="o">=</span><span class="s1">&#39;dilation&#39;</span>
-<span class="n">output_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">operation_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">filter_size</span><span class="si">}</span><span class="s2">.png&quot;</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">output_filename</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>  <span class="c1"># Save in BGR format for OpenCV</span>
-
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[ WARN:0@3.627] global loadsave.cpp:248 findDecoder imread_(&#39;kilim1.png&#39;): can&#39;t open/read file: check file path/integrity
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
-<span class="nn">Input In [1],</span> in <span class="ni">&lt;cell line: 20&gt;</span><span class="nt">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="n">burgundy_rgb</span> <span class="o">=</span> <span class="p">[</span><span class="mi">128</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">]</span>     
-<span class="g g-Whitespace">     </span><span class="mi">19</span> <span class="c1"># Create a color image from the binary image</span>
-<span class="ne">---&gt; </span><span class="mi">20</span> <span class="n">colored_binary_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">binary_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">binary_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">21</span> <span class="n">colored_binary_image</span><span class="p">[</span><span class="n">binary_image</span> <span class="o">==</span> <span class="mi">255</span><span class="p">]</span> <span class="o">=</span> <span class="n">white_rgb</span>  
-<span class="g g-Whitespace">     </span><span class="mi">22</span> <span class="n">colored_binary_image</span><span class="p">[</span><span class="n">binary_image</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">burgundy_rgb</span>    
-
-<span class="ne">AttributeError</span>: &#39;NoneType&#39; object has no attribute &#39;shape&#39;
-</pre></div>
-</div>
+<img alt="_images/bda7314314f568468f612f0b1f36a4adaea1c3b16cb5cf31995f149d5cf48d45.png" src="_images/bda7314314f568468f612f0b1f36a4adaea1c3b16cb5cf31995f149d5cf48d45.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -508,7 +500,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">square</span><span class="p">,</span> <span class="n">binary_dilation</span>
 
 <span class="c1"># Try another image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;kilim_color.png&quot;</span>  
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/kilim_color.png&quot;</span>  
 <span class="n">rgb_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
 
 <span class="c1"># Split the RGB image into its channels</span>
@@ -554,77 +546,12 @@ document.write(`
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
-<span class="c1"># Save the high-res output image as a PNG file with the color mapping</span>
-<span class="n">operation_name</span><span class="o">=</span><span class="s1">&#39;dilation_2&#39;</span>
-<span class="n">output_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">operation_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">filter_size</span><span class="si">}</span><span class="s2">.png&quot;</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">output_filename</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>  <span class="c1"># Save in BGR format for OpenCV</span>
-
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <img alt="_images/f549d477db08eabb8f41f7fb18e8f8ef42d47b2de3a05eaef39e5cdb0158a34a.png" src="_images/f549d477db08eabb8f41f7fb18e8f8ef42d47b2de3a05eaef39e5cdb0158a34a.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Dilation</span>
-<span class="kn">import</span> <span class="nn">cv2</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">square</span><span class="p">,</span> <span class="n">disk</span><span class="p">,</span> <span class="n">binary_dilation</span>
-
-<span class="c1"># Load the image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;peace_pixelated_2.png&quot;</span>  
-<span class="n">grayscale_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
-<span class="n">_</span><span class="p">,</span> <span class="n">binary_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">threshold</span><span class="p">(</span><span class="n">grayscale_image</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">THRESH_BINARY</span><span class="p">)</span>
-
-<span class="c1"># Define RGB values for white and burgundy</span>
-<span class="n">white_rgb</span> <span class="o">=</span> <span class="p">[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">]</span>  
-<span class="n">burgundy_rgb</span> <span class="o">=</span> <span class="p">[</span><span class="mi">128</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">]</span>     
-
-<span class="c1"># Create a color image from the binary image</span>
-<span class="n">colored_binary_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">binary_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">binary_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-<span class="n">colored_binary_image</span><span class="p">[</span><span class="n">binary_image</span> <span class="o">==</span> <span class="mi">255</span><span class="p">]</span> <span class="o">=</span> <span class="n">white_rgb</span>  
-<span class="n">colored_binary_image</span><span class="p">[</span><span class="n">binary_image</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">burgundy_rgb</span>  
-
-<span class="c1"># Define the filter size</span>
-<span class="n">filter_size</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">se</span> <span class="o">=</span> <span class="n">square</span><span class="p">(</span><span class="n">filter_size</span><span class="p">)</span>
-
-<span class="c1"># Perform the binary operation on the high-res image</span>
-<span class="n">output_image</span> <span class="o">=</span> <span class="n">binary_dilation</span><span class="p">(</span><span class="n">binary_image</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
-
-<span class="c1"># Convert processed binary output to RGB for saving</span>
-<span class="n">output_image_rgb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">output_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">output_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-<span class="n">output_image_rgb</span><span class="p">[</span><span class="n">output_image</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">burgundy_rgb</span>    
-<span class="n">output_image_rgb</span><span class="p">[</span><span class="n">output_image</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">white_rgb</span>     
-
-<span class="c1"># Display the colored binary and dilated images</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Colored Binary Image&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">colored_binary_image</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dilation with Filter Size </span><span class="si">{</span><span class="n">filter_size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
-<span class="c1"># Save the high-res output image as a PNG file with the color mapping</span>
-<span class="n">operation_name</span><span class="o">=</span><span class="s1">&#39;peace_dilation&#39;</span>
-<span class="n">output_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">operation_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">filter_size</span><span class="si">}</span><span class="s2">.png&quot;</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">output_filename</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>  <span class="c1"># Save in BGR format for OpenCV</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/cad4a72238ff9231b1240448bb2fe815b72e24f8966ea51bc5ac17339a375609.png" src="_images/cad4a72238ff9231b1240448bb2fe815b72e24f8966ea51bc5ac17339a375609.png" />
 </div>
 </div>
 </section>
@@ -660,7 +587,7 @@ document.write(`
 
 
 <span class="c1"># Load the image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;kilim1.png&quot;</span>  <span class="c1"># Replace with your image path</span>
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/kilim1.png&quot;</span>  <span class="c1"># Replace with your image path</span>
 <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
 <span class="c1"># Convert the high-res image to binary (thresholding)</span>
 <span class="n">_</span><span class="p">,</span> <span class="n">binary_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">threshold</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">THRESH_BINARY</span><span class="p">)</span>
@@ -701,12 +628,6 @@ document.write(`
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
-<span class="c1"># Save the high-res output image as a PNG file with the color mapping</span>
-<span class="n">operation_name</span><span class="o">=</span><span class="s1">&#39;erosion&#39;</span>
-<span class="n">output_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">operation_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">filter_size</span><span class="si">}</span><span class="s2">.png&quot;</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">output_filename</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>  <span class="c1"># Save in BGR format for OpenCV</span>
-
-
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -724,7 +645,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">square</span><span class="p">,</span> <span class="n">binary_erosion</span>
 
 <span class="c1"># Try another image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;kilim_color.png&quot;</span>  
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/kilim_color.png&quot;</span>  
 <span class="n">rgb_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
 
 <span class="c1"># Split the RGB image into its channels</span>
@@ -767,11 +688,6 @@ document.write(`
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Erosion with Filter Size </span><span class="si">{</span><span class="n">filter_size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
-<span class="n">operation_name</span><span class="o">=</span><span class="s1">&#39;erosion_2&#39;</span>
-<span class="n">output_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">operation_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">filter_size</span><span class="si">}</span><span class="s2">.png&quot;</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">output_filename</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>  <span class="c1"># Save in BGR format for OpenCV</span>
-
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -803,7 +719,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">square</span><span class="p">,</span> <span class="n">binary_opening</span>
 
 <span class="c1"># Load the image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;kilim1.png&quot;</span>  <span class="c1"># Replace with your image path</span>
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/kilim1.png&quot;</span>  <span class="c1"># Replace with your image path</span>
 <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
 
 <span class="c1"># Convert the high-res image to binary (thresholding)</span>
@@ -844,12 +760,6 @@ document.write(`
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
-<span class="c1"># Save the high-res output image as a PNG file with the color mapping</span>
-<span class="n">operation_name</span><span class="o">=</span><span class="s1">&#39;opening&#39;</span>
-<span class="n">output_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">operation_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">filter_size</span><span class="si">}</span><span class="s2">.png&quot;</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">output_filename</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>  <span class="c1"># Save in BGR format for OpenCV</span>
-
-
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -867,7 +777,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">square</span><span class="p">,</span> <span class="n">binary_opening</span>
 
 <span class="c1"># Try another image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;kilim_color.png&quot;</span>  
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/kilim_color.png&quot;</span>  
 <span class="n">rgb_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
 
 <span class="c1"># Split the RGB image into its channels</span>
@@ -911,10 +821,6 @@ document.write(`
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
-<span class="n">operation_name</span><span class="o">=</span><span class="s1">&#39;opening_2&#39;</span>
-<span class="n">output_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">operation_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">filter_size</span><span class="si">}</span><span class="s2">.png&quot;</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">output_filename</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>  <span class="c1"># Save in BGR format for OpenCV</span>
-
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -941,7 +847,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">square</span><span class="p">,</span> <span class="n">binary_closing</span>
 
 <span class="c1"># Load the image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;kilim1.png&quot;</span>  <span class="c1"># Replace with your image path</span>
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/kilim1.png&quot;</span>  <span class="c1"># Replace with your image path</span>
 <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
 
 <span class="c1"># Convert the high-res image to binary (thresholding)</span>
@@ -982,11 +888,6 @@ document.write(`
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
-<span class="c1"># Save the high-res output image as a PNG file with the color mapping</span>
-<span class="n">operation_name</span><span class="o">=</span><span class="s1">&#39;closing&#39;</span>
-<span class="n">output_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">operation_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">filter_size</span><span class="si">}</span><span class="s2">.png&quot;</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">output_filename</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>  <span class="c1"># Save in BGR format for OpenCV</span>
-
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1004,7 +905,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">square</span><span class="p">,</span> <span class="n">binary_closing</span>
 
 <span class="c1"># Try another image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;kilim_color.png&quot;</span>  
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/kilim_color.png&quot;</span>  
 <span class="n">rgb_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
 
 <span class="c1"># Split the RGB image into its channels</span>
@@ -1022,7 +923,6 @@ document.write(`
 <span class="n">colored_binary_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">binary_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">binary_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
 <span class="n">colored_binary_image</span><span class="p">[</span><span class="n">binary_image</span> <span class="o">==</span> <span class="mi">255</span><span class="p">]</span> <span class="o">=</span> <span class="n">white_rgb</span>  
 <span class="n">colored_binary_image</span><span class="p">[</span><span class="n">binary_image</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">burgundy_rgb</span>   
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s1">&#39;kilim_binary_burgundy.png&#39;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">colored_binary_image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>  <span class="c1"># Save in BGR format for OpenCV</span>
 
 
 <span class="c1"># Define the filter size</span>
@@ -1050,10 +950,6 @@ document.write(`
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
-<span class="n">operation_name</span><span class="o">=</span><span class="s1">&#39;closing_2&#39;</span>
-<span class="n">output_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">operation_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">filter_size</span><span class="si">}</span><span class="s2">.png&quot;</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">output_filename</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">output_image_rgb</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>  <span class="c1"># Save in BGR format for OpenCV</span>
-
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1068,212 +964,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-
-
-<span class="c1"># Load the original image</span>
-<span class="c1">#image = cv2.imread(&#39;cropped_kilim_image.png&#39;)</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;redmushroom_long.png&#39;</span><span class="p">)</span>
-
-<span class="c1"># Crop a specific region of the image (rows 800 to 1311, columns 513 to 1024)</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>  <span class="c1"># Convert to RGB</span>
-<span class="c1">#cv2.imwrite(&quot;redmushroom_long.png&quot;, cv2.cvtColor(image, cv2.COLOR_RGB2BGR))</span>
-
-<span class="c1"># Get image dimensions</span>
-<span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span>
-
-<span class="c1"># Crop bottom 1/3 of the image</span>
-<span class="c1">#cropped_image = image[: 2 * h // 3, :, :]</span>
-<span class="c1">#cv2.imwrite(&quot;cropped_kilim_image.png&quot;, cv2.cvtColor(cropped_image, cv2.COLOR_RGB2BGR))  # Save cropped image</span>
-
-<span class="c1"># Thresholding for Red, Green, and Blue channels</span>
-<span class="c1">#_, bin_red = cv2.threshold(image[:, :, 0], 128, 255, cv2.THRESH_BINARY)</span>
-<span class="c1">#_, bin_green = cv2.threshold(image[:, :, 1], 128, 255, cv2.THRESH_BINARY)</span>
-<span class="c1">#_, bin_blue = cv2.threshold(image[:, :, 2], 128, 255, cv2.THRESH_BINARY)</span>
-
-<span class="c1"># Split the image into R, G, B channels</span>
-<span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-
-<span class="n">threshold_value</span> <span class="o">=</span> <span class="mi">130</span>
-<span class="n">bin_red</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="n">threshold_value</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-<span class="n">bin_green</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">g</span> <span class="o">&gt;</span> <span class="n">threshold_value</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-<span class="n">bin_blue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">b</span> <span class="o">&gt;</span> <span class="n">threshold_value</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-
-
-<span class="c1"># Define structuring element for dilation</span>
-<span class="n">kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>  
-
-<span class="c1"># Apply dilation</span>
-<span class="n">dil_red</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">dilate</span><span class="p">(</span><span class="n">bin_red</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">dil_green</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">dilate</span><span class="p">(</span><span class="n">bin_green</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">dil_blue</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">dilate</span><span class="p">(</span><span class="n">bin_blue</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="c1"># Function to apply burgundy background</span>
-<span class="k">def</span> <span class="nf">apply_burgundy_background</span><span class="p">(</span><span class="n">binary_img</span><span class="p">):</span>
-    <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">binary_img</span><span class="o">.</span><span class="n">shape</span>
-    <span class="n">burgundy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">128</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>  <span class="c1"># RGB color for burgundy</span>
-    <span class="n">white</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>  <span class="c1"># RGB color for white</span>
-
-    <span class="c1"># Create a 3-channel image</span>
-    <span class="n">color_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-
-    <span class="c1"># Assign colors: Foreground → White, Background → Burgundy</span>
-    <span class="n">color_image</span><span class="p">[</span><span class="n">binary_img</span> <span class="o">==</span> <span class="mi">255</span><span class="p">]</span> <span class="o">=</span> <span class="n">white</span>  
-    <span class="n">color_image</span><span class="p">[</span><span class="n">binary_img</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">burgundy</span>  
-
-    <span class="k">return</span> <span class="n">color_image</span>
-
-<span class="c1"># Apply the burgundy background transformation</span>
-<span class="n">bin_red_colored</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">bin_red</span><span class="p">)</span>
-<span class="n">bin_green_colored</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">bin_green</span><span class="p">)</span>
-<span class="n">bin_blue_colored</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">bin_blue</span><span class="p">)</span>
-
-<span class="n">dil_red_colored</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">dil_red</span><span class="p">)</span>
-<span class="n">dil_green_colored</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">dil_green</span><span class="p">)</span>
-<span class="n">dil_blue_colored</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">dil_blue</span><span class="p">)</span>
-
-<span class="c1"># Save results as separate images</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;binarized_red2.png&quot;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">bin_red_colored</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;binarized_green2.png&quot;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">bin_green_colored</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;binarized_blue2.png&quot;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">bin_blue_colored</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>
-
-<span class="c1">#cv2.imwrite(&quot;dilated_red.png&quot;, cv2.cvtColor(dil_red_colored, cv2.COLOR_RGB2BGR))</span>
-<span class="c1">#cv2.imwrite(&quot;dilated_green.png&quot;, cv2.cvtColor(dil_green_colored, cv2.COLOR_RGB2BGR))</span>
-<span class="c1">#cv2.imwrite(&quot;dilated_blue.png&quot;, cv2.cvtColor(dil_blue_colored, cv2.COLOR_RGB2BGR))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[207 221 232 ...  92  97 102]
- [203 216 228 ...  94 100 104]
- [200 211 222 ...  95  99 102]
- ...
- [114 120 119 ... 117 102 105]
- [ 91  93  94 ... 117 102 107]
- [ 71  73  73 ... 158 139 136]]
-[[204 214 219 ...  92  97 101]
- [200 209 215 ...  94  99 103]
- [196 204 209 ...  95  98 101]
- ...
- [130 136 134 ...  92  77  80]
- [105 107 107 ...  92  77  82]
- [ 86  87  87 ... 134 115 112]]
-[[169 186 200 ...  54  63  71]
- [165 181 196 ...  56  68  73]
- [161 176 190 ...  59  68  73]
- ...
- [ 55  65  65 ...  95  80  83]
- [ 26  32  35 ...  95  80  85]
- [  3   8  10 ... 134 115 112]]
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cv2</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-
-
-<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;redmushroom_long.png&#39;</span><span class="p">)</span>
-
-
-<span class="c1"># Split the image into R, G, B channels</span>
-<span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-
-<span class="n">r</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-<span class="n">g</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-
-<span class="c1"># Calculate Intensity (I) as the average of R, G, B</span>
-<span class="n">intensity</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">g</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">/</span> <span class="mf">3.0</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">intensity</span><span class="p">))</span>
-
-<span class="c1"># Normalize intensity to the range [0, 255]</span>
-<span class="n">intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">intensity</span><span class="p">)</span>
-
-<span class="c1"># Threshold the intensity to get a binary image</span>
-<span class="n">threshold_value</span> <span class="o">=</span> <span class="mi">128</span>  <span class="c1"># You can adjust this threshold as needed</span>
-<span class="n">binary_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">intensity</span> <span class="o">&gt;</span> <span class="n">threshold_value</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-<span class="n">binary_image</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">binary_image</span><span class="p">)</span>
-<span class="c1"># Display the original and binarized image</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image_rgb</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Original Image&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">binary_image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Binarized Image (Based on Intensity)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="c1"># Save the binarized image</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s1">&#39;binarized_based_on_intensity.png&#39;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">binary_image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[169 186 200 ...  54  63  71]
- [165 181 196 ...  56  68  73]
- [161 176 190 ...  59  68  73]
- ...
- [ 55  65  65 ...  95  80  83]
- [ 26  32  35 ...  95  80  85]
- [  3   8  10 ... 134 115 112]]
-[[204 214 219 ...  92  97 101]
- [200 209 215 ...  94  99 103]
- [196 204 209 ...  95  98 101]
- ...
- [130 136 134 ...  92  77  80]
- [105 107 107 ...  92  77  82]
- [ 86  87  87 ... 134 115 112]]
-[[207 221 232 ...  92  97 102]
- [203 216 228 ...  94 100 104]
- [200 211 222 ...  95  99 102]
- ...
- [114 120 119 ... 117 102 105]
- [ 91  93  94 ... 117 102 107]
- [ 71  73  73 ... 158 139 136]]
-255.0
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="nn">Input In [1],</span> in <span class="ni">&lt;cell line: 31&gt;</span><span class="nt">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">29</span> <span class="n">threshold_value</span> <span class="o">=</span> <span class="mi">128</span>  <span class="c1"># You can adjust this threshold as needed</span>
-<span class="g g-Whitespace">     </span><span class="mi">30</span> <span class="n">binary_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">intensity</span> <span class="o">&gt;</span> <span class="n">threshold_value</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">31</span> <span class="n">binary_image</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">binary_image</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">32</span> <span class="c1"># Display the original and binarized image</span>
-<span class="g g-Whitespace">     </span><span class="mi">33</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-
-<span class="ne">NameError</span>: name &#39;apply_burgundy_background&#39; is not defined
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cv2</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
 <span class="c1"># Load the color image (RGB or BGR)</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;kilim_bordo.png&#39;</span><span class="p">)</span>  <span class="c1"># Replace with your colored image path</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;images/kilim_bordo.png&#39;</span><span class="p">)</span>  <span class="c1"># Replace with your colored image path</span>
 
 <span class="c1"># Convert to grayscale (binary thresholding will follow this)</span>
 <span class="n">gray_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
@@ -1308,9 +1000,6 @@ document.write(`
 <span class="c1"># Apply burgundy background transformation to the mask</span>
 <span class="n">mask_colored</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
 
-<span class="c1"># Save the mask with burgundy background</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;upper_half_and_original_mask_with_burgundy.png&quot;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">mask_colored</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>
-
 <span class="c1"># Create an image all black except for the center pixel (white)</span>
 <span class="n">initial_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">binary_image</span><span class="p">)</span>
 <span class="n">center_x</span><span class="p">,</span> <span class="n">center_y</span> <span class="o">=</span> <span class="n">w</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">//</span> <span class="mi">2</span>
@@ -1336,8 +1025,6 @@ document.write(`
 <span class="c1"># Apply burgundy background transformation to the dilated image</span>
 <span class="n">dilated_colored</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">dilated_image</span><span class="p">)</span>
 
-<span class="c1"># Save the dilated image with burgundy background</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;cond_dilated_100.png&quot;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">dilated_colored</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>
 
 <span class="c1"># Visualize results</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -1369,7 +1056,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c1"># Load the color image</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;region_filling_input2.png&quot;</span><span class="p">)</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;images/region_filling_input.png&quot;</span><span class="p">)</span>
 
 <span class="c1"># Convert to grayscale and then to binary</span>
 <span class="n">gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
@@ -1409,37 +1096,15 @@ document.write(`
 <span class="c1"># Combine filled region with the original boundary</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">filled</span> <span class="o">|</span> <span class="n">binary</span><span class="p">)</span>
 
-<span class="c1"># Save the output images</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;region_filled.png&quot;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Region Filled&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;region_filling_all.png&quot;</span><span class="p">)</span>
-<span class="c1"># Get the original width and height</span>
-<span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
-
-<span class="c1"># Calculate the new height (halved)</span>
-<span class="n">new_height</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">height</span> <span class="o">//</span> <span class="mi">3</span>
-
-<span class="c1"># Resize the image</span>
-<span class="n">resized_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">new_height</span><span class="p">))</span>
-
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;region_filling_all.png&quot;</span><span class="p">,</span> <span class="n">resized_image</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
-</pre></div>
-</div>
+<img alt="_images/c930f4dc85ecc6ff2bf455ef060a35310bc2319e74bbb6e969faef588c8a0d24.png" src="_images/c930f4dc85ecc6ff2bf455ef060a35310bc2319e74bbb6e969faef588c8a0d24.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1448,7 +1113,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c1"># Load the image</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;redmushroom_long.png&#39;</span><span class="p">)</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;images/redmushroom_long.png&#39;</span><span class="p">)</span>
 
 <span class="c1"># Convert BGR to RGB</span>
 <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
@@ -1474,46 +1139,17 @@ document.write(`
 <span class="n">dilated_intensity</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">dilated_intensity</span><span class="p">)</span>
 
 <span class="c1"># Save the dilated intensity image</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s1">&#39;dilated_binarized_intensity.png&#39;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">dilated_intensity</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">))</span>
+<span class="c1">#cv2.imwrite(&#39;dilated_binarized_intensity.png&#39;, cv2.cvtColor(dilated_intensity, cv2.COLOR_RGB2BGR))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">dilated_intensity</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Dilation to binarized intensity image&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cv2</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="c1"># Load the binary image (assuming the image is binary already)</span>
-<span class="n">binary_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;kilim_bordo.png&#39;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>  <span class="c1"># Replace with your binary image path</span>
-
-<span class="c1"># Get image dimensions</span>
-<span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">binary_image</span><span class="o">.</span><span class="n">shape</span>
-
-<span class="c1"># Calculate the middle row index</span>
-<span class="n">middle_row</span> <span class="o">=</span> <span class="n">h</span> <span class="o">//</span> <span class="mi">2</span>
-
-<span class="c1"># Find the first white pixel (255) in the middle row</span>
-<span class="n">middle_row_pixels</span> <span class="o">=</span> <span class="n">binary_image</span><span class="p">[</span><span class="n">middle_row</span><span class="p">,</span> <span class="p">:]</span>
-<span class="n">first_white_pixel_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">middle_row_pixels</span> <span class="o">==</span> <span class="mi">255</span><span class="p">)</span>
-
-<span class="c1"># Check if a white pixel was found</span>
-<span class="k">if</span> <span class="n">first_white_pixel_index</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">middle_row_pixels</span><span class="p">[</span><span class="n">first_white_pixel_index</span><span class="p">]</span> <span class="o">==</span> <span class="mi">255</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;First white pixel in the middle row is at index </span><span class="si">{</span><span class="n">first_white_pixel_index</span><span class="si">}</span><span class="s2"> (column </span><span class="si">{</span><span class="n">first_white_pixel_index</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No white pixel found in the middle row.&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>First white pixel in the middle row is at index 54 (column 54)
-</pre></div>
-</div>
+<img alt="_images/5d62ae16fd1bf3a3f61a6a8e0412f244fb6bd83d5c923cca91a9c8b8a87d631d.png" src="_images/5d62ae16fd1bf3a3f61a6a8e0412f244fb6bd83d5c923cca91a9c8b8a87d631d.png" />
 </div>
 </div>
 </section>
@@ -1531,7 +1167,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c1"># Load the image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;suyolu_color.png&quot;</span>  <span class="c1"># Replace with your image path</span>
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/suyolu_color.png&quot;</span>  
 <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
 
 <span class="c1"># Convert the high-res image to binary (thresholding)</span>
@@ -1587,7 +1223,7 @@ document.write(`
     <span class="k">return</span> <span class="n">color_image</span>
 
 <span class="c1"># Load the image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;cropped_kilim_image.png&quot;</span>  
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/cropped_kilim_image.png&quot;</span>  
 <span class="n">rgb_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
 
 <span class="c1"># Split the RGB image into its channels</span>
@@ -1617,23 +1253,28 @@ document.write(`
 <span class="n">partial_thinned_burgundy</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">partial_thinned</span><span class="p">)</span>
 
 <span class="c1"># Convert images to RGB before saving</span>
-<span class="n">binary_image_burgundy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">binary_image_burgundy</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
-<span class="n">skeleton_burgundy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">skeleton_burgundy</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
-<span class="n">thinned_burgundy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">thinned_burgundy</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
-<span class="n">partial_thinned_burgundy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">partial_thinned_burgundy</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+<span class="c1">#binary_image_burgundy = cv2.cvtColor(binary_image_burgundy, cv2.COLOR_BGR2RGB)</span>
+<span class="c1">#skeleton_burgundy = cv2.cvtColor(skeleton_burgundy, cv2.COLOR_BGR2RGB)</span>
+<span class="c1">#thinned_burgundy = cv2.cvtColor(thinned_burgundy, cv2.COLOR_BGR2RGB)</span>
+<span class="c1">#partial_thinned_burgundy = cv2.cvtColor(partial_thinned_burgundy, cv2.COLOR_BGR2RGB)</span>
 
-<span class="c1"># Save the images using cv2.imwrite</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;binary_image.png&quot;</span><span class="p">,</span> <span class="n">binary_image_burgundy</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;skeletonized.png&quot;</span><span class="p">,</span> <span class="n">skeleton_burgundy</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;thinned.png&quot;</span><span class="p">,</span> <span class="n">thinned_burgundy</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;partial_thinned.png&quot;</span><span class="p">,</span> <span class="n">partial_thinned_burgundy</span><span class="p">)</span>
+<span class="c1"># Display results</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">141</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">binary_image_burgundy</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Binary Image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">142</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">skeleton_burgundy</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Skeletonization&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">143</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">thinned_burgundy</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Thinning&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">144</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">partial_thinned_burgundy</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Partial Thinning&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
-</pre></div>
-</div>
+<img alt="_images/423c153b50e4b58eceb2e517838d60753022f7f5a2f9264aa338dd259bc43d6b.png" src="_images/423c153b50e4b58eceb2e517838d60753022f7f5a2f9264aa338dd259bc43d6b.png" />
 </div>
 </div>
 </section>
@@ -1651,7 +1292,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">dilation</span><span class="p">,</span> <span class="n">erosion</span><span class="p">,</span> <span class="n">opening</span><span class="p">,</span> <span class="n">closing</span><span class="p">,</span> <span class="n">white_tophat</span><span class="p">,</span> <span class="n">black_tophat</span><span class="p">,</span> <span class="n">square</span>
 
 <span class="c1"># Load the RGB image as a color image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;cropped_kilim_image.png&quot;</span>  <span class="c1"># Replace with your image path</span>
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/cropped_kilim_image.png&quot;</span>  <span class="c1"># Replace with your image path</span>
 <span class="n">color_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>  <span class="c1"># Load as color image (BGR format)</span>
 
 <span class="c1"># Convert BGR to RGB</span>
@@ -1696,15 +1337,6 @@ document.write(`
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">248</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">closing_output</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Closing&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
-<span class="c1"># Save images with proper names</span>
-<span class="c1">#cv2.imwrite(&quot;kilim_color.png&quot;, cv2.cvtColor(color_image_rgb, cv2.COLOR_RGB2BGR))</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;kilim_grayscale.png&quot;</span><span class="p">,</span> <span class="n">high_res_image</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;kilim_white_tophat.png&quot;</span><span class="p">,</span> <span class="n">white_tophat_output</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;kilim_black_tophat.png&quot;</span><span class="p">,</span> <span class="n">black_tophat_output</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;kilim_dilation.png&quot;</span><span class="p">,</span> <span class="n">dilation_output</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;kilim_erosion.png&quot;</span><span class="p">,</span> <span class="n">erosion_output</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;kilim_opening.png&quot;</span><span class="p">,</span> <span class="n">opening_output</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;kilim_closing.png&quot;</span><span class="p">,</span> <span class="n">closing_output</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1723,20 +1355,17 @@ document.write(`
 <span class="n">smoothing_output</span> <span class="o">=</span> <span class="n">closing</span><span class="p">(</span><span class="n">opening_output</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">131</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">high_res_image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original Grayscale Image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">132</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">opening_output</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Opening Output&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">133</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">smoothing_output</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Smoothing Output&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;kilim_opening_15.png&quot;</span><span class="p">,</span> <span class="n">opening_output</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;kilim_morph_smoothing.png&quot;</span><span class="p">,</span> <span class="n">smoothing_output</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/7f1919109e64876a50d7dd0e7aa4812862f675a833a5730d2958e0c7fdb5d55c.png" src="_images/7f1919109e64876a50d7dd0e7aa4812862f675a833a5730d2958e0c7fdb5d55c.png" />
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
-</pre></div>
-</div>
+<img alt="_images/8e55f1b9d9d917524f8cf7a6fcafe192af784c27d09551955a16f2688dc1e834.png" src="_images/8e55f1b9d9d917524f8cf7a6fcafe192af784c27d09551955a16f2688dc1e834.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1748,18 +1377,17 @@ document.write(`
 <span class="n">diff</span> <span class="o">=</span> <span class="n">dilation_output</span> <span class="o">-</span> <span class="n">erosion_output</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">131</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">dilation_output</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Dilation&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">132</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">erosion_output</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Erosion&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">133</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Difference (morphological gradient)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;kilim_gradient.png&quot;</span><span class="p">,</span> <span class="n">diff</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/8bace5cbc343c53d904f41d8a2b36719b88bed2051bb3cbb897e5c17a1dade7a.png" src="_images/8bace5cbc343c53d904f41d8a2b36719b88bed2051bb3cbb897e5c17a1dade7a.png" />
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
-</pre></div>
-</div>
+<img alt="_images/32c41ce6ba5a5f5d9c3ae8a78a710c8fc1a4e0cc6c8cc1bbcd278d7e21ddff72.png" src="_images/32c41ce6ba5a5f5d9c3ae8a78a710c8fc1a4e0cc6c8cc1bbcd278d7e21ddff72.png" />
 </div>
 </div>
 </section>
@@ -1866,7 +1494,7 @@ document.write(`
 <span class="c1">#cv2.imwrite(&quot;coins3.png&quot;, cv2.cvtColor(image_color, cv2.COLOR_RGB2BGR))</span>
 
 
-<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;coins3.png&quot;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;images/coins3.png&quot;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
 <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">)</span>
 
@@ -1885,16 +1513,16 @@ document.write(`
 <span class="c1"># Display the final image</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">151</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image_color</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Input image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">152</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">closed</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Binary image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">153</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">eroded</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Eroded&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">154</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">dilated</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Only large coins&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;coin_binary.png&quot;</span><span class="p">,</span> <span class="n">closed</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;coin_eroded.png&quot;</span><span class="p">,</span> <span class="n">eroded</span><span class="p">)</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;coin_big_ones.png&quot;</span><span class="p">,</span> <span class="n">dilated</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1902,15 +1530,26 @@ document.write(`
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>389 378
 </pre></div>
 </div>
-<img alt="_images/6c282ae3cbe84654ddd9a88277047fb1de909fe9198f77e7db1d6d670d6775c0.png" src="_images/6c282ae3cbe84654ddd9a88277047fb1de909fe9198f77e7db1d6d670d6775c0.png" />
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">Input In [18],</span> in <span class="ni">&lt;cell line: 32&gt;</span><span class="nt">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">30</span> <span class="c1"># Display the final image</span>
+<span class="g g-Whitespace">     </span><span class="mi">31</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="ne">---&gt; </span><span class="mi">32</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">151</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image_color</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">33</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Input image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">34</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">152</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">closed</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;image_color&#39; is not defined
 </pre></div>
 </div>
+<img alt="_images/398a006a30fdf2ad01bdf1021f44a1f05285dd417367916a8d5e6fa8479e29ae.png" src="_images/398a006a30fdf2ad01bdf1021f44a1f05285dd417367916a8d5e6fa8479e29ae.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cv2</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Boundary extraction</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">skimage.measure</span> <span class="kn">import</span> <span class="n">find_contours</span>
@@ -1931,7 +1570,7 @@ document.write(`
     <span class="k">return</span> <span class="n">color_image</span>
 
 <span class="c1"># Load the image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;dilation_45.png&quot;</span>  <span class="c1"># Replace with your image path</span>
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/boundary_ext.png&quot;</span>  
 <span class="n">rgb_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
 
 <span class="c1"># Convert the image to grayscale</span>
@@ -1964,96 +1603,14 @@ document.write(`
 <span class="c1"># Visualize the boundary image with burgundy background</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">boundary_image_burgundy</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Extracted Boundary with Burgundy Background&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Extracted Boundary&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="c1"># Optionally save the image</span>
-<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s2">&quot;boundary_with_burgundy_background.png&quot;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">boundary_image_burgundy</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">)</span> <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2496f0160fbf9f4235a5df8d44afeb26fa1ccbd6f33904b33e0cf7cb4fc87e12.png" src="_images/2496f0160fbf9f4235a5df8d44afeb26fa1ccbd6f33904b33e0cf7cb4fc87e12.png" />
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cv2</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="k">def</span> <span class="nf">calculate_histogram</span><span class="p">(</span><span class="n">image</span><span class="p">):</span>
-    <span class="c1"># Convert the image to RGB</span>
-    <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
-    
-    <span class="c1"># Create an empty histogram with 64 bins (for the 64 color codes)</span>
-    <span class="n">hist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-    
-    <span class="c1"># Loop over each pixel in the image</span>
-    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">image_rgb</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">image_rgb</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-            <span class="c1"># Extract the R, G, B values (0-255)</span>
-            <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">image_rgb</span><span class="p">[</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span>
-            
-            <span class="c1"># Extract the 2 most significant bits from each channel</span>
-            <span class="n">r_bits</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;&gt;</span> <span class="mi">6</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mb">0b11</span>
-            <span class="n">g_bits</span> <span class="o">=</span> <span class="p">(</span><span class="n">g</span> <span class="o">&gt;&gt;</span> <span class="mi">6</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mb">0b11</span>
-            <span class="n">b_bits</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span> <span class="o">&gt;&gt;</span> <span class="mi">6</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mb">0b11</span>
-            
-            <span class="c1"># Combine the 2 most significant bits from each channel into a single 6-bit code</span>
-            <span class="n">color_code</span> <span class="o">=</span> <span class="p">(</span><span class="n">r_bits</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">g_bits</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="n">b_bits</span>
-            
-            <span class="c1"># Increment the corresponding bin in the histogram</span>
-            <span class="n">hist</span><span class="p">[</span><span class="n">color_code</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-            
-    <span class="k">return</span> <span class="n">hist</span>
-
-<span class="k">def</span> <span class="nf">plot_histogram_with_single_color</span><span class="p">(</span><span class="n">hist</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s1">&#39;histogram_with_single_color.png&#39;</span><span class="p">):</span>
-    <span class="c1"># Choose a burgundy color for the bars (RGB format)</span>
-    <span class="n">burgundy</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">)</span>  <span class="c1"># RGB tuple for burgundy</span>
-    
-    <span class="c1"># Plot the histogram with 64 bins, using a single color</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">64</span><span class="p">),</span> <span class="n">hist</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">burgundy</span><span class="p">)</span>
-
-    <span class="c1"># Set title and labels with larger fonts</span>
-    <span class="c1">#plt.title(&quot;64-bin Histogram of Color Codes&quot;, fontsize=16)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Color Code (0-63)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-    
-    <span class="c1"># Set background color to white</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
-    
-    <span class="c1"># Save the histogram to a file with a white background</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Histogram with single color saved to </span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    
-    <span class="c1"># Close the plot to prevent it from displaying in the notebook</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-<span class="c1"># Load the image (replace with the actual file path if needed)</span>
-<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;cropped_kilim_image.png&#39;</span><span class="p">)</span>
-
-<span class="c1"># Ensure the image was loaded properly</span>
-<span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Could not load image. Make sure the file path is correct.&quot;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="c1"># Calculate the histogram for the image</span>
-    <span class="n">hist</span> <span class="o">=</span> <span class="n">calculate_histogram</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-
-    <span class="c1"># Save the histogram with single color (burgundy) to a file</span>
-    <span class="n">plot_histogram_with_single_color</span><span class="p">(</span><span class="n">hist</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s1">&#39;histogram_with_single_color_kilim.png&#39;</span><span class="p">)</span>  <span class="c1"># You can change the save path and name here</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Histogram with single color saved to histogram_with_single_color_kilim.png
-</pre></div>
-</div>
+<img alt="_images/d38b39ae70fb512bd439868c0a5228f1980954c83614d5d836a7b5ae9b6d1628.png" src="_images/d38b39ae70fb512bd439868c0a5228f1980954c83614d5d836a7b5ae9b6d1628.png" />
 </div>
 </div>
 </section>
@@ -2063,7 +1620,7 @@ document.write(`
     {
         requestKernel: true,
         binderOptions: {
-            repo: "executablebooks/jupyter-book",
+            repo: "itironal/466Companion",
             ref: "master",
         },
         codeMirrorConfig: {
@@ -2090,6 +1647,24 @@ document.write(`
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="newCh6.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chapter 6: Image Transforms</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="newCh11.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Chapter 11 Image Segmentation</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div></div>
   
 </div>
