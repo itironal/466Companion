@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>&lt;no title&gt; &#8212; My sample book</title>
+    <title>Chapter 13: &#8212; My sample book</title>
   
   
   
@@ -64,6 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'newCh13';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Chapter 11 Image Segmentation" href="newCh11.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -134,8 +135,14 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+    
+    
+      
+    
+    
+    <img src="_static/ImageProcessingLogo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/ImageProcessingLogo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
   
-    <p class="title logo__title">My sample book</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -148,11 +155,18 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="newCh1.html"><strong>Chapter 1 Introduction</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh2.html"><strong>Chapter 2 Human Visual System and Image Perception</strong></a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="newCh3.html">Chapter 3: Mathematical Tools for Image Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh4.html">Chapter 4: Color Image Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh5.html">Chapter 5: Spatial Image Enhancement by Filtering: Convolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh6.html">Chapter 6: Image Transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh10.html">Chapter 10: Morphological Image Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh11.html"><strong>Chapter 11 Image Segmentation</strong></a></li>
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 13:</a></li>
 </ul>
 
     </div>
@@ -207,7 +221,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=lab/tree/newCh13.ipynb" target="_blank"
+      <li><a href="https://mybinder.org/v2/gh/itironal/466Companion/master?urlpath=lab/tree/newCh13.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch onBinder"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -225,7 +239,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://colab.research.google.com/github/executablebooks/jupyter-book/blob/master/newCh13.ipynb" target="_blank"
+      <li><a href="https://colab.research.google.com/github/itironal/466Companion/blob/master/newCh13.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch onColab"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -343,9 +357,7 @@ document.write(`
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</label>
+
 </div></div>
       
     </div>
@@ -356,19 +368,11 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1><no title></h1>
+    <h1>Chapter 13:</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-            </nav>
         </div>
     </div>
 </div>
@@ -378,7 +382,10 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <div class="cell docutils container">
+  <section class="tex2jax_ignore mathjax_ignore" id="chapter-13">
+<h1>Chapter 13:<a class="headerlink" href="#chapter-13" title="Permalink to this heading">#</a></h1>
+<p>This is the companion file for Chapter 10.</p>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Polygon approximation by splitting</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -415,7 +422,7 @@ document.write(`
     <span class="n">split_polygon</span><span class="p">(</span><span class="n">boundary_points</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">boundary_points</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">boundary_points</span><span class="p">[</span><span class="n">result</span><span class="p">]</span>
 
-<span class="n">image_rgb</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;20.jpg&quot;</span><span class="p">)</span>  
+<span class="n">image_rgb</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;images/20.jpg&quot;</span><span class="p">)</span>  
 <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">image_rgb</span><span class="p">[</span><span class="mi">500</span><span class="p">:</span><span class="mi">1350</span><span class="p">,</span> <span class="mi">600</span><span class="p">:</span><span class="mi">1400</span><span class="p">]</span>
 <span class="c1"># Convert to grayscale</span>
 <span class="n">gray</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">rgb2gray</span><span class="p">(</span><span class="n">image_rgb</span><span class="p">)</span>
@@ -463,66 +470,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="nn">Input In [1],</span> in <span class="ni">&lt;cell line: 36&gt;</span><span class="nt">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">33</span>     <span class="n">split_polygon</span><span class="p">(</span><span class="n">boundary_points</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">boundary_points</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">34</span>     <span class="k">return</span> <span class="n">boundary_points</span><span class="p">[</span><span class="n">result</span><span class="p">]</span>
-<span class="ne">---&gt; </span><span class="mi">36</span> <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;20.jpg&quot;</span><span class="p">)</span>  
-<span class="g g-Whitespace">     </span><span class="mi">37</span> <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">image_rgb</span><span class="p">[</span><span class="mi">500</span><span class="p">:</span><span class="mi">1350</span><span class="p">,</span> <span class="mi">600</span><span class="p">:</span><span class="mi">1400</span><span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">38</span> <span class="c1"># Convert to grayscale</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/skimage/io/_io.py:53,</span> in <span class="ni">imread</span><span class="nt">(fname, as_gray, plugin, **plugin_args)</span>
-<span class="g g-Whitespace">     </span><span class="mi">50</span>         <span class="n">plugin</span> <span class="o">=</span> <span class="s1">&#39;tifffile&#39;</span>
-<span class="g g-Whitespace">     </span><span class="mi">52</span> <span class="k">with</span> <span class="n">file_or_url_context</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">fname</span><span class="p">:</span>
-<span class="ne">---&gt; </span><span class="mi">53</span>     <span class="n">img</span> <span class="o">=</span> <span class="n">call_plugin</span><span class="p">(</span><span class="s1">&#39;imread&#39;</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">plugin</span><span class="o">=</span><span class="n">plugin</span><span class="p">,</span> <span class="o">**</span><span class="n">plugin_args</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">55</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="s1">&#39;ndim&#39;</span><span class="p">):</span>
-<span class="g g-Whitespace">     </span><span class="mi">56</span>     <span class="k">return</span> <span class="n">img</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/skimage/io/manage_plugins.py:207,</span> in <span class="ni">call_plugin</span><span class="nt">(kind, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">203</span>     <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">204</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Could not find the plugin &quot;</span><span class="si">%s</span><span class="s1">&quot; for </span><span class="si">%s</span><span class="s1">.&#39;</span> <span class="o">%</span>
-<span class="g g-Whitespace">    </span><span class="mi">205</span>                            <span class="p">(</span><span class="n">plugin</span><span class="p">,</span> <span class="n">kind</span><span class="p">))</span>
-<span class="ne">--&gt; </span><span class="mi">207</span> <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/skimage/io/_plugins/imageio_plugin.py:15,</span> in <span class="ni">imread</span><span class="nt">(*args, **kwargs)</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="nd">@wraps</span><span class="p">(</span><span class="n">imageio_imread</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="k">def</span> <span class="nf">imread</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="ne">---&gt; </span><span class="mi">15</span>     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">imageio_imread</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/imageio/v2.py:200,</span> in <span class="ni">imread</span><span class="nt">(uri, format, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">197</span> <span class="n">imopen_args</span> <span class="o">=</span> <span class="n">decypher_format_arg</span><span class="p">(</span><span class="nb">format</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">198</span> <span class="n">imopen_args</span><span class="p">[</span><span class="s2">&quot;legacy_mode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="ne">--&gt; </span><span class="mi">200</span> <span class="k">with</span> <span class="n">imopen</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="s2">&quot;ri&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">imopen_args</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">201</span>     <span class="k">return</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/imageio/core/imopen.py:118,</span> in <span class="ni">imopen</span><span class="nt">(uri, io_mode, plugin, extension, format_hint, legacy_mode, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">116</span>     <span class="n">request</span><span class="o">.</span><span class="n">format_hint</span> <span class="o">=</span> <span class="n">format_hint</span>
-<span class="g g-Whitespace">    </span><span class="mi">117</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">118</span>     <span class="n">request</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">io_mode</span><span class="p">,</span> <span class="n">format_hint</span><span class="o">=</span><span class="n">format_hint</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">120</span> <span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;&lt;bytes&gt;&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span> <span class="k">else</span> <span class="n">uri</span>
-<span class="g g-Whitespace">    </span><span class="mi">122</span> <span class="c1"># fast-path based on plugin</span>
-<span class="g g-Whitespace">    </span><span class="mi">123</span> <span class="c1"># (except in legacy mode)</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/imageio/core/request.py:248,</span> in <span class="ni">Request.__init__</span><span class="nt">(self, uri, mode, extension, format_hint, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">245</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid Request.Mode: </span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">247</span> <span class="c1"># Parse what was given</span>
-<span class="ne">--&gt; </span><span class="mi">248</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_uri</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">250</span> <span class="c1"># Set extension</span>
-<span class="g g-Whitespace">    </span><span class="mi">251</span> <span class="k">if</span> <span class="n">extension</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/imageio/core/request.py:407,</span> in <span class="ni">Request._parse_uri</span><span class="nt">(self, uri)</span>
-<span class="g g-Whitespace">    </span><span class="mi">404</span> <span class="k">if</span> <span class="n">is_read_request</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">405</span>     <span class="c1"># Reading: check that the file exists (but is allowed a dir)</span>
-<span class="g g-Whitespace">    </span><span class="mi">406</span>     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">407</span>         <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;No such file: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">fn</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">408</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">409</span>     <span class="c1"># Writing: check that the directory to write to does exist</span>
-<span class="g g-Whitespace">    </span><span class="mi">410</span>     <span class="n">dn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
-
-<span class="ne">FileNotFoundError</span>: No such file: &#39;/Users/itir/Documents/466CompanionBook/466Companion/20.jpg&#39;
-</pre></div>
-</div>
+<img alt="_images/1d2540c3df7ba7f5a8b096aa40d7053ef04b429fa3f9ccef44c94f1cd1beffdb.png" src="_images/1d2540c3df7ba7f5a8b096aa40d7053ef04b429fa3f9ccef44c94f1cd1beffdb.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -572,7 +520,7 @@ document.write(`
 
 <span class="c1"># === MAIN PIPELINE ===</span>
 <span class="c1"># Load the horse image</span>
-<span class="n">image_rgb</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;20.jpg&quot;</span><span class="p">)</span>  <span class="c1"># Replace with your local image path if needed</span>
+<span class="n">image_rgb</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;images/20.jpg&quot;</span><span class="p">)</span>  <span class="c1"># Replace with your local image path if needed</span>
 <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">image_rgb</span><span class="p">[</span><span class="mi">500</span><span class="p">:</span><span class="mi">1350</span><span class="p">,</span> <span class="mi">600</span><span class="p">:</span><span class="mi">1400</span><span class="p">]</span>
 
 <span class="c1"># Convert to grayscale</span>
@@ -618,15 +566,16 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/d479fd0a4bc09b7fdf0a1b3a6454af0f575fe89201bb9fa3f19886d152554bb2.png" src="_images/d479fd0a4bc09b7fdf0a1b3a6454af0f575fe89201bb9fa3f19886d152554bb2.png" />
+<img alt="_images/cb92be1c8c40d6bf80a1730ba75d2b2727a9c5da041bac903a60cd897a49b219.png" src="_images/cb92be1c8c40d6bf80a1730ba75d2b2727a9c5da041bac903a60cd897a49b219.png" />
 </div>
 </div>
+</section>
 
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
         binderOptions: {
-            repo: "executablebooks/jupyter-book",
+            repo: "itironal/466Companion",
             ref: "master",
         },
         codeMirrorConfig: {
@@ -653,6 +602,15 @@ document.write(`
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="newCh11.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Chapter 11 Image Segmentation</strong></p>
+      </div>
+    </a>
 </div></div>
   
 </div>
@@ -662,20 +620,6 @@ document.write(`
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-  </nav></div>
-
-</div></div>
               
             
           </div>
