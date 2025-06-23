@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'newCh4';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Chapter 5: Spatial Image Enhancement by Filtering: Convolution" href="newCh5.html" />
+    <link rel="next" title="Chapter 5: Spatial Image Enhancement by Point Operations" href="newCh5.html" />
     <link rel="prev" title="Chapter 3: Mathematical Tools for Image Processing" href="newCh3.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -161,8 +161,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="newCh2.html"><strong>Chapter 2 Human Visual System and Image Perception</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh3.html">Chapter 3: Mathematical Tools for Image Processing</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 4: Color Image Processing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="newCh5.html">Chapter 5: Spatial Image Enhancement by Filtering: Convolution</a></li>
-<li class="toctree-l1"><a class="reference internal" href="newCh6.html">Chapter 6: Image Transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh5.html">Chapter 5: Spatial Image Enhancement by Point Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh6.html">Chapter 6: Spatial Image Enhancement by Filtering: Convolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh7.html">Chapter 7: Image Transforms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh10.html">Chapter 10: Morphological Image Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh11.html"><strong>Chapter 11 Image Segmentation</strong></a></li>
 
@@ -433,12 +434,14 @@ document.write(`
 <span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">io</span><span class="p">,</span> <span class="n">color</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
 
 <span class="c1"># Download the image from the specified URL</span>
-<span class="o">!</span>wget -cq https://raw.githubusercontent.com/hazalmogultay/466Images/master/W9/odtu.jpg
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/odtu.jpg&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/odtu.jpg&quot;</span><span class="p">)</span>
 
 <span class="c1"># Read the downloaded image using skimage&#39;s io module</span>
-<span class="n">img1</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;odtu.jpg&quot;</span><span class="p">)</span> 
+<span class="n">img1</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;images/odtu.jpg&quot;</span><span class="p">)</span> 
 
 <span class="c1"># Create a blank image of the same shape as img1, filled with white (255)</span>
 <span class="n">img2</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">img1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">img1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">img1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
@@ -521,8 +524,12 @@ document.write(`
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="o">!</span>wget -cq https://raw.githubusercontent.com/hazalmogultay/466Images/master/W9/odtu.jpg
-<span class="n">img1</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;odtu.jpg&quot;</span><span class="p">)</span> 
+<span class="c1"># Download the image from the specified URL</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/odtu.jpg&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/odtu.jpg&quot;</span><span class="p">)</span>
+
+<span class="c1"># Read the downloaded image using skimage&#39;s io module</span>
+<span class="n">img1</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;images/odtu.jpg&quot;</span><span class="p">)</span> 
 <span class="n">img_hsi</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">rgb2hsv</span><span class="p">(</span><span class="n">img1</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
@@ -565,6 +572,10 @@ document.write(`
 <span class="kn">import</span> <span class="nn">cv2</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Download the images from the specified URL</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/cropped_kilim_image.png&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/cropped_kilim_image.png&quot;</span><span class="p">)</span>
 
 <span class="c1"># --- FILE NAMES ---</span>
 <span class="n">gray_image_filename</span> <span class="o">=</span> <span class="s2">&quot;images/cropped_kilim_image.png&quot;</span>    <span class="c1"># grayscale input</span>
@@ -691,7 +702,7 @@ document.write(`
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Chapter 5: Spatial Image Enhancement by Filtering: Convolution</p>
+        <p class="prev-next-title">Chapter 5: Spatial Image Enhancement by Point Operations</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -1,0 +1,1071 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Chapter 7: Image Transforms &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'newCh7';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Chapter 10: Morphological Image Processing" href="newCh10.html" />
+    <link rel="prev" title="Chapter 6: Spatial Image Enhancement by Filtering: Convolution" href="newCh6.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/ImageProcessingLogo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/ImageProcessingLogo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to your Jupyter Book
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="newCh1.html"><strong>Chapter 1 Introduction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh2.html"><strong>Chapter 2 Human Visual System and Image Perception</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh3.html">Chapter 3: Mathematical Tools for Image Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh4.html">Chapter 4: Color Image Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh5.html">Chapter 5: Spatial Image Enhancement by Point Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh6.html">Chapter 6: Spatial Image Enhancement by Filtering: Convolution</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 7: Image Transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh10.html">Chapter 10: Morphological Image Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh11.html"><strong>Chapter 11 Image Segmentation</strong></a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="newCh13.html">Chapter 13:</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/itironal/466Companion/master?urlpath=lab/tree/newCh7.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/itironal/466Companion/blob/master/newCh7.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/newCh7.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Chapter 7: Image Transforms</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-1-a-useful-explanation-of-vector-spaces">Video 7.1. A useful explanation of vector spaces</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-2-what-are-eigenvector-and-eigenvalue-of-a-matrix">Video 7.2. What are eigenvector and eigenvalue of a matrix?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-3-the-colorful-life-of-john-baptiste-fourier-part-1">Video 7.3. The colorful life of John Baptiste Fourier (Part 1)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-4-there-are-a-lot-of-lessons-to-be-taken-from-the-life-of-fourier-part-2">Video 7.4. There are a lot of lessons to be taken from the life of Fourier (Part 2)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-1"><strong>Programming exercise 7.1:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-5-a-video-which-demonstrates-the-fourier-transform">Video 7.5. A video which demonstrates the Fourier transform</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-2"><strong>Programming exercise 7.2:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-3"><strong>Programming exercise 7.3:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-4"><strong>Programming exercise 7.4:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-5"><strong>Programming exercise 7.5:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-6"><strong>Programming exercise 7.6:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-7"><strong>Programming exercise 7.7:</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="chapter-7-image-transforms">
+<h1>Chapter 7: Image Transforms<a class="headerlink" href="#chapter-7-image-transforms" title="Permalink to this heading">#</a></h1>
+<p>This is the companion file for Chapter 7.</p>
+<section id="video-7-1-a-useful-explanation-of-vector-spaces">
+<h2>Video 7.1. A useful explanation of vector spaces<a class="headerlink" href="#video-7-1-a-useful-explanation-of-vector-spaces" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://www.youtube.com/watch?v=ozwodzD5bJM"><img alt="A useful explanation of vector spaces" src="https://img.youtube.com/vi/ozwodzD5bJM/0.jpg" /></a></p>
+</section>
+<section id="video-7-2-what-are-eigenvector-and-eigenvalue-of-a-matrix">
+<h2>Video 7.2. What are eigenvector and eigenvalue of a matrix?<a class="headerlink" href="#video-7-2-what-are-eigenvector-and-eigenvalue-of-a-matrix" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://www.youtube.com/watch?v=PFDu9oVAE-g"><img alt="What are eigenvector and eigenvalue of a matrix?" src="https://img.youtube.com/vi/PFDu9oVAE-g/0.jpg" /></a></p>
+</section>
+<section id="video-7-3-the-colorful-life-of-john-baptiste-fourier-part-1">
+<h2>Video 7.3. The colorful life of John Baptiste Fourier (Part 1)<a class="headerlink" href="#video-7-3-the-colorful-life-of-john-baptiste-fourier-part-1" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://www.youtube.com/watch?v=2bSw38dqRrU"><img alt="The colorful life of John Baptiste Fourier (Part 1)" src="https://img.youtube.com/vi/2bSw38dqRrU/0.jpg" /></a></p>
+</section>
+<section id="video-7-4-there-are-a-lot-of-lessons-to-be-taken-from-the-life-of-fourier-part-2">
+<h2>Video 7.4. There are a lot of lessons to be taken from the life of Fourier (Part 2)<a class="headerlink" href="#video-7-4-there-are-a-lot-of-lessons-to-be-taken-from-the-life-of-fourier-part-2" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://www.youtube.com/watch?v=6qiIMrBOmOo"><img alt="There are a lot of lessons to be taken from the life of Fourier (Part 2)" src="https://img.youtube.com/vi/6qiIMrBOmOo/0.jpg" /></a></p>
+</section>
+<section id="programming-exercise-7-1">
+<h2><strong>Programming exercise 7.1:</strong><a class="headerlink" href="#programming-exercise-7-1" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following code to see the output of Fourier transformaiton.</p></li>
+<li><p>Change sigma to 3 and see how the output changes.</p></li>
+<li><p>Rotate the input image 45 degrees and see the output.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fourier transformation</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.fftpack</span> <span class="k">as</span> <span class="nn">fp</span> 
+
+<span class="c1"># Image in spatial domain</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">512</span><span class="p">,</span><span class="mi">512</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="n">img</span><span class="p">[</span><span class="mi">235</span><span class="p">:</span><span class="mi">275</span><span class="p">,</span> <span class="mi">245</span><span class="p">:</span><span class="mi">265</span><span class="p">]</span> <span class="o">=</span> <span class="mi">255</span>
+
+<span class="c1"># Image in Fourier domain</span>
+<span class="n">img_f</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">fftn</span><span class="p">(</span><span class="n">img</span><span class="p">);</span>
+<span class="c1"># Magnitude spectrum</span>
+<span class="n">magn</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">img_f</span><span class="p">);</span> 
+<span class="c1"># Magnitude spectrum (centered)</span>
+<span class="n">magn_centered</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">magn</span><span class="p">)</span>
+<span class="c1"># Stretched spectrum (log transformation)</span>
+<span class="n">log_magn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">magn_centered</span><span class="p">);</span>
+<span class="c1"># Phase</span>
+<span class="n">img_phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">img_f</span><span class="p">)</span>
+<span class="c1"># Image converted back in spatial domain</span>
+<span class="n">converted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">ifftn</span><span class="p">(</span><span class="n">img_f</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Image in spatial domain&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">magn</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Magnitude spectrum&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">magn_centered</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Centered magnitude spectrum&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">log_magn</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Stretched spectrum (log transformation)&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img_phase</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Phase&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">converted</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Converted back to spatial domain&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/fc677cac5afb5f7c2e1f4c392f0cb0fef72265362bbce9b4a2801be2eae2c01d.png" src="_images/fc677cac5afb5f7c2e1f4c392f0cb0fef72265362bbce9b4a2801be2eae2c01d.png" />
+</div>
+</div>
+</section>
+<section id="video-7-5-a-video-which-demonstrates-the-fourier-transform">
+<h2>Video 7.5. A video which demonstrates the Fourier transform<a class="headerlink" href="#video-7-5-a-video-which-demonstrates-the-fourier-transform" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://www.youtube.com/watch?v=gwaYwRwY6PU"><img alt="A nice video which demonstrates the Fourier transform." src="https://img.youtube.com/vi/gwaYwRwY6PU/0.jpg" /></a></p>
+</section>
+<section id="programming-exercise-7-2">
+<h2><strong>Programming exercise 7.2:</strong><a class="headerlink" href="#programming-exercise-7-2" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fourier Transform</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.image</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="c1">#read the original image</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/dervis_hocam.png&quot;</span>
+<span class="n">original_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)))</span><span class="o">/</span><span class="mi">255</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">original_img</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Image in spatial domain</span><span class="se">\n</span><span class="s1"> (a)&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.3</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
+
+<span class="c1">#fourier transformation of channels</span>
+<span class="n">fourier_transform_red_channel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">original_img</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">fourier_transform_green_channel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">original_img</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">fourier_transform_blue_channel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">original_img</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">])</span>
+<span class="c1">#absolute value for magnitude spectrum (real part)</span>
+<span class="n">magnitude_spectrum_red</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">fourier_transform_red_channel</span><span class="p">)</span>
+<span class="n">magnitude_spectrum_green</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">fourier_transform_green_channel</span><span class="p">)</span>
+<span class="n">magnitude_spectrum_blue</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">fourier_transform_blue_channel</span><span class="p">)</span>
+
+<span class="c1">#log transformation to enhance white areas for better visualization</span>
+<span class="c1">#normalizing to show as rgb image</span>
+<span class="n">log_transformation_mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">magnitude_spectrum_red</span><span class="p">,</span> <span class="n">magnitude_spectrum_green</span><span class="p">,</span> <span class="n">magnitude_spectrum_blue</span><span class="p">)))</span>
+<span class="n">log_transformation_mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">log_transformation_mag</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">log_transformation_mag</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">((</span><span class="n">log_transformation_mag</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">));</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Magnitude Spectrum</span><span class="se">\n</span><span class="s1"> (b)&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.3</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
+
+<span class="c1">#magnitude spectrum folded to center from the corners</span>
+<span class="n">folded_mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">log_transformation_mag</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">((</span><span class="n">folded_mag</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">));</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Folded Magnitude Spectrum</span><span class="se">\n</span><span class="s1"> (c)&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.3</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
+
+<span class="c1">#angle for phase spectrum</span>
+<span class="n">phase_red</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">fourier_transform_red_channel</span><span class="p">)</span>
+<span class="n">phase_green</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">fourier_transform_green_channel</span><span class="p">)</span>
+<span class="n">phase_blue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">fourier_transform_blue_channel</span><span class="p">)</span>
+
+<span class="n">phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">phase_red</span><span class="p">,</span> <span class="n">phase_green</span><span class="p">,</span> <span class="n">phase_blue</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">((</span><span class="n">phase</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Phase Spectrum</span><span class="se">\n</span><span class="s1"> (d)&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.3</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1ae8d65257d637e0cb4096f7add71abe1c28881bc561b15f64f90c6b09d4eb0d.png" src="_images/1ae8d65257d637e0cb4096f7add71abe1c28881bc561b15f64f90c6b09d4eb0d.png" />
+</div>
+</div>
+</section>
+<section id="programming-exercise-7-3">
+<h2><strong>Programming exercise 7.3:</strong><a class="headerlink" href="#programming-exercise-7-3" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Cosine Transform</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.fftpack</span> <span class="kn">import</span> <span class="n">dct</span>
+<span class="kn">import</span> <span class="nn">matplotlib.image</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="c1">#plt.rcParams.update({&#39;font.size&#39;: 18})</span>
+
+<span class="c1">#read original image </span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/fatos_hocam_background.png&quot;</span>
+<span class="n">original_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)))</span><span class="o">/</span><span class="mi">255</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">original_img</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Image in spatial domain</span><span class="se">\n</span><span class="s1"> (a)&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1">#cosine transformation of channels</span>
+<span class="n">cosine_red</span> <span class="o">=</span> <span class="n">dct</span><span class="p">(</span> <span class="n">dct</span><span class="p">(</span> <span class="n">original_img</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;ortho&#39;</span> <span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;ortho&#39;</span> <span class="p">)</span>
+<span class="n">cosine_green</span> <span class="o">=</span> <span class="n">dct</span><span class="p">(</span> <span class="n">dct</span><span class="p">(</span> <span class="n">original_img</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;ortho&#39;</span> <span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;ortho&#39;</span> <span class="p">)</span>
+<span class="n">cosine_blue</span> <span class="o">=</span> <span class="n">dct</span><span class="p">(</span> <span class="n">dct</span><span class="p">(</span> <span class="n">original_img</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;ortho&#39;</span> <span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;ortho&#39;</span> <span class="p">)</span>
+
+<span class="c1">#normalizing to show as rgb image</span>
+<span class="n">cosine_transformation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">cosine_red</span><span class="p">,</span> <span class="n">cosine_green</span><span class="p">,</span> <span class="n">cosine_blue</span><span class="p">))</span>
+
+<span class="c1">#enhance the transformation for better visualization</span>
+<span class="n">cosine_transformation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">cosine_transformation</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mi">4</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">((</span><span class="n">cosine_transformation</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Cosine Transformation</span><span class="se">\n</span><span class="s1"> (b)&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/67ec876b9ee9037a72f6666f6d4c952c496945f6b92310cd00373ad13cbd88af.png" src="_images/67ec876b9ee9037a72f6666f6d4c952c496945f6b92310cd00373ad13cbd88af.png" />
+</div>
+</div>
+</section>
+<section id="programming-exercise-7-4">
+<h2><strong>Programming exercise 7.4:</strong><a class="headerlink" href="#programming-exercise-7-4" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following code to perform convolution with a Gaussian filter (by multiplying the transformed image and kernel in the frequency domain).</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.fftpack</span> <span class="k">as</span> <span class="nn">fp</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">signal</span>
+<span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">io</span><span class="p">,</span> <span class="n">color</span>
+
+<span class="c1"># Load and preprocess the image</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/redmushroom.jpeg&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/redmushroom.jpeg&quot;</span><span class="p">)</span>
+<span class="n">image_rgb</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;images/redmushroom.jpeg&#39;</span><span class="p">)[</span><span class="mi">800</span><span class="p">:</span><span class="mi">1311</span><span class="p">,</span> <span class="mi">513</span><span class="p">:</span><span class="mi">1024</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Load full RGB image</span>
+<span class="n">image_gray</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">rgb2gray</span><span class="p">(</span><span class="n">image_rgb</span><span class="p">)</span>  <span class="c1"># Convert to grayscale for frequency processing</span>
+
+<span class="c1"># Define the Gaussian kernel for low-pass filtering</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">image_gray</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sigma</span><span class="p">),</span> <span class="n">signal</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">image_gray</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sigma</span><span class="p">))</span>
+
+<span class="c1"># Convert image and kernel to frequency domain</span>
+<span class="n">freq_image</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">image_gray</span><span class="p">)</span>
+<span class="n">freq_kernel</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">kernel</span><span class="p">))</span>
+
+<span class="c1"># Perform convolution in the frequency domain</span>
+<span class="n">convolved</span> <span class="o">=</span> <span class="n">freq_image</span> <span class="o">*</span> <span class="n">freq_kernel</span>
+<span class="n">output_image</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">ifft2</span><span class="p">(</span><span class="n">convolved</span><span class="p">)</span><span class="o">.</span><span class="n">real</span>
+
+<span class="c1"># Plotting the results</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+<span class="c1"># Original RGB Image</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image_rgb</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original RGB Image&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1"># Grayscale Image in Spatial Domain</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image_gray</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Grayscale Image&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1"># Kernel in Spatial Domain</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Kernel in Spatial Domain&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1"># Kernel in Frequency Domain</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">freq_kernel</span><span class="p">)),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Kernel in Frequency Domain&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1"># Filtered Image (Grayscale)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">output_image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Filtered Image&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/57e531fe7f57d24fafce140dad4ef86f79ac40981b8f3e5f90217cb1628da354.png" src="_images/57e531fe7f57d24fafce140dad4ef86f79ac40981b8f3e5f90217cb1628da354.png" />
+</div>
+</div>
+</section>
+<section id="programming-exercise-7-5">
+<h2><strong>Programming exercise 7.5:</strong><a class="headerlink" href="#programming-exercise-7-5" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following code to perfrom low pass filtering in frequency domain.</p></li>
+<li><p>Change filter size to 100 and run the code. What change do you see in the filtered image?</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Low pass filtering in the frequency spectrum </span>
+
+<span class="c1"># Load and preprocess the image</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/redmushroom.jpeg&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/redmushroom.jpeg&quot;</span><span class="p">)</span>
+<span class="n">image_rgb</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;images/redmushroom.jpeg&#39;</span><span class="p">)[</span><span class="mi">800</span><span class="p">:</span><span class="mi">1311</span><span class="p">,</span> <span class="mi">513</span><span class="p">:</span><span class="mi">1024</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Load full RGB image</span>
+<span class="n">image_gray</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">rgb2gray</span><span class="p">(</span><span class="n">image_rgb</span><span class="p">)</span>  <span class="c1"># Convert to grayscale for frequency processing</span>
+
+<span class="c1"># Perform the Fourier Transform of the grayscale image to move to frequency domain</span>
+<span class="n">freq_image</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">image_gray</span><span class="p">)</span>
+
+<span class="c1"># Define the size of the low-pass filter</span>
+<span class="n">filter_size</span> <span class="o">=</span> <span class="mi">30</span>
+
+<span class="c1"># Shift the frequency components so that the low-frequency components are at the center</span>
+<span class="n">freq_image_centered</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">freq_image</span><span class="p">)</span>
+
+<span class="c1"># Create an empty low-pass filter with the same shape as the frequency image</span>
+<span class="n">low_pass</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+
+<span class="c1"># Define the region to be kept for the low-pass filter in the center</span>
+<span class="n">low_pass</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">filter_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter_size</span><span class="p">,</span> 
+         <span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">filter_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter_size</span><span class="p">]</span> <span class="o">=</span> \
+    <span class="n">freq_image_centered</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">filter_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter_size</span><span class="p">,</span> 
+                        <span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">filter_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter_size</span><span class="p">]</span>
+
+<span class="c1"># Perform the inverse Fourier transform to convert the filtered image back to spatial domain</span>
+<span class="n">filtered_image</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">ifft2</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">low_pass</span><span class="p">))</span><span class="o">.</span><span class="n">real</span>
+
+<span class="c1"># Plot the results</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
+
+<span class="c1"># Plot the original grayscale image</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image_gray</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original Image&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot the magnitude of the original image in the frequency domain (log scale)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">((</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">freq_image</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original Image Spectrum&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot the low-pass filtered image after inverse FFT</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">filtered_image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Low Pass Filtered Image&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot the low-pass filter in the frequency domain (log scale)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">((</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span> <span class="n">low_pass</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Low Pass Filter Image Spectrum&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1"># Show the plots</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_67869/3493258240.py:41: ComplexWarning: Casting complex values to real discards the imaginary part
+  plt.imshow((10*np.log10(1 + freq_image)).astype(int), cmap=&#39;gray&#39;)
+/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_67869/3493258240.py:53: ComplexWarning: Casting complex values to real discards the imaginary part
+  plt.imshow((10*np.log10(1+ low_pass)).astype(int), cmap=&#39;gray&#39;)
+</pre></div>
+</div>
+<img alt="_images/2e7a2a4c631dda45a75f1bc6613dddc2b5e8d4a3d3a9c5f748c450f07422fad2.png" src="_images/2e7a2a4c631dda45a75f1bc6613dddc2b5e8d4a3d3a9c5f748c450f07422fad2.png" />
+</div>
+</div>
+</section>
+<section id="programming-exercise-7-6">
+<h2><strong>Programming exercise 7.6:</strong><a class="headerlink" href="#programming-exercise-7-6" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following code to perfrom high pass filtering in frequency domain.</p></li>
+<li><p>Change filter size to 5 and run the code. What change do you see in the filtered image?</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># High pass filtering in the frequency spectrum </span>
+
+<span class="c1"># Load and preprocess the image</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/redmushroom.jpeg&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/redmushroom.jpeg&quot;</span><span class="p">)</span>
+<span class="n">image_rgb</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;images/redmushroom.jpeg&#39;</span><span class="p">)[</span><span class="mi">800</span><span class="p">:</span><span class="mi">1311</span><span class="p">,</span> <span class="mi">513</span><span class="p">:</span><span class="mi">1024</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Load full RGB image</span>
+<span class="n">image_gray</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">rgb2gray</span><span class="p">(</span><span class="n">image_rgb</span><span class="p">)</span>  <span class="c1"># Convert to grayscale for frequency processing</span>
+
+<span class="c1"># Perform the Fourier Transform of the grayscale image to move to frequency domain</span>
+<span class="n">freq_image</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">image_gray</span><span class="p">)</span>
+
+<span class="c1"># Define the size of the high-pass filter</span>
+<span class="n">filter_size</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="c1"># Shift the frequency components so that the low-frequency components are at the center</span>
+<span class="n">freq_image_centered</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">freq_image</span><span class="p">)</span>
+
+<span class="c1"># Create a copy of the frequency image to apply the high-pass filter</span>
+<span class="n">high_pass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="p">)</span>
+
+<span class="c1"># Set the low-frequency region (center) of the frequency image to zero, removing low-frequency components</span>
+<span class="n">high_pass</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">filter_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter_size</span><span class="p">,</span> 
+          <span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">filter_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter_size</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># Perform the inverse Fourier transform to convert the filtered image back to spatial domain</span>
+<span class="n">filtered_image</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">ifft2</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">high_pass</span><span class="p">))</span><span class="o">.</span><span class="n">real</span>
+
+<span class="c1"># Plot the results</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
+
+<span class="c1"># Plot the original grayscale image</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image_gray</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original Image&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot the magnitude of the original image in the frequency domain (log scale)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">((</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">freq_image</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original Image Spectrum&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot the high-pass filtered image after inverse FFT</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">filtered_image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;High Pass Filtered Image&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot the high-pass filter in the frequency domain (log scale)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">((</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span> <span class="n">high_pass</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;High Pass Filter Image Spectrum&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1"># Show the plots</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_67869/2113597330.py:39: ComplexWarning: Casting complex values to real discards the imaginary part
+  plt.imshow((10*np.log10(1 + freq_image)).astype(int), cmap=&#39;gray&#39;)
+/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_67869/2113597330.py:51: ComplexWarning: Casting complex values to real discards the imaginary part
+  plt.imshow((10*np.log10(1+ high_pass)).astype(int), cmap=&#39;gray&#39;)
+</pre></div>
+</div>
+<img alt="_images/a3c4b50a0e3563825713f65b6a372e16780a316cce68ff1320366d3036ce7b92.png" src="_images/a3c4b50a0e3563825713f65b6a372e16780a316cce68ff1320366d3036ce7b92.png" />
+</div>
+</div>
+</section>
+<section id="programming-exercise-7-7">
+<h2><strong>Programming exercise 7.7:</strong><a class="headerlink" href="#programming-exercise-7-7" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following code to perfrom band pass filtering in frequency domain.</p></li>
+<li><p>Change sizes of filter and filter2 and run the code. What change do you see in the filtered image?</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Band pass filtering in the frequency spectrum </span>
+
+<span class="c1"># Load and preprocess the image</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/redmushroom.jpeg&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/redmushroom.jpeg&quot;</span><span class="p">)</span>
+<span class="n">image_rgb</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;images/redmushroom.jpeg&#39;</span><span class="p">)[</span><span class="mi">800</span><span class="p">:</span><span class="mi">1311</span><span class="p">,</span> <span class="mi">513</span><span class="p">:</span><span class="mi">1024</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Load full RGB image</span>
+<span class="n">image_gray</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">rgb2gray</span><span class="p">(</span><span class="n">image_rgb</span><span class="p">)</span>  <span class="c1"># Convert to grayscale for frequency processing</span>
+
+<span class="c1"># Perform the Fourier Transform of the grayscale image to move to the frequency domain</span>
+<span class="n">freq_image</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">fft2</span><span class="p">(</span><span class="n">image_gray</span><span class="p">)</span>
+
+<span class="c1"># Define the size of the outer low-frequency filter and the inner high-frequency filter</span>
+<span class="n">filter_size</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="n">filter2_size</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="c1"># Shift the frequency components so that low frequencies are at the center</span>
+<span class="n">freq_image_centered</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">freq_image</span><span class="p">)</span>
+
+<span class="c1"># Create a copy of the frequency image to apply the band-pass filter</span>
+<span class="n">band_pass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="p">)</span>
+
+<span class="c1"># Apply the outer low-pass filter by zeroing out the high frequencies (the center)</span>
+<span class="n">band_pass</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">filter_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter_size</span><span class="p">,</span> 
+          <span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">filter_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter_size</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># Apply the inner high-pass filter by zeroing out the very low frequencies (center region)</span>
+<span class="n">band_pass</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">filter2_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter2_size</span><span class="p">,</span> 
+          <span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">filter2_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter2_size</span><span class="p">]</span> <span class="o">=</span> \
+    <span class="n">freq_image_centered</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">filter2_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter2_size</span><span class="p">,</span> 
+                        <span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">filter2_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">freq_image_centered</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter2_size</span><span class="p">]</span>
+
+<span class="c1"># Perform the inverse Fourier transform to convert the filtered image back to spatial domain</span>
+<span class="n">filtered_image</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">ifft2</span><span class="p">(</span><span class="n">fp</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">band_pass</span><span class="p">))</span><span class="o">.</span><span class="n">real</span>
+
+<span class="c1"># Plot the results</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
+
+<span class="c1"># Plot the original grayscale image</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image_gray</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original Image&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot the magnitude of the original image in the frequency domain (log scale)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">((</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">freq_image</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original Image Spectrum&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot the band-pass filtered image after inverse FFT</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">filtered_image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Band Pass Filtered Image&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot the band-pass filter in the frequency domain (log scale)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">((</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span> <span class="n">band_pass</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Band Pass Filter Image Spectrum&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1"># Show the plots</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_67869/1524391493.py:46: ComplexWarning: Casting complex values to real discards the imaginary part
+  plt.imshow((10*np.log10(1 + freq_image)).astype(int), cmap=&#39;gray&#39;)
+/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_67869/1524391493.py:58: ComplexWarning: Casting complex values to real discards the imaginary part
+  plt.imshow((10*np.log10(1+ band_pass)).astype(int), cmap=&#39;gray&#39;)
+</pre></div>
+</div>
+<img alt="_images/03d8beec6f514e7d463befe363f678015bda8078b27f890e13c62eaedc89783b.png" src="_images/03d8beec6f514e7d463befe363f678015bda8078b27f890e13c62eaedc89783b.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "itironal/466Companion",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="newCh6.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chapter 6: Spatial Image Enhancement by Filtering: Convolution</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="newCh10.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 10: Morphological Image Processing</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-1-a-useful-explanation-of-vector-spaces">Video 7.1. A useful explanation of vector spaces</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-2-what-are-eigenvector-and-eigenvalue-of-a-matrix">Video 7.2. What are eigenvector and eigenvalue of a matrix?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-3-the-colorful-life-of-john-baptiste-fourier-part-1">Video 7.3. The colorful life of John Baptiste Fourier (Part 1)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-4-there-are-a-lot-of-lessons-to-be-taken-from-the-life-of-fourier-part-2">Video 7.4. There are a lot of lessons to be taken from the life of Fourier (Part 2)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-1"><strong>Programming exercise 7.1:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-5-a-video-which-demonstrates-the-fourier-transform">Video 7.5. A video which demonstrates the Fourier transform</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-2"><strong>Programming exercise 7.2:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-3"><strong>Programming exercise 7.3:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-4"><strong>Programming exercise 7.4:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-5"><strong>Programming exercise 7.5:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-6"><strong>Programming exercise 7.6:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-7"><strong>Programming exercise 7.7:</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
