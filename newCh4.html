@@ -164,10 +164,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="newCh5.html">Chapter 5: Spatial Image Enhancement by Point Operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh6.html">Chapter 6: Spatial Image Enhancement by Filtering: Convolution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh7.html">Chapter 7: Image Transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh8.html">Chapter 8: Wavelet Transforms and Multiresolution Image Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh10.html">Chapter 10: Morphological Image Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh11.html"><strong>Chapter 11 Image Segmentation</strong></a></li>
-
-
 <li class="toctree-l1"><a class="reference internal" href="newCh13.html">Chapter 13:</a></li>
 </ul>
 
@@ -382,10 +381,10 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-4-1-the-physics-and-psychology-of-color"><strong>Video 4.1: The Physics and Psychology of Color</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-4-2-what-is-color"><strong>Video 4.2: What is Color?</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-4-3-color-spectrum"><strong>Video 4.3: Color Spectrum?</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-4-4-how-does-the-brain-generate-color"><strong>Video 4.4: How does the brain generate color?</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-4-1"><strong>Video 4.1</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-4-2"><strong>Video 4.2</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-4-3"><strong>Video 4.3?</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-4-4"><strong>Video 4.4</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-4-1"><strong>Programming exercise 4.1:</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-4-2"><strong>Programming exercise 4.2:</strong></a></li>
 </ul>
@@ -402,23 +401,27 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="chapter-4-color-image-processing">
 <h1>Chapter 4: Color Image Processing<a class="headerlink" href="#chapter-4-color-image-processing" title="Permalink to this heading">#</a></h1>
 <p>This is the companion file for Chapter 4.</p>
-<section id="video-4-1-the-physics-and-psychology-of-color">
-<h2><strong>Video 4.1: The Physics and Psychology of Color</strong><a class="headerlink" href="#video-4-1-the-physics-and-psychology-of-color" title="Permalink to this heading">#</a></h2>
+<section id="video-4-1">
+<h2><strong>Video 4.1</strong><a class="headerlink" href="#video-4-1" title="Permalink to this heading">#</a></h2>
+<p><strong>The Physics and Psychology of Color</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=af78RPi6ayE"><img alt="The Physics and Psychology of Colour - Andrew Hanson" src="https://img.youtube.com/vi/af78RPi6ayE/0.jpg" /></a></p>
 <p><em>Video: The Physics and Psychology of Colour - Andrew Hanson.</em></p>
 </section>
-<section id="video-4-2-what-is-color">
-<h2><strong>Video 4.2: What is Color?</strong><a class="headerlink" href="#video-4-2-what-is-color" title="Permalink to this heading">#</a></h2>
+<section id="video-4-2">
+<h2><strong>Video 4.2</strong><a class="headerlink" href="#video-4-2" title="Permalink to this heading">#</a></h2>
+<p><strong>What is Color?</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=0DXZvcfPVrk"><img alt="What is color? - Khan Academy" src="https://img.youtube.com/vi/0DXZvcfPVrk/0.jpg" /></a></p>
 <p><em>Video: “What is color?” from Khan Academy.</em></p>
 </section>
-<section id="video-4-3-color-spectrum">
-<h2><strong>Video 4.3: Color Spectrum?</strong><a class="headerlink" href="#video-4-3-color-spectrum" title="Permalink to this heading">#</a></h2>
+<section id="video-4-3">
+<h2><strong>Video 4.3?</strong><a class="headerlink" href="#video-4-3" title="Permalink to this heading">#</a></h2>
+<p><strong>Color Spectrum</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=0vJOkO43KI4"><img alt="Color Spectrum" src="https://img.youtube.com/vi/0vJOkO43KI4/0.jpg" /></a></p>
 <p><em>Video: Color Spectrum.</em></p>
 </section>
-<section id="video-4-4-how-does-the-brain-generate-color">
-<h2><strong>Video 4.4: How does the brain generate color?</strong><a class="headerlink" href="#video-4-4-how-does-the-brain-generate-color" title="Permalink to this heading">#</a></h2>
+<section id="video-4-4">
+<h2><strong>Video 4.4</strong><a class="headerlink" href="#video-4-4" title="Permalink to this heading">#</a></h2>
+<p><strong>How does the brain generate color?</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=l8_fZPHasdo"><img alt="How does the brain generate color?" src="https://img.youtube.com/vi/l8_fZPHasdo/0.jpg" /></a></p>
 <p><em>Video: How does the brain generate color?</em></p>
 </section>
@@ -724,10 +727,10 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-4-1-the-physics-and-psychology-of-color"><strong>Video 4.1: The Physics and Psychology of Color</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-4-2-what-is-color"><strong>Video 4.2: What is Color?</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-4-3-color-spectrum"><strong>Video 4.3: Color Spectrum?</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-4-4-how-does-the-brain-generate-color"><strong>Video 4.4: How does the brain generate color?</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-4-1"><strong>Video 4.1</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-4-2"><strong>Video 4.2</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-4-3"><strong>Video 4.3?</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-4-4"><strong>Video 4.4</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-4-1"><strong>Programming exercise 4.1:</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-4-2"><strong>Programming exercise 4.2:</strong></a></li>
 </ul>

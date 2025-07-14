@@ -163,12 +163,12 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Chapter 2 Human Visual System and Image Perception</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh3.html">Chapter 3: Mathematical Tools for Image Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh4.html">Chapter 4: Color Image Processing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="newCh5.html">Chapter 5: Spatial Image Enhancement by Filtering: Convolution</a></li>
-<li class="toctree-l1"><a class="reference internal" href="newCh6.html">Chapter 6: Image Transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh5.html">Chapter 5: Spatial Image Enhancement by Point Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh6.html">Chapter 6: Spatial Image Enhancement by Filtering: Convolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh7.html">Chapter 7: Image Transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh8.html">Chapter 8: Wavelet Transforms and Multiresolution Image Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh10.html">Chapter 10: Morphological Image Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh11.html"><strong>Chapter 11 Image Segmentation</strong></a></li>
-
-
 <li class="toctree-l1"><a class="reference internal" href="newCh13.html">Chapter 13:</a></li>
 </ul>
 
@@ -383,14 +383,11 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-1-the-experiment-about-the-decomposition-of-white-light-by-isaac-newton"><strong>Video 2.1: The experiment about the decomposition of white light by Isaac Newton.</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-2-alhazen-not-available"><strong>Video 2.2: Alhazen (not available)</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-3-the-history-of-light"><strong>Video 2.3: The history of light</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-4-how-your-eyes-make-sense-of-the-world"><strong>Video 2.4: How your eyes make sense of the world</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-5-color-perception-based-on-surroundings"><strong>Video 2.5: Color perception based on surroundings</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-6-how-signal-travels-through-a-neuron"><strong>Video 2.6: How signal travels through a neuron</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-1"><strong>Video 2.1</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-2"><strong>Video 2.2</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-3"><strong>Video 2.3</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-4"><strong>Video 2.4</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-2-1"><strong>Programming exercise 2.1:</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-7-working-principle-of-a-single-pixel-camera-not-available"><strong>Video 2.7: Working principle of a single pixel camera (not available)</strong></a></li>
 </ul>
             </nav>
         </div>
@@ -405,40 +402,30 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="chapter-2-human-visual-system-and-image-perception">
 <h1><strong>Chapter 2 Human Visual System and Image Perception</strong><a class="headerlink" href="#chapter-2-human-visual-system-and-image-perception" title="Permalink to this heading">#</a></h1>
 <p>This is the companion file for Chapter 2.</p>
-<section id="video-2-1-the-experiment-about-the-decomposition-of-white-light-by-isaac-newton">
-<h2><strong>Video 2.1: The experiment about the decomposition of white light by Isaac Newton.</strong><a class="headerlink" href="#video-2-1-the-experiment-about-the-decomposition-of-white-light-by-isaac-newton" title="Permalink to this heading">#</a></h2>
+<section id="video-2-1">
+<h2><strong>Video 2.1</strong><a class="headerlink" href="#video-2-1" title="Permalink to this heading">#</a></h2>
+<p><strong>The experiment about the decomposition of white light by Isaac Newton.</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=6_HroTxaZe0"><img alt="The experiment about the decomposition of white light by Isaac Newton" src="https://img.youtube.com/vi/6_HroTxaZe0/0.jpg" /></a></p>
 <p><em>The experiment about the decomposition of white light by Isaac Newton.</em></p>
 </section>
-<section id="video-2-2-alhazen-not-available">
-<h2><strong>Video 2.2: Alhazen (not available)</strong><a class="headerlink" href="#video-2-2-alhazen-not-available" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://www.youtube.com/watch?v=5h6795eqhgU"><img alt="Alhazen was a great scientist of Medieval Islam. He is the first to bring scientific methodologies to study and understand the laws of nature." src="https://img.youtube.com/vi/5h6795eqhgU/0.jpg" /></a></p>
-</section>
-<section id="video-2-3-the-history-of-light">
-<h2><strong>Video 2.3: The history of light</strong><a class="headerlink" href="#video-2-3-the-history-of-light" title="Permalink to this heading">#</a></h2>
+<section id="video-2-2">
+<h2><strong>Video 2.2</strong><a class="headerlink" href="#video-2-2" title="Permalink to this heading">#</a></h2>
+<p><strong>The history of light</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=OLCqaWaV6jA"><img alt="The history of light" src="https://img.youtube.com/vi/OLCqaWaV6jA/0.jpg" /></a></p>
 <p><em>The history of light.</em></p>
 </section>
-<section id="video-2-4-how-your-eyes-make-sense-of-the-world">
-<h2><strong>Video 2.4: How your eyes make sense of the world</strong><a class="headerlink" href="#video-2-4-how-your-eyes-make-sense-of-the-world" title="Permalink to this heading">#</a></h2>
+<section id="video-2-3">
+<h2><strong>Video 2.3</strong><a class="headerlink" href="#video-2-3" title="Permalink to this heading">#</a></h2>
+<p><strong>How your eyes make sense of the world</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=hsh2kPdgazo"><img alt="This video illustrates how our eyes work to generate a digital image out of visible light." src="https://img.youtube.com/vi/hsh2kPdgazo/0.jpg" /></a></p>
 <p><em>This video illustrates how our eyes work to generate a digital image out of visible light.</em></p>
 </section>
-<section id="video-2-5-color-perception-based-on-surroundings">
-<h2><strong>Video 2.5: Color perception based on surroundings</strong><a class="headerlink" href="#video-2-5-color-perception-based-on-surroundings" title="Permalink to this heading">#</a></h2>
+<section id="video-2-4">
+<h2><strong>Video 2.4</strong><a class="headerlink" href="#video-2-4" title="Permalink to this heading">#</a></h2>
+<p><strong>Color perception based on surroundings</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=n_5g9URYGo4"><img alt="When the color is coded in the brain, it is coded with respect to its surroundings. Carefully, watch the video and observe how you perceive the exact same color as different, when the background changes." src="https://img.youtube.com/vi/n_5g9URYGo4/0.jpg" /></a></p>
 <p><em>When the color is coded in the brain, it is coded with respect to its surroundings. Carefully, watch the video and observe how you perceive the exact same color as different, when the background changes.</em></p>
 </section>
-<section id="video-2-6-how-signal-travels-through-a-neuron">
-<h2><strong>Video 2.6: How signal travels through a neuron</strong><a class="headerlink" href="#video-2-6-how-signal-travels-through-a-neuron" title="Permalink to this heading">#</a></h2>
-<figure>
-    <p align="center">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/b2ctEsGEpe0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </p>
-    <figcaption>
-        Learn more about how signal travels through a neuron.
-    </figcaption>
-</figure></section>
 <section id="programming-exercise-2-1">
 <h2><strong>Programming exercise 2.1:</strong><a class="headerlink" href="#programming-exercise-2-1" title="Permalink to this heading">#</a></h2>
 <p>Let us present two spots of light, each with an intensity of 100 units, to an observer. Suppose that the Just Noticeable Difference (JND) threshold is ( \Delta I(100) = 10 ) to discriminate the brightness levels of two spots. If the light intensity of the two spots were 150 units, what is the corresponding ( \Delta I(150) )?</p>
@@ -484,11 +471,6 @@ document.write(`
 \[\displaystyle \Delta I(150) = 15.0.\]</div>
 </div>
 </div>
-</section>
-<section id="video-2-7-working-principle-of-a-single-pixel-camera-not-available">
-<h2><strong>Video 2.7: Working principle of a single pixel camera (not available)</strong><a class="headerlink" href="#video-2-7-working-principle-of-a-single-pixel-camera-not-available" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://www.youtube.com/watch?v=y-jIzuHBJTo"><img alt="A short video which explains the working principle of a single pixel camera." src="https://img.youtube.com/vi/y-jIzuHBJTo/0.jpg" /></a></p>
-<p><em>A short video which explains the working principle of a single pixel camera.</em></p>
 </section>
 </section>
 
@@ -559,14 +541,11 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-1-the-experiment-about-the-decomposition-of-white-light-by-isaac-newton"><strong>Video 2.1: The experiment about the decomposition of white light by Isaac Newton.</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-2-alhazen-not-available"><strong>Video 2.2: Alhazen (not available)</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-3-the-history-of-light"><strong>Video 2.3: The history of light</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-4-how-your-eyes-make-sense-of-the-world"><strong>Video 2.4: How your eyes make sense of the world</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-5-color-perception-based-on-surroundings"><strong>Video 2.5: Color perception based on surroundings</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-6-how-signal-travels-through-a-neuron"><strong>Video 2.6: How signal travels through a neuron</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-1"><strong>Video 2.1</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-2"><strong>Video 2.2</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-3"><strong>Video 2.3</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-4"><strong>Video 2.4</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-2-1"><strong>Programming exercise 2.1:</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-2-7-working-principle-of-a-single-pixel-camera-not-available"><strong>Video 2.7: Working principle of a single pixel camera (not available)</strong></a></li>
 </ul>
   </nav></div>
 
