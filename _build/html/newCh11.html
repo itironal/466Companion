@@ -161,12 +161,12 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="newCh2.html"><strong>Chapter 2 Human Visual System and Image Perception</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh3.html">Chapter 3: Mathematical Tools for Image Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh4.html">Chapter 4: Color Image Processing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="newCh5.html">Chapter 5: Spatial Image Enhancement by Filtering: Convolution</a></li>
-<li class="toctree-l1"><a class="reference internal" href="newCh6.html">Chapter 6: Image Transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh5.html">Chapter 5: Spatial Image Enhancement by Point Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh6.html">Chapter 6: Spatial Image Enhancement by Filtering: Convolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh7.html">Chapter 7: Image Transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh8.html">Chapter 8: Wavelet Transforms and Multiresolution Image Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh10.html">Chapter 10: Morphological Image Processing</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Chapter 11 Image Segmentation</strong></a></li>
-
-
 <li class="toctree-l1"><a class="reference internal" href="newCh13.html">Chapter 13:</a></li>
 </ul>
 
@@ -381,21 +381,17 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Chapter 11 Image Segmentation</strong></a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-1-k-means-clustering-algorithm"><strong>Video 11.1: k-Means Clustering Algorithm.</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-2-mean-shift"><strong>Video 11.2: Mean Shift?</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-3-what-is-mean-shift"><strong>Video 11.3: What is Mean Shift?</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-1"><strong>Video 11.1</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-1"><strong>Programming exercise 11.1:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-2"><strong>Programming exercise 11.2:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-2"><strong>Video 11.2</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-3"><strong>Video 11.3</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-3"><strong>Programming exercise 11.3:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-4"><strong>Video 11.4</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-5"><strong>Video 11.5</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-6"><strong>Video 11.6</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-4"><strong>Programming exercise 11.4:</strong></a></li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-3"><strong>Programming exercise 11.3:</strong></a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-4-finding-clusters-in-graphs-by-gilbert-strang"><strong>Video 11.4: Finding Clusters in Graphs by Gilbert Strang</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-5-graph-similarity-matrix-by-shi"><strong>Video 11.5: Graph Similarity Matrix by Shi</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-6-graph-based-image-segmentation"><strong>Video 11.6: Graph-based Image Segmentation</strong></a></li>
-</ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-4"><strong>Programming exercise 11.4:</strong></a></li>
-</ul>
-
             </nav>
         </div>
     </div>
@@ -409,10 +405,17 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="chapter-11-image-segmentation">
 <h1><strong>Chapter 11 Image Segmentation</strong><a class="headerlink" href="#chapter-11-image-segmentation" title="Permalink to this heading">#</a></h1>
 <p>This is the companion file for Chapter 11.</p>
-<section id="video-11-1-k-means-clustering-algorithm">
-<h2><strong>Video 11.1: k-Means Clustering Algorithm.</strong><a class="headerlink" href="#video-11-1-k-means-clustering-algorithm" title="Permalink to this heading">#</a></h2>
+<section id="video-11-1">
+<h2><strong>Video 11.1</strong><a class="headerlink" href="#video-11-1" title="Permalink to this heading">#</a></h2>
+<p><strong>k-Means Clustering Algorithm.</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=5I3Ei69I40s"><img alt="K-MEANS Clustering Algorithm" src="https://img.youtube.com/vi/5I3Ei69I40s/0.jpg" /></a></p>
 <p><em>Video 1: K-MEANS Clustering Algorithm.</em></p>
+</section>
+<section id="programming-exercise-11-1">
+<h2><strong>Programming exercise 11.1:</strong><a class="headerlink" href="#programming-exercise-11-1" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following code to perform k-Means Clustering.</p></li>
+</ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#K-means</span>
@@ -467,6 +470,12 @@ document.write(`
 <img alt="_images/94b38672166087a97b6600fa542f588e6bb7809f3f1a28f30657ca63938ee067.png" src="_images/94b38672166087a97b6600fa542f588e6bb7809f3f1a28f30657ca63938ee067.png" />
 </div>
 </div>
+</section>
+<section id="programming-exercise-11-2">
+<h2><strong>Programming exercise 11.2:</strong><a class="headerlink" href="#programming-exercise-11-2" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following code to perform Meanshift Clustering.</p></li>
+</ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Meanshift</span>
@@ -606,31 +615,96 @@ Estimated bandwidth: 49.78323383001994
 <span class="g g-Whitespace">    </span><span class="mi">116</span>     <span class="k">with</span> <span class="n">config_context</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">):</span>
 <span class="ne">--&gt; </span><span class="mi">117</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/sklearn/cluster/_mean_shift.py:99,</span> in <span class="ni">_mean_shift_single_seed</span><span class="nt">(my_mean, X, nbrs, max_iter)</span>
-<span class="g g-Whitespace">     </span><span class="mi">97</span>     <span class="k">break</span>  <span class="c1"># Depending on seeding strategy this condition may occur</span>
-<span class="g g-Whitespace">     </span><span class="mi">98</span> <span class="n">my_old_mean</span> <span class="o">=</span> <span class="n">my_mean</span>  <span class="c1"># save the old mean</span>
-<span class="ne">---&gt; </span><span class="mi">99</span> <span class="n">my_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">points_within</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">100</span> <span class="c1"># If converged or at max_iter, adds the cluster</span>
-<span class="g g-Whitespace">    </span><span class="mi">101</span> <span class="k">if</span> <span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">102</span>     <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">my_mean</span> <span class="o">-</span> <span class="n">my_old_mean</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">stop_thresh</span>
-<span class="g g-Whitespace">    </span><span class="mi">103</span>     <span class="ow">or</span> <span class="n">completed_iterations</span> <span class="o">==</span> <span class="n">max_iter</span>
-<span class="g g-Whitespace">    </span><span class="mi">104</span> <span class="p">):</span>
+<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/sklearn/cluster/_mean_shift.py:94,</span> in <span class="ni">_mean_shift_single_seed</span><span class="nt">(my_mean, X, nbrs, max_iter)</span>
+<span class="g g-Whitespace">     </span><span class="mi">91</span> <span class="n">completed_iterations</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="g g-Whitespace">     </span><span class="mi">92</span> <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">93</span>     <span class="c1"># Find mean of points within bandwidth</span>
+<span class="ne">---&gt; </span><span class="mi">94</span>     <span class="n">i_nbrs</span> <span class="o">=</span> <span class="n">nbrs</span><span class="o">.</span><span class="n">radius_neighbors</span><span class="p">([</span><span class="n">my_mean</span><span class="p">],</span> <span class="n">bandwidth</span><span class="p">,</span> <span class="n">return_distance</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">95</span>     <span class="n">points_within</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">i_nbrs</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">96</span>     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">points_within</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
 
-<span class="nn">File &lt;__array_function__ internals&gt;:180,</span> in <span class="ni">mean</span><span class="nt">(*args, **kwargs)</span>
+<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/sklearn/neighbors/_base.py:1169,</span> in <span class="ni">RadiusNeighborsMixin.radius_neighbors</span><span class="nt">(self, X, radius, return_distance, sort_results)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1167</span> <span class="n">n_jobs</span> <span class="o">=</span> <span class="n">effective_n_jobs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1168</span> <span class="n">delayed_query</span> <span class="o">=</span> <span class="n">delayed</span><span class="p">(</span><span class="n">_tree_query_radius_parallel_helper</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1169</span> <span class="n">chunked_results</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">prefer</span><span class="o">=</span><span class="s2">&quot;threads&quot;</span><span class="p">)(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1170</span>     <span class="n">delayed_query</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1171</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="n">s</span><span class="p">],</span> <span class="n">radius</span><span class="p">,</span> <span class="n">return_distance</span><span class="p">,</span> <span class="n">sort_results</span><span class="o">=</span><span class="n">sort_results</span>
+<span class="g g-Whitespace">   </span><span class="mi">1172</span>     <span class="p">)</span>
+<span class="nn">   1173     for s</span> in <span class="ni">gen_even_slices</span><span class="nt">(X.shape[0], n_jobs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1174</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1175</span> <span class="k">if</span> <span class="n">return_distance</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1176</span>     <span class="n">neigh_ind</span><span class="p">,</span> <span class="n">neigh_dist</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">chunked_results</span><span class="p">))</span>
 
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/numpy/core/fromnumeric.py:3432,</span> in <span class="ni">mean</span><span class="nt">(a, axis, dtype, out, keepdims, where)</span>
-<span class="g g-Whitespace">   </span><span class="mi">3429</span>     <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">3430</span>         <span class="k">return</span> <span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">3432</span> <span class="k">return</span> <span class="n">_methods</span><span class="o">.</span><span class="n">_mean</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">3433</span>                       <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/parallel.py:1043,</span> in <span class="ni">Parallel.__call__</span><span class="nt">(self, iterable)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1034</span> <span class="k">try</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1035</span>     <span class="c1"># Only set self._iterating to True if at least a batch</span>
+<span class="g g-Whitespace">   </span><span class="mi">1036</span>     <span class="c1"># was dispatched. In particular this covers the edge</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1040</span>     <span class="c1"># was very quick and its callback already dispatched all the</span>
+<span class="g g-Whitespace">   </span><span class="mi">1041</span>     <span class="c1"># remaining jobs.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1042</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_iterating</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="ne">-&gt; </span><span class="mi">1043</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dispatch_one_batch</span><span class="p">(</span><span class="n">iterator</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1044</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_iterating</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_iterator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<span class="g g-Whitespace">   </span><span class="mi">1046</span>     <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">dispatch_one_batch</span><span class="p">(</span><span class="n">iterator</span><span class="p">):</span>
 
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/numpy/core/_methods.py:180,</span> in <span class="ni">_mean</span><span class="nt">(a, axis, dtype, out, keepdims, where)</span>
-<span class="g g-Whitespace">    </span><span class="mi">177</span>         <span class="n">dtype</span> <span class="o">=</span> <span class="n">mu</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;f4&#39;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">178</span>         <span class="n">is_float16_result</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="ne">--&gt; </span><span class="mi">180</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">umr_sum</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">keepdims</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">181</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">mu</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">182</span>     <span class="n">ret</span> <span class="o">=</span> <span class="n">um</span><span class="o">.</span><span class="n">true_divide</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">183</span>             <span class="n">ret</span><span class="p">,</span> <span class="n">rcount</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">ret</span><span class="p">,</span> <span class="n">casting</span><span class="o">=</span><span class="s1">&#39;unsafe&#39;</span><span class="p">,</span> <span class="n">subok</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/parallel.py:861,</span> in <span class="ni">Parallel.dispatch_one_batch</span><span class="nt">(self, iterator)</span>
+<span class="g g-Whitespace">    </span><span class="mi">859</span>     <span class="k">return</span> <span class="kc">False</span>
+<span class="g g-Whitespace">    </span><span class="mi">860</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">861</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">862</span>     <span class="k">return</span> <span class="kc">True</span>
+
+<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/parallel.py:779,</span> in <span class="ni">Parallel._dispatch</span><span class="nt">(self, batch)</span>
+<span class="g g-Whitespace">    </span><span class="mi">777</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">778</span>     <span class="n">job_idx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">779</span>     <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">780</span>     <span class="c1"># A job can complete so quickly than its callback is</span>
+<span class="g g-Whitespace">    </span><span class="mi">781</span>     <span class="c1"># called before we get here, causing self._jobs to</span>
+<span class="g g-Whitespace">    </span><span class="mi">782</span>     <span class="c1"># grow. To ensure correct results ordering, .insert is</span>
+<span class="g g-Whitespace">    </span><span class="mi">783</span>     <span class="c1"># used (rather than .append) in the following line</span>
+<span class="g g-Whitespace">    </span><span class="mi">784</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">job_idx</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span>
+
+<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/_parallel_backends.py:208,</span> in <span class="ni">SequentialBackend.apply_async</span><span class="nt">(self, func, callback)</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span> <span class="k">def</span> <span class="nf">apply_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">207</span>     <span class="sd">&quot;&quot;&quot;Schedule a func to be run&quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">208</span>     <span class="n">result</span> <span class="o">=</span> <span class="n">ImmediateResult</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">209</span>     <span class="k">if</span> <span class="n">callback</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">210</span>         <span class="n">callback</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/_parallel_backends.py:572,</span> in <span class="ni">ImmediateResult.__init__</span><span class="nt">(self, batch)</span>
+<span class="g g-Whitespace">    </span><span class="mi">569</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">570</span>     <span class="c1"># Don&#39;t delay the application, to avoid keeping the input</span>
+<span class="g g-Whitespace">    </span><span class="mi">571</span>     <span class="c1"># arguments in memory</span>
+<span class="ne">--&gt; </span><span class="mi">572</span>     <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">batch</span><span class="p">()</span>
+
+<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/parallel.py:262,</span> in <span class="ni">BatchedCalls.__call__</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">258</span> <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">259</span>     <span class="c1"># Set the default nested backend to self._backend but do not set the</span>
+<span class="g g-Whitespace">    </span><span class="mi">260</span>     <span class="c1"># change the default number of processes to -1</span>
+<span class="g g-Whitespace">    </span><span class="mi">261</span>     <span class="k">with</span> <span class="n">parallel_backend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">262</span>         <span class="k">return</span> <span class="p">[</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">263</span>                 <span class="k">for</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">]</span>
+
+<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/parallel.py:262,</span> in <span class="ni">&lt;listcomp&gt;</span><span class="nt">(.0)</span>
+<span class="g g-Whitespace">    </span><span class="mi">258</span> <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">259</span>     <span class="c1"># Set the default nested backend to self._backend but do not set the</span>
+<span class="g g-Whitespace">    </span><span class="mi">260</span>     <span class="c1"># change the default number of processes to -1</span>
+<span class="g g-Whitespace">    </span><span class="mi">261</span>     <span class="k">with</span> <span class="n">parallel_backend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">262</span>         <span class="k">return</span> <span class="p">[</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">263</span>                 <span class="k">for</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">]</span>
+
+<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/sklearn/utils/fixes.py:117,</span> in <span class="ni">_FuncWrapper.__call__</span><span class="nt">(self, *args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">115</span> <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">116</span>     <span class="k">with</span> <span class="n">config_context</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">117</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/sklearn/neighbors/_base.py:951,</span> in <span class="ni">_tree_query_radius_parallel_helper</span><span class="nt">(tree, *args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">945</span> <span class="k">def</span> <span class="nf">_tree_query_radius_parallel_helper</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">946</span>     <span class="sd">&quot;&quot;&quot;Helper for the Parallel calls in RadiusNeighborsMixin.radius_neighbors.</span>
+<span class="g g-Whitespace">    </span><span class="mi">947</span><span class="sd"> </span>
+<span class="g g-Whitespace">    </span><span class="mi">948</span><span class="sd">     The Cython method tree.query_radius is not directly picklable by</span>
+<span class="g g-Whitespace">    </span><span class="mi">949</span><span class="sd">     cloudpickle under PyPy.</span>
+<span class="g g-Whitespace">    </span><span class="mi">950</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">951</span>     <span class="k">return</span> <span class="n">tree</span><span class="o">.</span><span class="n">query_radius</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
@@ -638,8 +712,9 @@ Estimated bandwidth: 49.78323383001994
 </div>
 </div>
 </section>
-<section id="video-11-2-mean-shift">
-<h2><strong>Video 11.2: Mean Shift?</strong><a class="headerlink" href="#video-11-2-mean-shift" title="Permalink to this heading">#</a></h2>
+<section id="video-11-2">
+<h2><strong>Video 11.2</strong><a class="headerlink" href="#video-11-2" title="Permalink to this heading">#</a></h2>
+<p><strong>Mean Shift</strong></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
@@ -662,8 +737,9 @@ Estimated bandwidth: 49.78323383001994
 </div></div>
 </div>
 </section>
-<section id="video-11-3-what-is-mean-shift">
-<h2><strong>Video 11.3: What is Mean Shift?</strong><a class="headerlink" href="#video-11-3-what-is-mean-shift" title="Permalink to this heading">#</a></h2>
+<section id="video-11-3">
+<h2><strong>Video 11.3</strong><a class="headerlink" href="#video-11-3" title="Permalink to this heading">#</a></h2>
+<p><strong>What is Mean Shift?</strong></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
@@ -686,9 +762,8 @@ Estimated bandwidth: 49.78323383001994
 </div></div>
 </div>
 </section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="programming-exercise-11-3">
-<h1><strong>Programming exercise 11.3:</strong><a class="headerlink" href="#programming-exercise-11-3" title="Permalink to this heading">#</a></h1>
+<section id="programming-exercise-11-3">
+<h2><strong>Programming exercise 11.3:</strong><a class="headerlink" href="#programming-exercise-11-3" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Run the following code to perform segmentation using thresholding.</p></li>
 <li><p>Change the threshold and see how the output changes.</p></li>
@@ -743,13 +818,16 @@ Estimated bandwidth: 49.78323383001994
 <img alt="_images/4265894ee1c6f0032e73aac2a6df977dc76480901d13d95b6bbded83eeccab11.png" src="_images/4265894ee1c6f0032e73aac2a6df977dc76480901d13d95b6bbded83eeccab11.png" />
 </div>
 </div>
-<section id="video-11-4-finding-clusters-in-graphs-by-gilbert-strang">
-<h2><strong>Video 11.4: Finding Clusters in Graphs by Gilbert Strang</strong><a class="headerlink" href="#video-11-4-finding-clusters-in-graphs-by-gilbert-strang" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="video-11-4">
+<h2><strong>Video 11.4</strong><a class="headerlink" href="#video-11-4" title="Permalink to this heading">#</a></h2>
+<p><strong>Finding Clusters in Graphs by Gilbert Strang</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=cxTmmasBiC8"><img alt="Finding Clusters in Graphs" src="https://img.youtube.com/vi/cxTmmasBiC8/0.jpg" /></a></p>
 <p><em>Video 4:Finding Clusters in Graphs</em></p>
 </section>
-<section id="video-11-5-graph-similarity-matrix-by-shi">
-<h2><strong>Video 11.5: Graph Similarity Matrix by Shi</strong><a class="headerlink" href="#video-11-5-graph-similarity-matrix-by-shi" title="Permalink to this heading">#</a></h2>
+<section id="video-11-5">
+<h2><strong>Video 11.5</strong><a class="headerlink" href="#video-11-5" title="Permalink to this heading">#</a></h2>
+<p><strong>Graph Similarity Matrix by Shi</strong></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
@@ -772,8 +850,9 @@ Estimated bandwidth: 49.78323383001994
 </div></div>
 </div>
 </section>
-<section id="video-11-6-graph-based-image-segmentation">
-<h2><strong>Video 11.6: Graph-based Image Segmentation</strong><a class="headerlink" href="#video-11-6-graph-based-image-segmentation" title="Permalink to this heading">#</a></h2>
+<section id="video-11-6">
+<h2><strong>Video 11.6</strong><a class="headerlink" href="#video-11-6" title="Permalink to this heading">#</a></h2>
+<p><strong>Graph-based Image Segmentation</strong></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%HTML</span>
@@ -796,9 +875,8 @@ Video 6: Graph-based Image Segmentation
 </div></div>
 </div>
 </section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="programming-exercise-11-4">
-<h1><strong>Programming exercise 11.4:</strong><a class="headerlink" href="#programming-exercise-11-4" title="Permalink to this heading">#</a></h1>
+<section id="programming-exercise-11-4">
+<h2><strong>Programming exercise 11.4:</strong><a class="headerlink" href="#programming-exercise-11-4" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Run the following code to obtain superpixels and normalize cut to merge superpixels.</p></li>
 <li><p>Change compactness and number of segments parameters and observe how the superpixels change.</p></li>
@@ -843,6 +921,7 @@ Video 6: Graph-based Image Segmentation
 <img alt="_images/82230bd71744fcf2a5784d953c238c5ba8d3df45c78999b4410a6499102b7045.png" src="_images/82230bd71744fcf2a5784d953c238c5ba8d3df45c78999b4410a6499102b7045.png" />
 </div>
 </div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -912,21 +991,17 @@ Video 6: Graph-based Image Segmentation
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Chapter 11 Image Segmentation</strong></a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-1-k-means-clustering-algorithm"><strong>Video 11.1: k-Means Clustering Algorithm.</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-2-mean-shift"><strong>Video 11.2: Mean Shift?</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-3-what-is-mean-shift"><strong>Video 11.3: What is Mean Shift?</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-1"><strong>Video 11.1</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-1"><strong>Programming exercise 11.1:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-2"><strong>Programming exercise 11.2:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-2"><strong>Video 11.2</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-3"><strong>Video 11.3</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-3"><strong>Programming exercise 11.3:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-4"><strong>Video 11.4</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-5"><strong>Video 11.5</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-6"><strong>Video 11.6</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-4"><strong>Programming exercise 11.4:</strong></a></li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-3"><strong>Programming exercise 11.3:</strong></a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-4-finding-clusters-in-graphs-by-gilbert-strang"><strong>Video 11.4: Finding Clusters in Graphs by Gilbert Strang</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-5-graph-similarity-matrix-by-shi"><strong>Video 11.5: Graph Similarity Matrix by Shi</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-6-graph-based-image-segmentation"><strong>Video 11.6: Graph-based Image Segmentation</strong></a></li>
-</ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-4"><strong>Programming exercise 11.4:</strong></a></li>
-</ul>
-
   </nav></div>
 
 </div></div>

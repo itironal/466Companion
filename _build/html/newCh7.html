@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'newCh7';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Chapter 10: Morphological Image Processing" href="newCh10.html" />
+    <link rel="next" title="Chapter 8: Wavelet Transforms and Multiresolution Image Analysis" href="newCh8.html" />
     <link rel="prev" title="Chapter 6: Spatial Image Enhancement by Filtering: Convolution" href="newCh6.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -164,10 +164,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="newCh5.html">Chapter 5: Spatial Image Enhancement by Point Operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh6.html">Chapter 6: Spatial Image Enhancement by Filtering: Convolution</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 7: Image Transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh8.html">Chapter 8: Wavelet Transforms and Multiresolution Image Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh10.html">Chapter 10: Morphological Image Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh11.html"><strong>Chapter 11 Image Segmentation</strong></a></li>
-
-
 <li class="toctree-l1"><a class="reference internal" href="newCh13.html">Chapter 13:</a></li>
 </ul>
 
@@ -382,12 +381,12 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-1-a-useful-explanation-of-vector-spaces">Video 7.1. A useful explanation of vector spaces</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-2-what-are-eigenvector-and-eigenvalue-of-a-matrix">Video 7.2. What are eigenvector and eigenvalue of a matrix?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-3-the-colorful-life-of-john-baptiste-fourier-part-1">Video 7.3. The colorful life of John Baptiste Fourier (Part 1)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-4-there-are-a-lot-of-lessons-to-be-taken-from-the-life-of-fourier-part-2">Video 7.4. There are a lot of lessons to be taken from the life of Fourier (Part 2)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-1">Video 7.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-2">Video 7.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-3">Video 7.3</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-4">Video 7.4</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-1"><strong>Programming exercise 7.1:</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-5-a-video-which-demonstrates-the-fourier-transform">Video 7.5. A video which demonstrates the Fourier transform</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-5">Video 7.5</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-2"><strong>Programming exercise 7.2:</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-3"><strong>Programming exercise 7.3:</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-4"><strong>Programming exercise 7.4:</strong></a></li>
@@ -408,20 +407,24 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="chapter-7-image-transforms">
 <h1>Chapter 7: Image Transforms<a class="headerlink" href="#chapter-7-image-transforms" title="Permalink to this heading">#</a></h1>
 <p>This is the companion file for Chapter 7.</p>
-<section id="video-7-1-a-useful-explanation-of-vector-spaces">
-<h2>Video 7.1. A useful explanation of vector spaces<a class="headerlink" href="#video-7-1-a-useful-explanation-of-vector-spaces" title="Permalink to this heading">#</a></h2>
+<section id="video-7-1">
+<h2>Video 7.1<a class="headerlink" href="#video-7-1" title="Permalink to this heading">#</a></h2>
+<p><strong>A useful explanation of vector spaces</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=ozwodzD5bJM"><img alt="A useful explanation of vector spaces" src="https://img.youtube.com/vi/ozwodzD5bJM/0.jpg" /></a></p>
 </section>
-<section id="video-7-2-what-are-eigenvector-and-eigenvalue-of-a-matrix">
-<h2>Video 7.2. What are eigenvector and eigenvalue of a matrix?<a class="headerlink" href="#video-7-2-what-are-eigenvector-and-eigenvalue-of-a-matrix" title="Permalink to this heading">#</a></h2>
+<section id="video-7-2">
+<h2>Video 7.2<a class="headerlink" href="#video-7-2" title="Permalink to this heading">#</a></h2>
+<p><strong>What are eigenvector and eigenvalue of a matrix?</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=PFDu9oVAE-g"><img alt="What are eigenvector and eigenvalue of a matrix?" src="https://img.youtube.com/vi/PFDu9oVAE-g/0.jpg" /></a></p>
 </section>
-<section id="video-7-3-the-colorful-life-of-john-baptiste-fourier-part-1">
-<h2>Video 7.3. The colorful life of John Baptiste Fourier (Part 1)<a class="headerlink" href="#video-7-3-the-colorful-life-of-john-baptiste-fourier-part-1" title="Permalink to this heading">#</a></h2>
+<section id="video-7-3">
+<h2>Video 7.3<a class="headerlink" href="#video-7-3" title="Permalink to this heading">#</a></h2>
+<p><strong>The colorful life of John Baptiste Fourier (Part 1)</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=2bSw38dqRrU"><img alt="The colorful life of John Baptiste Fourier (Part 1)" src="https://img.youtube.com/vi/2bSw38dqRrU/0.jpg" /></a></p>
 </section>
-<section id="video-7-4-there-are-a-lot-of-lessons-to-be-taken-from-the-life-of-fourier-part-2">
-<h2>Video 7.4. There are a lot of lessons to be taken from the life of Fourier (Part 2)<a class="headerlink" href="#video-7-4-there-are-a-lot-of-lessons-to-be-taken-from-the-life-of-fourier-part-2" title="Permalink to this heading">#</a></h2>
+<section id="video-7-4">
+<h2>Video 7.4<a class="headerlink" href="#video-7-4" title="Permalink to this heading">#</a></h2>
+<p><strong>There are a lot of lessons to be taken from the life of Fourier (Part 2)</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=6qiIMrBOmOo"><img alt="There are a lot of lessons to be taken from the life of Fourier (Part 2)" src="https://img.youtube.com/vi/6qiIMrBOmOo/0.jpg" /></a></p>
 </section>
 <section id="programming-exercise-7-1">
@@ -494,8 +497,9 @@ document.write(`
 </div>
 </div>
 </section>
-<section id="video-7-5-a-video-which-demonstrates-the-fourier-transform">
-<h2>Video 7.5. A video which demonstrates the Fourier transform<a class="headerlink" href="#video-7-5-a-video-which-demonstrates-the-fourier-transform" title="Permalink to this heading">#</a></h2>
+<section id="video-7-5">
+<h2>Video 7.5<a class="headerlink" href="#video-7-5" title="Permalink to this heading">#</a></h2>
+<p><strong>A video which demonstrates the Fourier transform</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=gwaYwRwY6PU"><img alt="A nice video which demonstrates the Fourier transform." src="https://img.youtube.com/vi/gwaYwRwY6PU/0.jpg" /></a></p>
 </section>
 <section id="programming-exercise-7-2">
@@ -761,9 +765,9 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_67869/3493258240.py:41: ComplexWarning: Casting complex values to real discards the imaginary part
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_21351/3493258240.py:41: ComplexWarning: Casting complex values to real discards the imaginary part
   plt.imshow((10*np.log10(1 + freq_image)).astype(int), cmap=&#39;gray&#39;)
-/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_67869/3493258240.py:53: ComplexWarning: Casting complex values to real discards the imaginary part
+/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_21351/3493258240.py:53: ComplexWarning: Casting complex values to real discards the imaginary part
   plt.imshow((10*np.log10(1+ low_pass)).astype(int), cmap=&#39;gray&#39;)
 </pre></div>
 </div>
@@ -839,9 +843,9 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_67869/2113597330.py:39: ComplexWarning: Casting complex values to real discards the imaginary part
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_21351/2113597330.py:39: ComplexWarning: Casting complex values to real discards the imaginary part
   plt.imshow((10*np.log10(1 + freq_image)).astype(int), cmap=&#39;gray&#39;)
-/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_67869/2113597330.py:51: ComplexWarning: Casting complex values to real discards the imaginary part
+/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_21351/2113597330.py:51: ComplexWarning: Casting complex values to real discards the imaginary part
   plt.imshow((10*np.log10(1+ high_pass)).astype(int), cmap=&#39;gray&#39;)
 </pre></div>
 </div>
@@ -924,9 +928,9 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_67869/1524391493.py:46: ComplexWarning: Casting complex values to real discards the imaginary part
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_21351/1524391493.py:46: ComplexWarning: Casting complex values to real discards the imaginary part
   plt.imshow((10*np.log10(1 + freq_image)).astype(int), cmap=&#39;gray&#39;)
-/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_67869/1524391493.py:58: ComplexWarning: Casting complex values to real discards the imaginary part
+/var/folders/8t/x87x8bjs1yg6r5fqxbxf66wr0000gn/T/ipykernel_21351/1524391493.py:58: ComplexWarning: Casting complex values to real discards the imaginary part
   plt.imshow((10*np.log10(1+ band_pass)).astype(int), cmap=&#39;gray&#39;)
 </pre></div>
 </div>
@@ -977,11 +981,11 @@ document.write(`
       </div>
     </a>
     <a class="right-next"
-       href="newCh10.html"
+       href="newCh8.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Chapter 10: Morphological Image Processing</p>
+        <p class="prev-next-title">Chapter 8: Wavelet Transforms and Multiresolution Image Analysis</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1003,12 +1007,12 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-1-a-useful-explanation-of-vector-spaces">Video 7.1. A useful explanation of vector spaces</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-2-what-are-eigenvector-and-eigenvalue-of-a-matrix">Video 7.2. What are eigenvector and eigenvalue of a matrix?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-3-the-colorful-life-of-john-baptiste-fourier-part-1">Video 7.3. The colorful life of John Baptiste Fourier (Part 1)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-4-there-are-a-lot-of-lessons-to-be-taken-from-the-life-of-fourier-part-2">Video 7.4. There are a lot of lessons to be taken from the life of Fourier (Part 2)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-1">Video 7.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-2">Video 7.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-3">Video 7.3</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-4">Video 7.4</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-1"><strong>Programming exercise 7.1:</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-5-a-video-which-demonstrates-the-fourier-transform">Video 7.5. A video which demonstrates the Fourier transform</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-7-5">Video 7.5</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-2"><strong>Programming exercise 7.2:</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-3"><strong>Programming exercise 7.3:</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-7-4"><strong>Programming exercise 7.4:</strong></a></li>
