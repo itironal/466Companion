@@ -157,8 +157,8 @@ const thebe_selector_output = ".output, .cell_output"
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="newCh1.html"><strong>Chapter 1 Introduction</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="newCh2.html"><strong>Chapter 2 Human Visual System and Image Perception</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh1.html">Chapter 1 Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh2.html">Chapter 2 Human Visual System and Image Perception</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh3.html">Chapter 3: Mathematical Tools for Image Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh4.html">Chapter 4: Color Image Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh5.html">Chapter 5: Spatial Image Enhancement by Point Operations</a></li>
@@ -166,8 +166,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="newCh7.html">Chapter 7: Image Transforms</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 8: Wavelet Transforms and Multiresolution Image Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh10.html">Chapter 10: Morphological Image Processing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="newCh11.html"><strong>Chapter 11 Image Segmentation</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="newCh13.html">Chapter 13:</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh11.html">Chapter 11 Image Segmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh12.html">Chapter 12: Image Representation by Feature Extraction</a></li>
 </ul>
 
     </div>
@@ -385,6 +385,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-8-2">Video 8.2</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-8-3">Video 8.3</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-8-4">Video 8.4</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-8-1"><strong>Programming exercise 8.1:</strong></a></li>
 </ul>
             </nav>
         </div>
@@ -418,6 +419,103 @@ document.write(`
 <h2>Video 8.4<a class="headerlink" href="#video-8-4" title="Permalink to this heading">#</a></h2>
 <p><strong>Discrete Wavelet Transform</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=F7Lg-nFYooU"><img alt="Discrete Wavelet Transform" src="https://img.youtube.com/vi/F7Lg-nFYooU/0.jpg" /></a></p>
+</section>
+<section id="programming-exercise-8-1">
+<h2><strong>Programming exercise 8.1:</strong><a class="headerlink" href="#programming-exercise-8-1" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following code to see the output of applying Haar Wavelet Transform.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="c1"># Load the image</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/fatos_hocam_background.png&quot;</span>
+<span class="n">original_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)))</span> <span class="o">/</span> <span class="mi">255</span>
+
+<span class="c1"># Define 1D Haar transform</span>
+<span class="k">def</span> <span class="nf">haar_1d</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">output</span><span class="p">[</span><span class="n">i</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>      <span class="c1"># Approximation</span>
+        <span class="n">output</span><span class="p">[</span><span class="n">N</span><span class="o">//</span><span class="mi">2</span> <span class="o">+</span> <span class="n">i</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Detail</span>
+    <span class="k">return</span> <span class="n">output</span>
+
+<span class="c1"># 2D Haar transform (single level)</span>
+<span class="k">def</span> <span class="nf">haar_2d</span><span class="p">(</span><span class="n">channel</span><span class="p">):</span>
+    <span class="c1"># Apply 1D Haar to rows</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="n">haar_1d</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">arr</span><span class="o">=</span><span class="n">channel</span><span class="p">)</span>
+    <span class="c1"># Apply 1D Haar to columns</span>
+    <span class="n">transformed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="n">haar_1d</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">arr</span><span class="o">=</span><span class="n">temp</span><span class="p">)</span>
+    
+    <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">transformed</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">h2</span><span class="p">,</span> <span class="n">w2</span> <span class="o">=</span> <span class="n">h</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">w</span> <span class="o">//</span> <span class="mi">2</span>
+    <span class="n">LL</span> <span class="o">=</span> <span class="n">transformed</span><span class="p">[:</span><span class="n">h2</span><span class="p">,</span> <span class="p">:</span><span class="n">w2</span><span class="p">]</span>
+    <span class="n">LH</span> <span class="o">=</span> <span class="n">transformed</span><span class="p">[:</span><span class="n">h2</span><span class="p">,</span> <span class="n">w2</span><span class="p">:]</span>
+    <span class="n">HL</span> <span class="o">=</span> <span class="n">transformed</span><span class="p">[</span><span class="n">h2</span><span class="p">:,</span> <span class="p">:</span><span class="n">w2</span><span class="p">]</span>
+    <span class="n">HH</span> <span class="o">=</span> <span class="n">transformed</span><span class="p">[</span><span class="n">h2</span><span class="p">:,</span> <span class="n">w2</span><span class="p">:]</span>
+    
+    <span class="k">return</span> <span class="n">LL</span><span class="p">,</span> <span class="n">LH</span><span class="p">,</span> <span class="n">HL</span><span class="p">,</span> <span class="n">HH</span>
+
+<span class="c1"># Apply Haar transform to each RGB channel</span>
+<span class="n">LL_r</span><span class="p">,</span> <span class="n">LH_r</span><span class="p">,</span> <span class="n">HL_r</span><span class="p">,</span> <span class="n">HH_r</span> <span class="o">=</span> <span class="n">haar_2d</span><span class="p">(</span><span class="n">original_img</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">LL_g</span><span class="p">,</span> <span class="n">LH_g</span><span class="p">,</span> <span class="n">HL_g</span><span class="p">,</span> <span class="n">HH_g</span> <span class="o">=</span> <span class="n">haar_2d</span><span class="p">(</span><span class="n">original_img</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">LL_b</span><span class="p">,</span> <span class="n">LH_b</span><span class="p">,</span> <span class="n">HL_b</span><span class="p">,</span> <span class="n">HH_b</span> <span class="o">=</span> <span class="n">haar_2d</span><span class="p">(</span><span class="n">original_img</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">])</span>
+
+<span class="c1"># Stack components to make visual RGB versions of each</span>
+<span class="k">def</span> <span class="nf">stack_rgb</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+    <span class="c1"># Normalize for visualization</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">img</span> <span class="o">-</span> <span class="n">img</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">img</span> <span class="o">/</span> <span class="n">img</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">img</span>
+
+<span class="n">LL_img</span> <span class="o">=</span> <span class="n">stack_rgb</span><span class="p">(</span><span class="n">LL_r</span><span class="p">,</span> <span class="n">LL_g</span><span class="p">,</span> <span class="n">LL_b</span><span class="p">)</span>
+<span class="n">LH_img</span> <span class="o">=</span> <span class="n">stack_rgb</span><span class="p">(</span><span class="n">LH_r</span><span class="p">,</span> <span class="n">LH_g</span><span class="p">,</span> <span class="n">LH_b</span><span class="p">)</span>
+<span class="n">HL_img</span> <span class="o">=</span> <span class="n">stack_rgb</span><span class="p">(</span><span class="n">HL_r</span><span class="p">,</span> <span class="n">HL_g</span><span class="p">,</span> <span class="n">HL_b</span><span class="p">)</span>
+<span class="n">HH_img</span> <span class="o">=</span> <span class="n">stack_rgb</span><span class="p">(</span><span class="n">HH_r</span><span class="p">,</span> <span class="n">HH_g</span><span class="p">,</span> <span class="n">HH_b</span><span class="p">)</span>
+
+<span class="c1"># Plot all components</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">original_img</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original Image&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">LL_img</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;LL: Approximation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">LH_img</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;LH: Horizontal Detail&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">HL_img</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;HL: Vertical Detail&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">HH_img</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;HH: Diagonal Detail&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/9b102356b523e00d2fe6f0893eb799de6a28d1e93aee19ec227c813831aeaf8d.png" src="_images/9b102356b523e00d2fe6f0893eb799de6a28d1e93aee19ec227c813831aeaf8d.png" />
+</div>
+</div>
 </section>
 </section>
 
@@ -492,6 +590,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-8-2">Video 8.2</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-8-3">Video 8.3</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-8-4">Video 8.4</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-8-1"><strong>Programming exercise 8.1:</strong></a></li>
 </ul>
   </nav></div>
 
