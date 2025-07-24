@@ -165,6 +165,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="newCh6.html">Chapter 6: Spatial Image Enhancement by Filtering: Convolution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh7.html">Chapter 7: Image Transforms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh8.html">Chapter 8: Wavelet Transforms and Multiresolution Image Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh9.html">Chapter 9: Image Compression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh10.html">Chapter 10: Morphological Image Processing</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 11 Image Segmentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh12.html">Chapter 12: Image Representation by Feature Extraction</a></li>
@@ -381,16 +382,19 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-1">Programming exercise 11.1:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-1"><strong>Video 11.1</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-1"><strong>Programming exercise 11.1:</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-2"><strong>Programming exercise 11.2:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-2">Programming exercise 11.2:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-3">Programming exercise 11.3:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-2"><strong>Video 11.2</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-3"><strong>Video 11.3</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-3"><strong>Programming exercise 11.3:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-4">Programming exercise 11.4:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-4"><strong>Video 11.4</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-5"><strong>Video 11.5</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-6"><strong>Video 11.6</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-4"><strong>Programming exercise 11.4:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-5">Programming exercise 11.5:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-6">Programming exercise 11.6:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-7">Programming exercise 11.7:</a></li>
 </ul>
             </nav>
         </div>
@@ -405,14 +409,169 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="chapter-11-image-segmentation">
 <h1>Chapter 11 Image Segmentation<a class="headerlink" href="#chapter-11-image-segmentation" title="Permalink to this heading">#</a></h1>
 <p>This is the companion file for Chapter 11.</p>
+<section id="programming-exercise-11-1">
+<h2>Programming exercise 11.1:<a class="headerlink" href="#programming-exercise-11-1" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following code to perform Split-and-Merge Clustering.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">class</span> <span class="nc">Region</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span>
+        <span class="n">patch</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">y</span><span class="p">:</span><span class="n">y</span><span class="o">+</span><span class="n">h</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="o">+</span><span class="n">w</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">h</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sum</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">patch</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sum_sq</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">patch</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_stats</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">update_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+        <span class="n">var</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sum_sq</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sum</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">var</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">are_adjacent</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">):</span>
+    <span class="n">vert</span> <span class="o">=</span> <span class="p">((</span><span class="n">r1</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">r1</span><span class="o">.</span><span class="n">w</span> <span class="o">==</span> <span class="n">r2</span><span class="o">.</span><span class="n">x</span> <span class="ow">or</span> <span class="n">r2</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">r2</span><span class="o">.</span><span class="n">w</span> <span class="o">==</span> <span class="n">r1</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">r1</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">r1</span><span class="o">.</span><span class="n">h</span> <span class="o">&lt;=</span> <span class="n">r2</span><span class="o">.</span><span class="n">y</span> <span class="ow">or</span> <span class="n">r2</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">r2</span><span class="o">.</span><span class="n">h</span> <span class="o">&lt;=</span> <span class="n">r1</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+    <span class="n">horz</span> <span class="o">=</span> <span class="p">((</span><span class="n">r1</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">r1</span><span class="o">.</span><span class="n">h</span> <span class="o">==</span> <span class="n">r2</span><span class="o">.</span><span class="n">y</span> <span class="ow">or</span> <span class="n">r2</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">r2</span><span class="o">.</span><span class="n">h</span> <span class="o">==</span> <span class="n">r1</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">r1</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">r1</span><span class="o">.</span><span class="n">w</span> <span class="o">&lt;=</span> <span class="n">r2</span><span class="o">.</span><span class="n">x</span> <span class="ow">or</span> <span class="n">r2</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">r2</span><span class="o">.</span><span class="n">w</span> <span class="o">&lt;=</span> <span class="n">r1</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">vert</span> <span class="ow">or</span> <span class="n">horz</span>
+
+<span class="k">def</span> <span class="nf">split_pass</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">split_threshold</span><span class="p">,</span> <span class="n">min_size</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">region</span><span class="o">.</span><span class="n">std</span> <span class="o">&lt;=</span> <span class="n">split_threshold</span> <span class="ow">or</span> <span class="n">region</span><span class="o">.</span><span class="n">w</span> <span class="o">&lt;=</span> <span class="n">min_size</span> <span class="ow">or</span> <span class="n">region</span><span class="o">.</span><span class="n">h</span> <span class="o">&lt;=</span> <span class="n">min_size</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">region</span><span class="p">]</span>
+    <span class="n">hw</span><span class="p">,</span> <span class="n">hh</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">w</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">region</span><span class="o">.</span><span class="n">h</span> <span class="o">//</span> <span class="mi">2</span>
+    <span class="n">quads</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">region</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">region</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">hw</span><span class="p">,</span> <span class="n">hh</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">region</span><span class="o">.</span><span class="n">x</span><span class="o">+</span><span class="n">hw</span><span class="p">,</span> <span class="n">region</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">region</span><span class="o">.</span><span class="n">w</span><span class="o">-</span><span class="n">hw</span><span class="p">,</span> <span class="n">hh</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">region</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">region</span><span class="o">.</span><span class="n">y</span><span class="o">+</span><span class="n">hh</span><span class="p">,</span> <span class="n">hw</span><span class="p">,</span> <span class="n">region</span><span class="o">.</span><span class="n">h</span><span class="o">-</span><span class="n">hh</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">region</span><span class="o">.</span><span class="n">x</span><span class="o">+</span><span class="n">hw</span><span class="p">,</span> <span class="n">region</span><span class="o">.</span><span class="n">y</span><span class="o">+</span><span class="n">hh</span><span class="p">,</span> <span class="n">region</span><span class="o">.</span><span class="n">w</span><span class="o">-</span><span class="n">hw</span><span class="p">,</span> <span class="n">region</span><span class="o">.</span><span class="n">h</span><span class="o">-</span><span class="n">hh</span><span class="p">),</span>
+    <span class="p">]</span>
+    <span class="n">leaves</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">quads</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">w</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">h</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">leaves</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">split_pass</span><span class="p">(</span><span class="n">Region</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">image</span><span class="p">),</span> <span class="n">split_threshold</span><span class="p">,</span> <span class="n">min_size</span><span class="p">,</span> <span class="n">image</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">leaves</span>
+
+<span class="k">def</span> <span class="nf">build_adjacency</span><span class="p">(</span><span class="n">regions</span><span class="p">):</span>
+    <span class="n">adj</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">regions</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">regions</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">regions</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">are_adjacent</span><span class="p">(</span><span class="n">regions</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">regions</span><span class="p">[</span><span class="n">j</span><span class="p">]):</span>
+                <span class="n">adj</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">adj</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">adj</span>
+
+<span class="k">def</span> <span class="nf">merge_pass</span><span class="p">(</span><span class="n">regions</span><span class="p">,</span> <span class="n">merge_threshold</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">regions</span><span class="p">)))</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="s1">&#39;sum&#39;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">sum</span><span class="p">,</span> <span class="s1">&#39;sum_sq&#39;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">sum_sq</span><span class="p">}</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">regions</span><span class="p">]</span>
+    <span class="n">adj</span> <span class="o">=</span> <span class="n">build_adjacency</span><span class="p">(</span><span class="n">regions</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parent</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">!=</span> <span class="n">u</span><span class="p">:</span>
+            <span class="n">parent</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">u</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">parent</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">union</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="n">ru</span><span class="p">,</span> <span class="n">rv</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">find</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ru</span> <span class="o">==</span> <span class="n">rv</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">ru</span> <span class="o">&gt;</span> <span class="n">rv</span><span class="p">:</span>
+            <span class="n">ru</span><span class="p">,</span> <span class="n">rv</span> <span class="o">=</span> <span class="n">rv</span><span class="p">,</span> <span class="n">ru</span>
+        <span class="n">parent</span><span class="p">[</span><span class="n">rv</span><span class="p">]</span> <span class="o">=</span> <span class="n">ru</span>
+        <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="n">ru</span><span class="p">],</span> <span class="n">stats</span><span class="p">[</span><span class="n">rv</span><span class="p">]</span>
+        <span class="n">s1</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">s2</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span>
+        <span class="n">s1</span><span class="p">[</span><span class="s1">&#39;sum&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">s2</span><span class="p">[</span><span class="s1">&#39;sum&#39;</span><span class="p">]</span>
+        <span class="n">s1</span><span class="p">[</span><span class="s1">&#39;sum_sq&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">s2</span><span class="p">[</span><span class="s1">&#39;sum_sq&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">while</span> <span class="n">changed</span><span class="p">:</span>
+        <span class="n">changed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">nbrs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">adj</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">nbrs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">ri</span><span class="p">,</span> <span class="n">rj</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">find</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">ri</span> <span class="o">!=</span> <span class="n">rj</span><span class="p">:</span>
+                    <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="n">ri</span><span class="p">],</span> <span class="n">stats</span><span class="p">[</span><span class="n">rj</span><span class="p">]</span>
+                    <span class="n">n</span> <span class="o">=</span> <span class="n">s1</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">s2</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span>
+                    <span class="n">var</span> <span class="o">=</span> <span class="p">(</span><span class="n">s1</span><span class="p">[</span><span class="s1">&#39;sum_sq&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">s2</span><span class="p">[</span><span class="s1">&#39;sum_sq&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">s1</span><span class="p">[</span><span class="s1">&#39;sum&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">s2</span><span class="p">[</span><span class="s1">&#39;sum&#39;</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">var</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="n">merge_threshold</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">union</span><span class="p">(</span><span class="n">ri</span><span class="p">,</span> <span class="n">rj</span><span class="p">):</span>
+                            <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">groups</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">regions</span><span class="p">):</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+        <span class="n">groups</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">groups</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+<span class="k">def</span> <span class="nf">visualize_segments</span><span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+    <span class="n">seg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
+            <span class="n">seg</span><span class="p">[</span><span class="n">reg</span><span class="o">.</span><span class="n">y</span><span class="p">:</span><span class="n">reg</span><span class="o">.</span><span class="n">y</span><span class="o">+</span><span class="n">reg</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="n">reg</span><span class="o">.</span><span class="n">x</span><span class="p">:</span><span class="n">reg</span><span class="o">.</span><span class="n">x</span><span class="o">+</span><span class="n">reg</span><span class="o">.</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span>
+    <span class="k">return</span> <span class="n">seg</span>
+
+<span class="k">def</span> <span class="nf">run_segmentation</span><span class="p">(</span><span class="n">gray_img</span><span class="p">,</span> <span class="n">split_th</span><span class="p">,</span> <span class="n">merge_th</span><span class="p">,</span> <span class="n">min_sz</span><span class="p">):</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">Region</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">gray_img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">gray_img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gray_img</span><span class="p">)</span>
+    <span class="n">leaves</span> <span class="o">=</span> <span class="n">split_pass</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">split_th</span><span class="p">,</span> <span class="n">min_sz</span><span class="p">,</span> <span class="n">gray_img</span><span class="p">)</span>
+    <span class="n">groups</span> <span class="o">=</span> <span class="n">merge_pass</span><span class="p">(</span><span class="n">leaves</span><span class="p">,</span> <span class="n">merge_th</span><span class="p">)</span>
+    <span class="n">seg_img</span> <span class="o">=</span> <span class="n">visualize_segments</span><span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="n">gray_img</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">seg_img</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups</span><span class="p">)</span>
+
+<span class="c1"># Parameters (adjust as needed)</span>
+<span class="n">split_th</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">merge_th</span> <span class="o">=</span> <span class="mi">18</span>
+<span class="n">min_sz</span> <span class="o">=</span> <span class="mi">22</span>
+<span class="n">kernel_sz</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mf">1.6</span>
+
+<span class="c1"># Ensure kernel size is odd</span>
+<span class="k">if</span> <span class="n">kernel_sz</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">kernel_sz</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="c1"># Load and process image</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;images/input_split_merge.jpg&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;image not found in current directory&quot;</span><span class="p">)</span>
+<span class="n">gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
+<span class="n">blurred</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="p">(</span><span class="n">kernel_sz</span><span class="p">,</span> <span class="n">kernel_sz</span><span class="p">),</span> <span class="n">sigma</span><span class="p">)</span>
+
+<span class="c1"># Run segmentation</span>
+<span class="n">seg_img</span><span class="p">,</span> <span class="n">seg_count</span> <span class="o">=</span> <span class="n">run_segmentation</span><span class="p">(</span><span class="n">blurred</span><span class="p">,</span> <span class="n">split_th</span><span class="p">,</span> <span class="n">merge_th</span><span class="p">,</span> <span class="n">min_sz</span><span class="p">)</span>
+
+<span class="c1"># Show result</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">seg_img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Split=</span><span class="si">{</span><span class="n">split_th</span><span class="si">}</span><span class="s2">, Merge=</span><span class="si">{</span><span class="n">merge_th</span><span class="si">}</span><span class="s2">, Min=</span><span class="si">{</span><span class="n">min_sz</span><span class="si">}</span><span class="s2">, k=</span><span class="si">{</span><span class="n">kernel_sz</span><span class="si">}</span><span class="s2">, σ=</span><span class="si">{</span><span class="n">sigma</span><span class="si">}</span><span class="se">\n</span><span class="s2">Segments: </span><span class="si">{</span><span class="n">seg_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/d314fed06654ad74636a4be4108389fb765d6a49e5d458b9e58b01fe6f89f950.png" src="_images/d314fed06654ad74636a4be4108389fb765d6a49e5d458b9e58b01fe6f89f950.png" />
+</div>
+</div>
+</section>
 <section id="video-11-1">
 <h2><strong>Video 11.1</strong><a class="headerlink" href="#video-11-1" title="Permalink to this heading">#</a></h2>
 <p><strong>k-Means Clustering Algorithm.</strong></p>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=5I3Ei69I40s"><img alt="K-MEANS Clustering Algorithm" src="https://img.youtube.com/vi/5I3Ei69I40s/0.jpg" /></a></p>
 <p><em>Video 1: K-MEANS Clustering Algorithm.</em></p>
 </section>
-<section id="programming-exercise-11-1">
-<h2><strong>Programming exercise 11.1:</strong><a class="headerlink" href="#programming-exercise-11-1" title="Permalink to this heading">#</a></h2>
+<section id="programming-exercise-11-2">
+<h2>Programming exercise 11.2:<a class="headerlink" href="#programming-exercise-11-2" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Run the following code to perform k-Means Clustering.</p></li>
 </ol>
@@ -471,8 +630,8 @@ document.write(`
 </div>
 </div>
 </section>
-<section id="programming-exercise-11-2">
-<h2><strong>Programming exercise 11.2:</strong><a class="headerlink" href="#programming-exercise-11-2" title="Permalink to this heading">#</a></h2>
+<section id="programming-exercise-11-3">
+<h2>Programming exercise 11.3:<a class="headerlink" href="#programming-exercise-11-3" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Run the following code to perform Meanshift Clustering.</p></li>
 </ol>
@@ -536,179 +695,13 @@ document.write(`
 Estimated bandwidth: 49.78323383001994
 </pre></div>
 </div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="nn">Input In [2],</span> in <span class="ni">&lt;cell line: 24&gt;</span><span class="nt">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">21</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Estimated bandwidth:&quot;</span><span class="p">,</span> <span class="n">bandwidth</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">23</span> <span class="n">ms</span> <span class="o">=</span> <span class="n">MeanShift</span><span class="p">(</span><span class="n">bandwidth</span><span class="o">=</span><span class="n">bandwidth</span><span class="p">,</span> <span class="n">bin_seeding</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">24</span> <span class="n">ms</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">26</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">labels_</span>  <span class="c1"># Label for each pixel</span>
-<span class="g g-Whitespace">     </span><span class="mi">27</span> <span class="n">cluster_centers</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">cluster_centers_</span>  <span class="c1"># RGB color for each cluster center</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/sklearn/cluster/_mean_shift.py:441,</span> in <span class="ni">MeanShift.fit</span><span class="nt">(self, X, y)</span>
-<span class="g g-Whitespace">    </span><span class="mi">438</span> <span class="n">nbrs</span> <span class="o">=</span> <span class="n">NearestNeighbors</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="n">bandwidth</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">440</span> <span class="c1"># execute iterations on all seeds in parallel</span>
-<span class="ne">--&gt; </span><span class="mi">441</span> <span class="n">all_res</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">)(</span>
-<span class="g g-Whitespace">    </span><span class="mi">442</span>     <span class="n">delayed</span><span class="p">(</span><span class="n">_mean_shift_single_seed</span><span class="p">)(</span><span class="n">seed</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">nbrs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">443</span>     <span class="k">for</span> <span class="n">seed</span> <span class="ow">in</span> <span class="n">seeds</span>
-<span class="g g-Whitespace">    </span><span class="mi">444</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">445</span> <span class="c1"># copy results in a dictionary</span>
-<span class="g g-Whitespace">    </span><span class="mi">446</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seeds</span><span class="p">)):</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/parallel.py:1046,</span> in <span class="ni">Parallel.__call__</span><span class="nt">(self, iterable)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1043</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dispatch_one_batch</span><span class="p">(</span><span class="n">iterator</span><span class="p">):</span>
-<span class="g g-Whitespace">   </span><span class="mi">1044</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_iterating</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_iterator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-<span class="ne">-&gt; </span><span class="mi">1046</span> <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">dispatch_one_batch</span><span class="p">(</span><span class="n">iterator</span><span class="p">):</span>
-<span class="g g-Whitespace">   </span><span class="mi">1047</span>     <span class="k">pass</span>
-<span class="g g-Whitespace">   </span><span class="mi">1049</span> <span class="k">if</span> <span class="n">pre_dispatch</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span> <span class="ow">or</span> <span class="n">n_jobs</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1050</span>     <span class="c1"># The iterable was consumed all at once by the above for loop.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1051</span>     <span class="c1"># No need to wait for async callbacks to trigger to</span>
-<span class="g g-Whitespace">   </span><span class="mi">1052</span>     <span class="c1"># consumption.</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/parallel.py:861,</span> in <span class="ni">Parallel.dispatch_one_batch</span><span class="nt">(self, iterator)</span>
-<span class="g g-Whitespace">    </span><span class="mi">859</span>     <span class="k">return</span> <span class="kc">False</span>
-<span class="g g-Whitespace">    </span><span class="mi">860</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">861</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">862</span>     <span class="k">return</span> <span class="kc">True</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/parallel.py:779,</span> in <span class="ni">Parallel._dispatch</span><span class="nt">(self, batch)</span>
-<span class="g g-Whitespace">    </span><span class="mi">777</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">778</span>     <span class="n">job_idx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">779</span>     <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">780</span>     <span class="c1"># A job can complete so quickly than its callback is</span>
-<span class="g g-Whitespace">    </span><span class="mi">781</span>     <span class="c1"># called before we get here, causing self._jobs to</span>
-<span class="g g-Whitespace">    </span><span class="mi">782</span>     <span class="c1"># grow. To ensure correct results ordering, .insert is</span>
-<span class="g g-Whitespace">    </span><span class="mi">783</span>     <span class="c1"># used (rather than .append) in the following line</span>
-<span class="g g-Whitespace">    </span><span class="mi">784</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">job_idx</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/_parallel_backends.py:208,</span> in <span class="ni">SequentialBackend.apply_async</span><span class="nt">(self, func, callback)</span>
-<span class="g g-Whitespace">    </span><span class="mi">206</span> <span class="k">def</span> <span class="nf">apply_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">207</span>     <span class="sd">&quot;&quot;&quot;Schedule a func to be run&quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">208</span>     <span class="n">result</span> <span class="o">=</span> <span class="n">ImmediateResult</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">209</span>     <span class="k">if</span> <span class="n">callback</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">210</span>         <span class="n">callback</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/_parallel_backends.py:572,</span> in <span class="ni">ImmediateResult.__init__</span><span class="nt">(self, batch)</span>
-<span class="g g-Whitespace">    </span><span class="mi">569</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">570</span>     <span class="c1"># Don&#39;t delay the application, to avoid keeping the input</span>
-<span class="g g-Whitespace">    </span><span class="mi">571</span>     <span class="c1"># arguments in memory</span>
-<span class="ne">--&gt; </span><span class="mi">572</span>     <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">batch</span><span class="p">()</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/parallel.py:262,</span> in <span class="ni">BatchedCalls.__call__</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">258</span> <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">259</span>     <span class="c1"># Set the default nested backend to self._backend but do not set the</span>
-<span class="g g-Whitespace">    </span><span class="mi">260</span>     <span class="c1"># change the default number of processes to -1</span>
-<span class="g g-Whitespace">    </span><span class="mi">261</span>     <span class="k">with</span> <span class="n">parallel_backend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">262</span>         <span class="k">return</span> <span class="p">[</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">263</span>                 <span class="k">for</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">]</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/parallel.py:262,</span> in <span class="ni">&lt;listcomp&gt;</span><span class="nt">(.0)</span>
-<span class="g g-Whitespace">    </span><span class="mi">258</span> <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">259</span>     <span class="c1"># Set the default nested backend to self._backend but do not set the</span>
-<span class="g g-Whitespace">    </span><span class="mi">260</span>     <span class="c1"># change the default number of processes to -1</span>
-<span class="g g-Whitespace">    </span><span class="mi">261</span>     <span class="k">with</span> <span class="n">parallel_backend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">262</span>         <span class="k">return</span> <span class="p">[</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">263</span>                 <span class="k">for</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">]</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/sklearn/utils/fixes.py:117,</span> in <span class="ni">_FuncWrapper.__call__</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">115</span> <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">116</span>     <span class="k">with</span> <span class="n">config_context</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">117</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/sklearn/cluster/_mean_shift.py:94,</span> in <span class="ni">_mean_shift_single_seed</span><span class="nt">(my_mean, X, nbrs, max_iter)</span>
-<span class="g g-Whitespace">     </span><span class="mi">91</span> <span class="n">completed_iterations</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="g g-Whitespace">     </span><span class="mi">92</span> <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">93</span>     <span class="c1"># Find mean of points within bandwidth</span>
-<span class="ne">---&gt; </span><span class="mi">94</span>     <span class="n">i_nbrs</span> <span class="o">=</span> <span class="n">nbrs</span><span class="o">.</span><span class="n">radius_neighbors</span><span class="p">([</span><span class="n">my_mean</span><span class="p">],</span> <span class="n">bandwidth</span><span class="p">,</span> <span class="n">return_distance</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">95</span>     <span class="n">points_within</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">i_nbrs</span><span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">96</span>     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">points_within</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/sklearn/neighbors/_base.py:1169,</span> in <span class="ni">RadiusNeighborsMixin.radius_neighbors</span><span class="nt">(self, X, radius, return_distance, sort_results)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1167</span> <span class="n">n_jobs</span> <span class="o">=</span> <span class="n">effective_n_jobs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1168</span> <span class="n">delayed_query</span> <span class="o">=</span> <span class="n">delayed</span><span class="p">(</span><span class="n">_tree_query_radius_parallel_helper</span><span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">1169</span> <span class="n">chunked_results</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">prefer</span><span class="o">=</span><span class="s2">&quot;threads&quot;</span><span class="p">)(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1170</span>     <span class="n">delayed_query</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1171</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="n">s</span><span class="p">],</span> <span class="n">radius</span><span class="p">,</span> <span class="n">return_distance</span><span class="p">,</span> <span class="n">sort_results</span><span class="o">=</span><span class="n">sort_results</span>
-<span class="g g-Whitespace">   </span><span class="mi">1172</span>     <span class="p">)</span>
-<span class="nn">   1173     for s</span> in <span class="ni">gen_even_slices</span><span class="nt">(X.shape[0], n_jobs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1174</span> <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1175</span> <span class="k">if</span> <span class="n">return_distance</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1176</span>     <span class="n">neigh_ind</span><span class="p">,</span> <span class="n">neigh_dist</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">chunked_results</span><span class="p">))</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/parallel.py:1043,</span> in <span class="ni">Parallel.__call__</span><span class="nt">(self, iterable)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1034</span> <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1035</span>     <span class="c1"># Only set self._iterating to True if at least a batch</span>
-<span class="g g-Whitespace">   </span><span class="mi">1036</span>     <span class="c1"># was dispatched. In particular this covers the edge</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1040</span>     <span class="c1"># was very quick and its callback already dispatched all the</span>
-<span class="g g-Whitespace">   </span><span class="mi">1041</span>     <span class="c1"># remaining jobs.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1042</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_iterating</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="ne">-&gt; </span><span class="mi">1043</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dispatch_one_batch</span><span class="p">(</span><span class="n">iterator</span><span class="p">):</span>
-<span class="g g-Whitespace">   </span><span class="mi">1044</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_iterating</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_iterator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-<span class="g g-Whitespace">   </span><span class="mi">1046</span>     <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">dispatch_one_batch</span><span class="p">(</span><span class="n">iterator</span><span class="p">):</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/parallel.py:861,</span> in <span class="ni">Parallel.dispatch_one_batch</span><span class="nt">(self, iterator)</span>
-<span class="g g-Whitespace">    </span><span class="mi">859</span>     <span class="k">return</span> <span class="kc">False</span>
-<span class="g g-Whitespace">    </span><span class="mi">860</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">861</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">862</span>     <span class="k">return</span> <span class="kc">True</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/parallel.py:779,</span> in <span class="ni">Parallel._dispatch</span><span class="nt">(self, batch)</span>
-<span class="g g-Whitespace">    </span><span class="mi">777</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">778</span>     <span class="n">job_idx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">779</span>     <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">780</span>     <span class="c1"># A job can complete so quickly than its callback is</span>
-<span class="g g-Whitespace">    </span><span class="mi">781</span>     <span class="c1"># called before we get here, causing self._jobs to</span>
-<span class="g g-Whitespace">    </span><span class="mi">782</span>     <span class="c1"># grow. To ensure correct results ordering, .insert is</span>
-<span class="g g-Whitespace">    </span><span class="mi">783</span>     <span class="c1"># used (rather than .append) in the following line</span>
-<span class="g g-Whitespace">    </span><span class="mi">784</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">job_idx</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/_parallel_backends.py:208,</span> in <span class="ni">SequentialBackend.apply_async</span><span class="nt">(self, func, callback)</span>
-<span class="g g-Whitespace">    </span><span class="mi">206</span> <span class="k">def</span> <span class="nf">apply_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">207</span>     <span class="sd">&quot;&quot;&quot;Schedule a func to be run&quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">208</span>     <span class="n">result</span> <span class="o">=</span> <span class="n">ImmediateResult</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">209</span>     <span class="k">if</span> <span class="n">callback</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">210</span>         <span class="n">callback</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/_parallel_backends.py:572,</span> in <span class="ni">ImmediateResult.__init__</span><span class="nt">(self, batch)</span>
-<span class="g g-Whitespace">    </span><span class="mi">569</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">570</span>     <span class="c1"># Don&#39;t delay the application, to avoid keeping the input</span>
-<span class="g g-Whitespace">    </span><span class="mi">571</span>     <span class="c1"># arguments in memory</span>
-<span class="ne">--&gt; </span><span class="mi">572</span>     <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">batch</span><span class="p">()</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/parallel.py:262,</span> in <span class="ni">BatchedCalls.__call__</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">258</span> <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">259</span>     <span class="c1"># Set the default nested backend to self._backend but do not set the</span>
-<span class="g g-Whitespace">    </span><span class="mi">260</span>     <span class="c1"># change the default number of processes to -1</span>
-<span class="g g-Whitespace">    </span><span class="mi">261</span>     <span class="k">with</span> <span class="n">parallel_backend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">262</span>         <span class="k">return</span> <span class="p">[</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">263</span>                 <span class="k">for</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">]</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/joblib/parallel.py:262,</span> in <span class="ni">&lt;listcomp&gt;</span><span class="nt">(.0)</span>
-<span class="g g-Whitespace">    </span><span class="mi">258</span> <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">259</span>     <span class="c1"># Set the default nested backend to self._backend but do not set the</span>
-<span class="g g-Whitespace">    </span><span class="mi">260</span>     <span class="c1"># change the default number of processes to -1</span>
-<span class="g g-Whitespace">    </span><span class="mi">261</span>     <span class="k">with</span> <span class="n">parallel_backend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">262</span>         <span class="k">return</span> <span class="p">[</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">263</span>                 <span class="k">for</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">]</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/sklearn/utils/fixes.py:117,</span> in <span class="ni">_FuncWrapper.__call__</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">115</span> <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">116</span>     <span class="k">with</span> <span class="n">config_context</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">117</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File /opt/miniconda3/lib/python3.9/site-packages/sklearn/neighbors/_base.py:951,</span> in <span class="ni">_tree_query_radius_parallel_helper</span><span class="nt">(tree, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">945</span> <span class="k">def</span> <span class="nf">_tree_query_radius_parallel_helper</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">946</span>     <span class="sd">&quot;&quot;&quot;Helper for the Parallel calls in RadiusNeighborsMixin.radius_neighbors.</span>
-<span class="g g-Whitespace">    </span><span class="mi">947</span><span class="sd"> </span>
-<span class="g g-Whitespace">    </span><span class="mi">948</span><span class="sd">     The Cython method tree.query_radius is not directly picklable by</span>
-<span class="g g-Whitespace">    </span><span class="mi">949</span><span class="sd">     cloudpickle under PyPy.</span>
-<span class="g g-Whitespace">    </span><span class="mi">950</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">951</span>     <span class="k">return</span> <span class="n">tree</span><span class="o">.</span><span class="n">query_radius</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="ne">KeyboardInterrupt</span>: 
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of estimated clusters: 4
 </pre></div>
 </div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 864x432 with 0 Axes&gt;
+</pre></div>
+</div>
+<img alt="_images/d9940e6e0380002197ed2c70ea72e335d1b1d1f11fef7ebc8425a80f939b17a9.png" src="_images/d9940e6e0380002197ed2c70ea72e335d1b1d1f11fef7ebc8425a80f939b17a9.png" />
 </div>
 </div>
 </section>
@@ -762,8 +755,8 @@ Estimated bandwidth: 49.78323383001994
 </div></div>
 </div>
 </section>
-<section id="programming-exercise-11-3">
-<h2><strong>Programming exercise 11.3:</strong><a class="headerlink" href="#programming-exercise-11-3" title="Permalink to this heading">#</a></h2>
+<section id="programming-exercise-11-4">
+<h2>Programming exercise 11.4:<a class="headerlink" href="#programming-exercise-11-4" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Run the following code to perform segmentation using thresholding.</p></li>
 <li><p>Change the threshold and see how the output changes.</p></li>
@@ -875,8 +868,8 @@ Video 6: Graph-based Image Segmentation
 </div></div>
 </div>
 </section>
-<section id="programming-exercise-11-4">
-<h2><strong>Programming exercise 11.4:</strong><a class="headerlink" href="#programming-exercise-11-4" title="Permalink to this heading">#</a></h2>
+<section id="programming-exercise-11-5">
+<h2>Programming exercise 11.5:<a class="headerlink" href="#programming-exercise-11-5" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Run the following code to obtain superpixels and normalize cut to merge superpixels.</p></li>
 <li><p>Change compactness and number of segments parameters and observe how the superpixels change.</p></li>
@@ -919,6 +912,204 @@ Video 6: Graph-based Image Segmentation
 </div>
 <div class="cell_output docutils container">
 <img alt="_images/82230bd71744fcf2a5784d953c238c5ba8d3df45c78999b4410a6499102b7045.png" src="_images/82230bd71744fcf2a5784d953c238c5ba8d3df45c78999b4410a6499102b7045.png" />
+</div>
+</div>
+</section>
+<section id="programming-exercise-11-6">
+<h2>Programming exercise 11.6:<a class="headerlink" href="#programming-exercise-11-6" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following code to see how the accumulator array changes when new points are added to the image.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hough transform</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">skimage.transform</span> <span class="kn">import</span> <span class="n">hough_line</span>
+
+<span class="n">tested_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">im</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">16</span><span class="p">,</span><span class="mi">16</span><span class="p">))</span>
+<span class="c1"># Put the first white point</span>
+<span class="n">im</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+<span class="c1">#Transpose image to swap x and y axes before inputting it to hough_line function since this function accepts x and y as horizontal and vertical edges respectively.</span>
+<span class="c1">#However, in xy-plane, x is the vertical edge and y is the horizontal edge.</span>
+<span class="n">H</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">hough_line</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span><span class="n">tested_angles</span><span class="p">)</span>
+<span class="c1"># H is the accumulator array</span>
+<span class="n">angle_step</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">d_step</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">angle_step</span><span class="p">),</span>
+          <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">angle_step</span><span class="p">),</span>
+          <span class="n">d</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">d_step</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">d_step</span><span class="p">]</span>
+<span class="c1"># Plot accumulator array with the given bounds</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">721</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">722</span><span class="p">),</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="c1">########################</span>
+<span class="c1"># Put the second white point</span>
+<span class="n">im</span><span class="p">[</span><span class="mi">15</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">H</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">hough_line</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span><span class="n">tested_angles</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">723</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+
+
+<span class="n">angle_step</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">d_step</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">angle_step</span><span class="p">),</span>
+          <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">angle_step</span><span class="p">),</span>
+          <span class="n">d</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">d_step</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">d_step</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">724</span><span class="p">),</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">extent</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1">########################</span>
+<span class="c1"># Put the third white point</span>
+<span class="n">im</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">15</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">H</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">hough_line</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span><span class="n">tested_angles</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">725</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+
+
+<span class="n">angle_step</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">d_step</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">angle_step</span><span class="p">),</span>
+          <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">angle_step</span><span class="p">),</span>
+          <span class="n">d</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">d_step</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">d_step</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">726</span><span class="p">),</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">extent</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1">########################</span>
+<span class="c1"># Put the fourth white point</span>
+<span class="n">im</span><span class="p">[</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">H</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">hough_line</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span><span class="n">tested_angles</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">727</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+
+
+<span class="n">angle_step</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">d_step</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">angle_step</span><span class="p">),</span>
+          <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">angle_step</span><span class="p">),</span>
+          <span class="n">d</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">d_step</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">d_step</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">728</span><span class="p">),</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">extent</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1">##################</span>
+<span class="c1"># Put the fifth white point</span>
+<span class="n">im</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">H</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">hough_line</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span><span class="n">tested_angles</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">729</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+
+
+<span class="n">angle_step</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">d_step</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">angle_step</span><span class="p">),</span>
+          <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">angle_step</span><span class="p">),</span>
+          <span class="n">d</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">d_step</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">d_step</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">extent</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="c1">##################</span>
+<span class="c1"># Put the sixth white point</span>
+<span class="n">im</span><span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="mi">7</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">H</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">hough_line</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span><span class="n">tested_angles</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">11</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+
+
+<span class="n">angle_step</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">d_step</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">angle_step</span><span class="p">),</span>
+          <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">angle_step</span><span class="p">),</span>
+          <span class="n">d</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">d_step</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">d_step</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">12</span><span class="p">),</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">extent</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;ntheta&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;nrho&#39;</span><span class="p">)</span>
+
+<span class="c1">####################</span>
+<span class="c1"># Put the seventh white point</span>
+<span class="n">im</span><span class="p">[</span><span class="mi">9</span><span class="p">,</span><span class="mi">9</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">H</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">hough_line</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span><span class="n">tested_angles</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">13</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> 
+
+
+<span class="n">angle_step</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">d_step</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">angle_step</span><span class="p">),</span>
+          <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">theta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">angle_step</span><span class="p">),</span>
+          <span class="n">d</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">d_step</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">d_step</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">14</span><span class="p">),</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">extent</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;ntheta&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;nrho&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;nrho&#39;)
+</pre></div>
+</div>
+<img alt="_images/7ea07ff12b2bcddd649e56b19b3903c077cdeb6d341f21494ed05504f7647245.png" src="_images/7ea07ff12b2bcddd649e56b19b3903c077cdeb6d341f21494ed05504f7647245.png" />
+</div>
+</div>
+</section>
+<section id="programming-exercise-11-7">
+<h2>Programming exercise 11.7:<a class="headerlink" href="#programming-exercise-11-7" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following code to detect the coins (circles) in the image.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hough transform for detecting circles</span>
+<span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">feature</span><span class="p">,</span> <span class="n">io</span><span class="p">,</span> <span class="n">color</span>
+<span class="kn">from</span> <span class="nn">skimage.util</span> <span class="kn">import</span> <span class="n">img_as_ubyte</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">skimage.transform</span> <span class="kn">import</span> <span class="n">hough_circle</span><span class="p">,</span> <span class="n">hough_circle_peaks</span>
+<span class="kn">from</span> <span class="nn">skimage.draw</span> <span class="kn">import</span> <span class="n">circle_perimeter</span>
+<span class="kn">from</span> <span class="nn">skimage.transform</span> <span class="kn">import</span> <span class="n">rescale</span>
+
+<span class="c1"># Load image and rescale it</span>
+<span class="o">!</span>wget -cq https://raw.githubusercontent.com/hazalmogultay/466Images/master/W13/paralar.jpeg
+<span class="n">image</span> <span class="o">=</span> <span class="n">img_as_ubyte</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">rgb2gray</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;paralar.jpeg&#39;</span><span class="p">)))</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">rescale</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">anti_aliasing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Detect edges using Canny edge detector</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">canny</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">low_threshold</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">high_threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Define a set of radii and run hough circle detector </span>
+<span class="n">hough_radii</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">hough_res</span> <span class="o">=</span> <span class="n">hough_circle</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">hough_radii</span><span class="p">)</span>
+
+<span class="c1"># Select 4 circles (there are 4 coins in the image)</span>
+<span class="n">accums</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">radii</span> <span class="o">=</span> <span class="n">hough_circle_peaks</span><span class="p">(</span><span class="n">hough_res</span><span class="p">,</span> <span class="n">hough_radii</span><span class="p">,</span><span class="n">total_num_peaks</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">gray2rgb</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">center_y</span><span class="p">,</span> <span class="n">center_x</span><span class="p">,</span> <span class="n">radius</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cy</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">radii</span><span class="p">):</span>
+    <span class="n">circy</span><span class="p">,</span> <span class="n">circx</span> <span class="o">=</span> <span class="n">circle_perimeter</span><span class="p">(</span><span class="n">center_y</span><span class="p">,</span> <span class="n">center_x</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span>
+                                    <span class="n">shape</span><span class="o">=</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">image</span><span class="p">[</span><span class="n">circy</span><span class="p">,</span> <span class="n">circx</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Circles detected by Hough Transform&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span> <span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gray</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/65d79a49002299d7aff87ad04f125bbabc88dcc06aa5170c4b1bcfdf9d77338c.png" src="_images/65d79a49002299d7aff87ad04f125bbabc88dcc06aa5170c4b1bcfdf9d77338c.png" />
 </div>
 </div>
 </section>
@@ -991,16 +1182,19 @@ Video 6: Graph-based Image Segmentation
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-1">Programming exercise 11.1:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-1"><strong>Video 11.1</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-1"><strong>Programming exercise 11.1:</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-2"><strong>Programming exercise 11.2:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-2">Programming exercise 11.2:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-3">Programming exercise 11.3:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-2"><strong>Video 11.2</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-3"><strong>Video 11.3</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-3"><strong>Programming exercise 11.3:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-4">Programming exercise 11.4:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-4"><strong>Video 11.4</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-5"><strong>Video 11.5</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-11-6"><strong>Video 11.6</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-4"><strong>Programming exercise 11.4:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-5">Programming exercise 11.5:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-6">Programming exercise 11.6:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-11-7">Programming exercise 11.7:</a></li>
 </ul>
   </nav></div>
 
