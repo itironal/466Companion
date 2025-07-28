@@ -386,6 +386,8 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-12-3">Programming exercise 12.3:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-12-4">Programming exercise 12.4:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-12-5">Programming exercise 12.5:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-12-6">Programming exercise 12.6:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-12-7">Programming exercise 12.7:</a></li>
 </ul>
             </nav>
         </div>
@@ -599,6 +601,196 @@ document.write(`
 <section id="programming-exercise-12-3">
 <h2>Programming exercise 12.3:<a class="headerlink" href="#programming-exercise-12-3" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
+<li><p>Run the following code to see reconstruction from Fourier descriptors.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="k">def</span> <span class="nf">create_square_image</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+    <span class="n">cv2</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span> <span class="p">(</span><span class="mi">192</span><span class="p">,</span> <span class="mi">192</span><span class="p">),</span> <span class="mi">255</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">img</span>
+
+<span class="k">def</span> <span class="nf">get_contour_points</span><span class="p">(</span><span class="n">binary_img</span><span class="p">):</span>
+    <span class="n">contours</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">findContours</span><span class="p">(</span><span class="n">binary_img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">RETR_EXTERNAL</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CHAIN_APPROX_NONE</span><span class="p">)</span>
+    <span class="n">contour</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">contours</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">contourArea</span><span class="p">)</span>
+    <span class="n">contour</span> <span class="o">=</span> <span class="n">contour</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">complex_contour</span> <span class="o">=</span> <span class="n">contour</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">contour</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">complex_contour</span>
+
+<span class="k">def</span> <span class="nf">resample_contour</span><span class="p">(</span><span class="n">contour</span><span class="p">,</span> <span class="n">num_points</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Resample a closed contour to a fixed number of points using interpolation.&quot;&quot;&quot;</span>
+    <span class="c1"># Ensure it&#39;s a closed loop</span>
+    <span class="n">contour</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">contour</span><span class="p">,</span> <span class="p">[</span><span class="n">contour</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Calculate cumulative arc length (distance along the contour)</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span>
+    <span class="n">dists</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+    <span class="n">cumulative</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">dists</span><span class="p">)))</span>
+    <span class="n">total_length</span> <span class="o">=</span> <span class="n">cumulative</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Create evenly spaced target arc lengths</span>
+    <span class="n">desired</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">total_length</span><span class="p">,</span> <span class="n">num_points</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Interpolate real and imaginary parts separately</span>
+    <span class="n">real_interp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">desired</span><span class="p">,</span> <span class="n">cumulative</span><span class="p">,</span> <span class="n">contour</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+    <span class="n">imag_interp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">desired</span><span class="p">,</span> <span class="n">cumulative</span><span class="p">,</span> <span class="n">contour</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">real_interp</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">imag_interp</span>
+
+
+<span class="k">def</span> <span class="nf">reconstruct_contour_sym</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">P</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+    <span class="n">fd_shifted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+    <span class="n">fd_filtered</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="n">center</span> <span class="o">=</span> <span class="n">N</span> <span class="o">//</span> <span class="mi">2</span>
+    <span class="n">half_P</span> <span class="o">=</span> <span class="n">P</span> <span class="o">//</span> <span class="mi">2</span>
+    <span class="n">fd_filtered</span><span class="p">[</span><span class="n">center</span> <span class="o">-</span> <span class="n">half_P</span> <span class="p">:</span> <span class="n">center</span> <span class="o">+</span> <span class="n">half_P</span> <span class="o">+</span> <span class="n">P</span> <span class="o">%</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">fd_shifted</span><span class="p">[</span><span class="n">center</span> <span class="o">-</span> <span class="n">half_P</span> <span class="p">:</span> <span class="n">center</span> <span class="o">+</span> <span class="n">half_P</span> <span class="o">+</span> <span class="n">P</span> <span class="o">%</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">fd_filtered</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifftshift</span><span class="p">(</span><span class="n">fd_filtered</span><span class="p">)</span>
+    <span class="n">contour_rec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">fd_filtered</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">contour_rec</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">contour_rec</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">plot_reconstructions</span><span class="p">(</span><span class="n">original</span><span class="p">,</span> <span class="n">reconstructions</span><span class="p">,</span> <span class="n">Ps</span><span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ps</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Ps</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>  <span class="c1"># Smaller, square-friendly layout</span>
+    
+    <span class="c1"># Compute axis limits (shared for all plots)</span>
+    <span class="n">all_points</span> <span class="o">=</span> <span class="p">[</span><span class="n">original</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">reconstructions</span><span class="p">]</span>
+    <span class="n">all_real</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span> <span class="k">for</span> <span class="n">pts</span> <span class="ow">in</span> <span class="n">all_points</span><span class="p">])</span>
+    <span class="n">all_imag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span> <span class="k">for</span> <span class="n">pts</span> <span class="ow">in</span> <span class="n">all_points</span><span class="p">])</span>
+    <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="n">all_real</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">all_real</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">all_imag</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">all_imag</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">margin</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Add some padding</span>
+    <span class="n">xlim</span> <span class="o">=</span> <span class="p">(</span><span class="n">xmin</span> <span class="o">-</span> <span class="n">margin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">+</span> <span class="n">margin</span><span class="p">)</span>
+    <span class="n">ylim</span> <span class="o">=</span> <span class="p">(</span><span class="n">ymin</span> <span class="o">-</span> <span class="n">margin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">+</span> <span class="n">margin</span><span class="p">)</span>
+
+    <span class="c1"># Original shape</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">original</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">original</span><span class="p">),</span> <span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Original&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Reconstructions</span>
+    <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">reconstructions</span><span class="p">,</span> <span class="n">Ps</span><span class="p">):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;$P = </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="c1"># Main</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">create_square_image</span><span class="p">()</span>
+<span class="n">contour</span> <span class="o">=</span> <span class="n">get_contour_points</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+<span class="n">contour_centered</span> <span class="o">=</span> <span class="n">contour</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">contour</span><span class="p">)</span>
+<span class="n">contour</span> <span class="o">=</span> <span class="n">resample_contour</span><span class="p">(</span><span class="n">contour</span><span class="p">,</span> <span class="n">num_points</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>  
+<span class="n">fd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">contour_centered</span><span class="p">)</span>
+
+<span class="c1"># Reconstruct using increasing number of descriptors</span>
+<span class="n">Ps</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">]</span>
+<span class="n">reconstructions</span> <span class="o">=</span> <span class="p">[</span><span class="n">reconstruct_contour_sym</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">P</span><span class="p">)</span> <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">Ps</span><span class="p">]</span>
+
+<span class="n">plot_reconstructions</span><span class="p">(</span><span class="n">contour_centered</span><span class="p">,</span> <span class="n">reconstructions</span><span class="p">,</span> <span class="n">Ps</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/9ca78ca0cf772c7d85af56eb899569ce39a7d8643292c8da6bf99e5f36a52538.png" src="_images/9ca78ca0cf772c7d85af56eb899569ce39a7d8643292c8da6bf99e5f36a52538.png" />
+</div>
+</div>
+</section>
+<section id="programming-exercise-12-4">
+<h2>Programming exercise 12.4:<a class="headerlink" href="#programming-exercise-12-4" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following code to perform medial axis transform on sample T-shaped and L-shaped objects.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">medial_axis</span>
+<span class="kn">from</span> <span class="nn">skimage.draw</span> <span class="kn">import</span> <span class="n">rectangle</span>
+
+<span class="k">def</span> <span class="nf">create_T_shape_image</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)):</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">rr</span><span class="p">,</span> <span class="n">cc</span> <span class="o">=</span> <span class="n">rectangle</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">45</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">55</span><span class="p">))</span>
+    <span class="n">img</span><span class="p">[</span><span class="n">rr</span><span class="p">,</span> <span class="n">cc</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">rr</span><span class="p">,</span> <span class="n">cc</span> <span class="o">=</span> <span class="n">rectangle</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">70</span><span class="p">))</span>
+    <span class="n">img</span><span class="p">[</span><span class="n">rr</span><span class="p">,</span> <span class="n">cc</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">img</span>
+
+<span class="k">def</span> <span class="nf">create_L_shape_image</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)):</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">rr1</span><span class="p">,</span> <span class="n">cc1</span> <span class="o">=</span> <span class="n">rectangle</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span>
+    <span class="n">img</span><span class="p">[</span><span class="n">rr1</span><span class="p">,</span> <span class="n">cc1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">rr2</span><span class="p">,</span> <span class="n">cc2</span> <span class="o">=</span> <span class="n">rectangle</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">80</span><span class="p">))</span>
+    <span class="n">img</span><span class="p">[</span><span class="n">rr2</span><span class="p">,</span> <span class="n">cc2</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">img</span>
+
+<span class="k">def</span> <span class="nf">compute_medial_axis</span><span class="p">(</span><span class="n">binary_image</span><span class="p">):</span>
+    <span class="n">skeleton</span><span class="p">,</span> <span class="n">distance</span> <span class="o">=</span> <span class="n">medial_axis</span><span class="p">(</span><span class="n">binary_image</span><span class="p">,</span> <span class="n">return_distance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">skeleton</span><span class="p">,</span> <span class="n">distance</span>
+
+<span class="k">def</span> <span class="nf">plot_3x2</span><span class="p">(</span><span class="n">T_img</span><span class="p">,</span> <span class="n">L_img</span><span class="p">,</span> <span class="n">T_skel</span><span class="p">,</span> <span class="n">T_dist</span><span class="p">,</span> <span class="n">L_skel</span><span class="p">,</span> <span class="n">L_dist</span><span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+
+    <span class="c1"># Row 0: T-shape Original and L-shape Original</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">T_img</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;T-shaped Binary Image&quot;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">L_img</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;L-shaped Binary Image&quot;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Row 1: T-shape Medial Axis and L-shape Medial Axis</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">T_skel</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;T-shape Medial Axis&quot;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">L_skel</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;L-shape Medial Axis&quot;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Row 2: T-shape Distance and L-shape Distance</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">T_dist</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;T-shape Distance to Boundary&quot;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+    <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">L_dist</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;L-shape Distance to Boundary&quot;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Run</span>
+<span class="n">T_img</span> <span class="o">=</span> <span class="n">create_T_shape_image</span><span class="p">()</span>
+<span class="n">L_img</span> <span class="o">=</span> <span class="n">create_L_shape_image</span><span class="p">()</span>
+
+<span class="n">T_skel</span><span class="p">,</span> <span class="n">T_dist</span> <span class="o">=</span> <span class="n">compute_medial_axis</span><span class="p">(</span><span class="n">T_img</span><span class="p">)</span>
+<span class="n">L_skel</span><span class="p">,</span> <span class="n">L_dist</span> <span class="o">=</span> <span class="n">compute_medial_axis</span><span class="p">(</span><span class="n">L_img</span><span class="p">)</span>
+
+<span class="n">plot_3x2</span><span class="p">(</span><span class="n">T_img</span><span class="p">,</span> <span class="n">L_img</span><span class="p">,</span> <span class="n">T_skel</span><span class="p">,</span> <span class="n">T_dist</span><span class="p">,</span> <span class="n">L_skel</span><span class="p">,</span> <span class="n">L_dist</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1c321ec3445a9075500eabcdc53287ad79d7bd714847cc9aaa4d289add839daf.png" src="_images/1c321ec3445a9075500eabcdc53287ad79d7bd714847cc9aaa4d289add839daf.png" />
+</div>
+</div>
+</section>
+<section id="programming-exercise-12-5">
+<h2>Programming exercise 12.5:<a class="headerlink" href="#programming-exercise-12-5" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
 <li><p>Run the following code to see Gabor filters.</p></li>
 </ol>
 <div class="cell docutils container">
@@ -637,8 +829,8 @@ document.write(`
 </div>
 </div>
 </section>
-<section id="programming-exercise-12-4">
-<h2>Programming exercise 12.4:<a class="headerlink" href="#programming-exercise-12-4" title="Permalink to this heading">#</a></h2>
+<section id="programming-exercise-12-6">
+<h2>Programming exercise 12.6:<a class="headerlink" href="#programming-exercise-12-6" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Run the following code to perform SIFT keypoint extraction and matching.</p></li>
 </ol>
@@ -654,29 +846,29 @@ document.write(`
 <span class="n">image1</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;images/bmb1.jpeg&#39;</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">image1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
     <span class="n">image1</span> <span class="o">=</span> <span class="n">rgba2rgb</span><span class="p">(</span><span class="n">image1</span><span class="p">)</span>
-<span class="n">image1</span> <span class="o">=</span> <span class="n">rgb2gray</span><span class="p">(</span><span class="n">image1</span><span class="p">)</span>
+<span class="n">image1_gray</span> <span class="o">=</span> <span class="n">rgb2gray</span><span class="p">(</span><span class="n">image1</span><span class="p">)</span>
 
 <span class="n">image2</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;images/bmb2.jpeg&#39;</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">image2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
     <span class="n">image2</span> <span class="o">=</span> <span class="n">rgba2rgb</span><span class="p">(</span><span class="n">image2</span><span class="p">)</span>
-<span class="n">image2</span> <span class="o">=</span> <span class="n">rgb2gray</span><span class="p">(</span><span class="n">image2</span><span class="p">)</span>
+<span class="n">image2_gray</span> <span class="o">=</span> <span class="n">rgb2gray</span><span class="p">(</span><span class="n">image2</span><span class="p">)</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 
-<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image1</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image2</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image2</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
 <span class="c1"># Extract SIFT descriptors</span>
 <span class="n">descriptor_extractor</span> <span class="o">=</span> <span class="n">SIFT</span><span class="p">()</span>
 
-<span class="n">descriptor_extractor</span><span class="o">.</span><span class="n">detect_and_extract</span><span class="p">(</span><span class="n">image1</span><span class="p">)</span>
+<span class="n">descriptor_extractor</span><span class="o">.</span><span class="n">detect_and_extract</span><span class="p">(</span><span class="n">image1_gray</span><span class="p">)</span>
 <span class="n">keypoints1</span> <span class="o">=</span> <span class="n">descriptor_extractor</span><span class="o">.</span><span class="n">keypoints</span>
 <span class="n">descriptors1</span> <span class="o">=</span> <span class="n">descriptor_extractor</span><span class="o">.</span><span class="n">descriptors</span>
 
-<span class="n">descriptor_extractor</span><span class="o">.</span><span class="n">detect_and_extract</span><span class="p">(</span><span class="n">image2</span><span class="p">)</span>
+<span class="n">descriptor_extractor</span><span class="o">.</span><span class="n">detect_and_extract</span><span class="p">(</span><span class="n">image2_gray</span><span class="p">)</span>
 <span class="n">keypoints2</span> <span class="o">=</span> <span class="n">descriptor_extractor</span><span class="o">.</span><span class="n">keypoints</span>
 <span class="n">descriptors2</span> <span class="o">=</span> <span class="n">descriptor_extractor</span><span class="o">.</span><span class="n">descriptors</span>
 
@@ -694,13 +886,13 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/8b2fce3fb51ed3145c1c08bada229b4eb5b7af50a0133e18bc08a15b3f37caeb.png" src="_images/8b2fce3fb51ed3145c1c08bada229b4eb5b7af50a0133e18bc08a15b3f37caeb.png" />
-<img alt="_images/b0af63b18d6362374e10ab70cc9b7e0f736039eda87a53f9ecf1cad49fbc5b84.png" src="_images/b0af63b18d6362374e10ab70cc9b7e0f736039eda87a53f9ecf1cad49fbc5b84.png" />
+<img alt="_images/7be326260138367ae68f0f099961857a45deaad3f497d3b70f066bb4918c4062.png" src="_images/7be326260138367ae68f0f099961857a45deaad3f497d3b70f066bb4918c4062.png" />
+<img alt="_images/924a0e0a5dc527617cabb7877e1179f54ccca4e8520c2598593ffe463cf3773c.png" src="_images/924a0e0a5dc527617cabb7877e1179f54ccca4e8520c2598593ffe463cf3773c.png" />
 </div>
 </div>
 </section>
-<section id="programming-exercise-12-5">
-<h2>Programming exercise 12.5:<a class="headerlink" href="#programming-exercise-12-5" title="Permalink to this heading">#</a></h2>
+<section id="programming-exercise-12-7">
+<h2>Programming exercise 12.7:<a class="headerlink" href="#programming-exercise-12-7" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Run the following code to extract local binary patterns.</p></li>
 </ol>
@@ -833,6 +1025,8 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-12-3">Programming exercise 12.3:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-12-4">Programming exercise 12.4:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-12-5">Programming exercise 12.5:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-12-6">Programming exercise 12.6:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-12-7">Programming exercise 12.7:</a></li>
 </ul>
   </nav></div>
 
