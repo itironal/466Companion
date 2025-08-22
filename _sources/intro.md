@@ -1,11 +1,14 @@
-# Welcome to your Jupyter Book
+# Fundamentals of Image Processing with Python
 
-This is a small sample book to give you a feel for how book content is
-structured.
-It shows off a few of the major file types, as well as some sample content.
-It does not go in-depth into any particular topic - check out [the Jupyter Book documentation](https://jupyterbook.org) for more information.
+This is the companion e-book for “Fundamentals of Image Processing with Python”. In this e-book, you will find supporting material for the content presented in the print book. These include interactive code pieces that you can execute, and videos that facilitates your learning.
 
-Check out the content pages bundled with this sample book to see more.
+This e-book is presented as an HTML website, with videos that can be played directly in your web browser. For interactive programming content, we provide two options:
+
+Google Colab – Use the “rocket” button in the top-right corner of each page to open the notebook in Google Colab.
+
+Download Jupyter Notebooks – Use the download button in the top-right corner to download the notebook as a `*.ipynb' file, which can be opened with your local or remote Jupyter notebook editor.
+
+We assume that you can program in Python and know how to execute a Jupyter notebook.
 
 ```{tableofcontents}
 ```
