@@ -152,7 +152,7 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="intro.html">
-                    Welcome to your Jupyter Book
+                    Fundamentals of Image Processing with Python
                 </a>
             </li>
         </ul>
@@ -169,6 +169,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="newCh10.html">Chapter 10: Morphological Image Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh11.html">Chapter 11 Image Segmentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh12.html">Chapter 12: Image Representation by Feature Extraction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh15.html">Chapter 15: Deep Learning Approaches to Image Processing Tasks</a></li>
 </ul>
 
     </div>
@@ -387,6 +388,9 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-8-3">Video 8.3</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-8-4">Video 8.4</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-8-1"><strong>Programming exercise 8.1:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-8-2"><strong>Programming exercise 8.2:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-8-3"><strong>Programming exercise 8.3:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-8-4"><strong>Programming exercise 8.4:</strong></a></li>
 </ul>
             </nav>
         </div>
@@ -518,6 +522,283 @@ document.write(`
 </div>
 </div>
 </section>
+<section id="programming-exercise-8-2">
+<h2><strong>Programming exercise 8.2:</strong><a class="headerlink" href="#programming-exercise-8-2" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following code to see the output of the two-band analysis filter bank applied to a one-dimensional signal</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">firwin</span><span class="p">,</span> <span class="n">lfilter</span>
+
+<span class="k">def</span> <span class="nf">two_band_analysis</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">,</span> <span class="n">filter_order</span><span class="o">=</span><span class="mi">31</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform two-band analysis filter bank for 1D signal.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    fx : 1D numpy array</span>
+<span class="sd">        Input signal.</span>
+<span class="sd">    cutoff : float</span>
+<span class="sd">        Normalized cutoff frequency (0 &lt; cutoff &lt; 0.5), relative to Nyquist.</span>
+<span class="sd">    filter_order : int</span>
+<span class="sd">        Order of FIR filters.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    f0_down : 1D array</span>
+<span class="sd">        Approximation (low-pass) part, downsampled by 2.</span>
+<span class="sd">    f1_down : 1D array</span>
+<span class="sd">        Detail (high-pass) part, downsampled by 2.</span>
+<span class="sd">    f0_full : 1D array</span>
+<span class="sd">        Low-pass filtered signal (full length).</span>
+<span class="sd">    f1_full : 1D array</span>
+<span class="sd">        High-pass filtered signal (full length).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Step 1: Design FIR low-pass and high-pass filters</span>
+    <span class="n">h0</span> <span class="o">=</span> <span class="n">firwin</span><span class="p">(</span><span class="n">filter_order</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">,</span> <span class="n">pass_zero</span><span class="o">=</span><span class="s1">&#39;lowpass&#39;</span><span class="p">)</span>   <span class="c1"># Low-pass</span>
+    <span class="n">h1</span> <span class="o">=</span> <span class="n">firwin</span><span class="p">(</span><span class="n">filter_order</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">,</span> <span class="n">pass_zero</span><span class="o">=</span><span class="s1">&#39;highpass&#39;</span><span class="p">)</span>  <span class="c1"># High-pass</span>
+
+    <span class="c1"># Step 2: Filter the signal</span>
+    <span class="n">f0_full</span> <span class="o">=</span> <span class="n">lfilter</span><span class="p">(</span><span class="n">h0</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">fx</span><span class="p">)</span>  <span class="c1"># Approximation</span>
+    <span class="n">f1_full</span> <span class="o">=</span> <span class="n">lfilter</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">fx</span><span class="p">)</span>  <span class="c1"># Detail</span>
+
+    <span class="c1"># Step 3: Downsample by 2</span>
+    <span class="n">f0_down</span> <span class="o">=</span> <span class="n">f0_full</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">f1_down</span> <span class="o">=</span> <span class="n">f1_full</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">f0_down</span><span class="p">,</span> <span class="n">f1_down</span><span class="p">,</span> <span class="n">f0_full</span><span class="p">,</span> <span class="n">f1_full</span>
+
+<span class="c1"># ---------------- Example Usage ----------------</span>
+<span class="c1"># Create a sample 1D signal (e.g., sum of two sinusoids)</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="mi">256</span>  <span class="c1"># Sampling frequency</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="n">fs</span><span class="p">)</span>
+<span class="n">fx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">5</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">50</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+
+<span class="c1"># Apply two-band analysis filter bank</span>
+<span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="c1"># Normalized cutoff frequency (relative to Nyquist, 0.5)</span>
+<span class="n">f0_down</span><span class="p">,</span> <span class="n">f1_down</span><span class="p">,</span> <span class="n">f0_full</span><span class="p">,</span> <span class="n">f1_full</span> <span class="o">=</span> <span class="n">two_band_analysis</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">,</span> <span class="n">filter_order</span><span class="o">=</span><span class="mi">31</span><span class="p">)</span>
+
+<span class="c1"># ---------------- Plot Results ----------------</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">fx</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Original Signal&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Amplitude&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">f0_full</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Low-pass (Approximation)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">f1_full</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;High-pass (Detail)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Filtered Signals (Full Length)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Amplitude&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f0_down</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Downsampled Approximation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f1_down</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Downsampled Detail&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Downsampled Signals (Compressed)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Sample index&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Amplitude&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1fd13a48f8bf452a9bfebe066ddd63da0c9adf789a4f85b5ee5cb66b9a9804b4.png" src="_images/1fd13a48f8bf452a9bfebe066ddd63da0c9adf789a4f85b5ee5cb66b9a9804b4.png" />
+</div>
+</div>
+</section>
+<section id="programming-exercise-8-3">
+<h2><strong>Programming exercise 8.3:</strong><a class="headerlink" href="#programming-exercise-8-3" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following code to see the outputs of the two-band analysis filter bank applied to the image.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">firwin</span><span class="p">,</span> <span class="n">lfilter</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="k">def</span> <span class="nf">two_band_2d_analysis</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">filter_order</span><span class="o">=</span><span class="mi">31</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Two-band analysis filter bank for 2D images.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    image : 2D numpy array</span>
+<span class="sd">        Grayscale input image.</span>
+<span class="sd">    cutoff : float</span>
+<span class="sd">        Normalized cutoff frequency (0 &lt; cutoff &lt; 0.5).</span>
+<span class="sd">    filter_order : int</span>
+<span class="sd">        Order of 1D FIR filters.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    a0 : 2D array</span>
+<span class="sd">        Approximation (low-pass) image.</span>
+<span class="sd">    dv : 2D array</span>
+<span class="sd">        Vertical detail image.</span>
+<span class="sd">    dh : 2D array</span>
+<span class="sd">        Horizontal detail image.</span>
+<span class="sd">    dd : 2D array</span>
+<span class="sd">        Diagonal detail image.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Step 1: Design 1D low-pass and high-pass filters</span>
+    <span class="n">h0</span> <span class="o">=</span> <span class="n">firwin</span><span class="p">(</span><span class="n">filter_order</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">,</span> <span class="n">pass_zero</span><span class="o">=</span><span class="s1">&#39;lowpass&#39;</span><span class="p">)</span>
+    <span class="n">h1</span> <span class="o">=</span> <span class="n">firwin</span><span class="p">(</span><span class="n">filter_order</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">,</span> <span class="n">pass_zero</span><span class="o">=</span><span class="s1">&#39;highpass&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Step 2: Filter rows</span>
+    <span class="n">f0_rows</span> <span class="o">=</span> <span class="n">lfilter</span><span class="p">(</span><span class="n">h0</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">image</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Low-pass rows</span>
+    <span class="n">f1_rows</span> <span class="o">=</span> <span class="n">lfilter</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">image</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># High-pass rows</span>
+
+    <span class="c1"># Downsample rows by 2</span>
+    <span class="n">f0_rows_down</span> <span class="o">=</span> <span class="n">f0_rows</span><span class="p">[:,</span> <span class="p">::</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">f1_rows_down</span> <span class="o">=</span> <span class="n">f1_rows</span><span class="p">[:,</span> <span class="p">::</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="c1"># Step 3 &amp; 4: Filter columns and downsample by 2</span>
+    <span class="n">f0_cols</span> <span class="o">=</span> <span class="n">lfilter</span><span class="p">(</span><span class="n">h0</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">f0_rows_down</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[::</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Low-pass columns of LP rows</span>
+    <span class="n">f1_cols</span> <span class="o">=</span> <span class="n">lfilter</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">f0_rows_down</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[::</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># High-pass columns of LP rows</span>
+
+    <span class="n">f0_cols_h</span> <span class="o">=</span> <span class="n">lfilter</span><span class="p">(</span><span class="n">h0</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">f1_rows_down</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[::</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># Low-pass columns of HP rows</span>
+    <span class="n">f1_cols_h</span> <span class="o">=</span> <span class="n">lfilter</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">f1_rows_down</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[::</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># High-pass columns of HP rows</span>
+
+    <span class="c1"># Step 5: Merge with correct naming</span>
+    <span class="n">a0</span> <span class="o">=</span> <span class="n">f0_cols</span>       <span class="c1"># Approximation</span>
+    <span class="n">dv</span> <span class="o">=</span> <span class="n">f1_cols</span>       <span class="c1"># Vertical detail (LP horizontal, HP vertical)</span>
+    <span class="n">dh</span> <span class="o">=</span> <span class="n">f0_cols_h</span>     <span class="c1"># Horizontal detail (HP horizontal, LP vertical)</span>
+    <span class="n">dd</span> <span class="o">=</span> <span class="n">f1_cols_h</span>     <span class="c1"># Diagonal detail (HP both directions)</span>
+
+    <span class="k">return</span> <span class="n">a0</span><span class="p">,</span> <span class="n">dv</span><span class="p">,</span> <span class="n">dh</span><span class="p">,</span> <span class="n">dd</span>
+
+<span class="c1"># ---------------- Load the image ----------------</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/fatos_hocam_background.png&quot;</span>
+<span class="n">original_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">))</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">))</span> <span class="o">/</span> <span class="mf">255.0</span>  <span class="c1"># Grayscale</span>
+
+<span class="c1"># ---------------- Apply 2D two-band analysis filter bank ----------------</span>
+<span class="n">a0</span><span class="p">,</span> <span class="n">dv</span><span class="p">,</span> <span class="n">dh</span><span class="p">,</span> <span class="n">dd</span> <span class="o">=</span> <span class="n">two_band_2d_analysis</span><span class="p">(</span><span class="n">original_img</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">filter_order</span><span class="o">=</span><span class="mi">31</span><span class="p">)</span>
+
+<span class="c1"># ---------------- Plot the results ----------------</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">a0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Approximation (a0)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">dv</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Vertical Detail (dv)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Horizontal Detail (dh)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">dd</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Diagonal Detail (dd)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/49ed592b89236ef04be8b84feb3b8137d6501d46fe77cecb0a25756e7c205435.png" src="_images/49ed592b89236ef04be8b84feb3b8137d6501d46fe77cecb0a25756e7c205435.png" />
+</div>
+</div>
+</section>
+<section id="programming-exercise-8-4">
+<h2><strong>Programming exercise 8.4:</strong><a class="headerlink" href="#programming-exercise-8-4" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following code to see the reconstructed image obtained from the approximation and detail subbands using the two-band 2D synthesis filter bank.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">firwin</span><span class="p">,</span> <span class="n">lfilter</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="k">def</span> <span class="nf">upsample_by_2</span><span class="p">(</span><span class="n">image</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Upsample a 2D image by a factor of 2 along both axes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">upsampled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">rows</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">cols</span><span class="o">*</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">upsampled</span><span class="p">[::</span><span class="mi">2</span><span class="p">,</span> <span class="p">::</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span>
+    <span class="k">return</span> <span class="n">upsampled</span>
+
+<span class="k">def</span> <span class="nf">two_band_2d_synthesis</span><span class="p">(</span><span class="n">a0</span><span class="p">,</span> <span class="n">dv</span><span class="p">,</span> <span class="n">dh</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">filter_order</span><span class="o">=</span><span class="mi">31</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Two-band synthesis filter bank for 2D images.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a0, dv, dh, dd : 2D arrays</span>
+<span class="sd">        Subband images from analysis filter bank.</span>
+<span class="sd">    cutoff : float</span>
+<span class="sd">        Normalized cutoff frequency for synthesis filters.</span>
+<span class="sd">    filter_order : int</span>
+<span class="sd">        FIR filter order.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    f_reconstructed : 2D array</span>
+<span class="sd">        Reconstructed image from subbands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Step 1: Upsample all subband images by 2</span>
+    <span class="n">a0_up</span> <span class="o">=</span> <span class="n">upsample_by_2</span><span class="p">(</span><span class="n">a0</span><span class="p">)</span>
+    <span class="n">dv_up</span> <span class="o">=</span> <span class="n">upsample_by_2</span><span class="p">(</span><span class="n">dv</span><span class="p">)</span>
+    <span class="n">dh_up</span> <span class="o">=</span> <span class="n">upsample_by_2</span><span class="p">(</span><span class="n">dh</span><span class="p">)</span>
+    <span class="n">dd_up</span> <span class="o">=</span> <span class="n">upsample_by_2</span><span class="p">(</span><span class="n">dd</span><span class="p">)</span>
+
+    <span class="c1"># Step 2: Design synthesis filters</span>
+    <span class="n">g0</span> <span class="o">=</span> <span class="n">firwin</span><span class="p">(</span><span class="n">filter_order</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">,</span> <span class="n">pass_zero</span><span class="o">=</span><span class="s1">&#39;lowpass&#39;</span><span class="p">)</span>
+    <span class="n">g1</span> <span class="o">=</span> <span class="n">firwin</span><span class="p">(</span><span class="n">filter_order</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">,</span> <span class="n">pass_zero</span><span class="o">=</span><span class="s1">&#39;highpass&#39;</span><span class="p">)</span>
+
+    <span class="c1"># ---------------- Reconstruct columns ----------------</span>
+    <span class="c1"># Vertical direction:</span>
+    <span class="c1"># a0 + dh → low-pass vertically</span>
+    <span class="c1"># dv + dd → high-pass vertically</span>
+    <span class="n">col_low</span> <span class="o">=</span> <span class="n">lfilter</span><span class="p">(</span><span class="n">g0</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">a0_up</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">lfilter</span><span class="p">(</span><span class="n">g0</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">dh_up</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">col_high</span> <span class="o">=</span> <span class="n">lfilter</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">dv_up</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">lfilter</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">dd_up</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># ---------------- Reconstruct rows ----------------</span>
+    <span class="c1"># Horizontal direction:</span>
+    <span class="n">f_reconstructed</span> <span class="o">=</span> <span class="n">lfilter</span><span class="p">(</span><span class="n">g0</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">col_low</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">lfilter</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">col_high</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f_reconstructed</span>
+
+<span class="c1"># ---------------- Example Usage ----------------</span>
+<span class="c1"># Reconstruct the image from the subbands obtained earlier</span>
+<span class="n">f_rec</span> <span class="o">=</span> <span class="n">two_band_2d_synthesis</span><span class="p">(</span><span class="n">a0</span><span class="p">,</span> <span class="n">dv</span><span class="p">,</span> <span class="n">dh</span><span class="p">,</span> <span class="n">dd</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">filter_order</span><span class="o">=</span><span class="mi">31</span><span class="p">)</span>
+
+<span class="c1"># ---------------- Plot ----------------</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">f_rec</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Reconstructed Image from Subbands&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/43e5860bb7bdbd9529ff9f3aa5d281ad8344651f5c2787a2ec8a2ea4303f27ae.png" src="_images/43e5860bb7bdbd9529ff9f3aa5d281ad8344651f5c2787a2ec8a2ea4303f27ae.png" />
+</div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -592,6 +873,9 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-8-3">Video 8.3</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-8-4">Video 8.4</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-8-1"><strong>Programming exercise 8.1:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-8-2"><strong>Programming exercise 8.2:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-8-3"><strong>Programming exercise 8.3:</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-8-4"><strong>Programming exercise 8.4:</strong></a></li>
 </ul>
   </nav></div>
 

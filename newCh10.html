@@ -154,7 +154,7 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="intro.html">
-                    Welcome to your Jupyter Book
+                    Fundamentals of Image Processing with Python
                 </a>
             </li>
         </ul>
@@ -171,6 +171,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 10: Morphological Image Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh11.html">Chapter 11 Image Segmentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="newCh12.html">Chapter 12: Image Representation by Feature Extraction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="newCh15.html">Chapter 15: Deep Learning Approaches to Image Processing Tasks</a></li>
 </ul>
 
     </div>
@@ -399,10 +400,11 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-10-6">Programming exercise 10.6:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-10-7">Programming exercise 10.7:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercises-10-8">Programming exercises 10.8</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-10-9">Programming exercise 10.9:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercises-10-9">Programming exercises 10.9</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-10-10">Programming exercise 10.10:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-10-11">Programming exercise 10.11:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-10-12">Programming exercise 10.12:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-10-13">Programming exercise 10.13:</a></li>
 </ul>
             </nav>
         </div>
@@ -979,12 +981,9 @@ document.write(`
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Boundary extraction</span>
-
-<span class="kn">import</span> <span class="nn">cv2</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cv2</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">skimage.measure</span> <span class="kn">import</span> <span class="n">find_contours</span>
 
 <span class="c1"># Function to apply burgundy background</span>
 <span class="k">def</span> <span class="nf">apply_burgundy_background</span><span class="p">(</span><span class="n">binary_img</span><span class="p">):</span>
@@ -992,57 +991,66 @@ document.write(`
     <span class="n">burgundy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">128</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>  <span class="c1"># RGB color for burgundy</span>
     <span class="n">white</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>  <span class="c1"># RGB color for white</span>
 
-    <span class="c1"># Create a 3-channel image</span>
     <span class="n">color_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-
-    <span class="c1"># Assign colors: Background → Burgundy, Boundary → White</span>
-    <span class="n">color_image</span><span class="p">[</span><span class="n">binary_img</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">burgundy</span>  <span class="c1"># Background</span>
-    <span class="n">color_image</span><span class="p">[</span><span class="n">binary_img</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">white</span>  <span class="c1"># Boundary (white)</span>
-
+    <span class="n">color_image</span><span class="p">[</span><span class="n">binary_img</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">burgundy</span>
+    <span class="n">color_image</span><span class="p">[</span><span class="n">binary_img</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">white</span>
     <span class="k">return</span> <span class="n">color_image</span>
 
 <span class="c1"># Load the image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/boundary_ext.png&quot;</span>  
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/boundary_ext.png&quot;</span>
 <span class="n">rgb_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
-
-<span class="c1"># Convert the image to grayscale</span>
 <span class="n">gray_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">rgb_image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
-
-<span class="c1"># Threshold the image to get a binary image (you can adjust the threshold value)</span>
 <span class="n">_</span><span class="p">,</span> <span class="n">binary_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">threshold</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">THRESH_BINARY</span><span class="p">)</span>
+<span class="n">binary_image</span> <span class="o">=</span> <span class="n">binary_image</span> <span class="o">//</span> <span class="mi">255</span>  <span class="c1"># convert to 0/1</span>
 
-<span class="c1"># Convert to [0, 1] range for skimage</span>
-<span class="n">binary_image</span> <span class="o">=</span> <span class="n">binary_image</span> <span class="o">/</span> <span class="mi">255</span>
+<span class="c1"># Create circular structuring elements of two different sizes</span>
+<span class="n">kernel_small</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">getStructuringElement</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">MORPH_ELLIPSE</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">kernel_large</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">getStructuringElement</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">MORPH_ELLIPSE</span><span class="p">,</span> <span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
 
-<span class="c1"># Find contours using skimage</span>
-<span class="n">contours</span> <span class="o">=</span> <span class="n">find_contours</span><span class="p">(</span><span class="n">binary_image</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># Find contours at the binary threshold</span>
+<span class="c1"># Erode and compute boundaries</span>
+<span class="n">eroded_small</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">erode</span><span class="p">(</span><span class="n">binary_image</span><span class="p">,</span> <span class="n">kernel_small</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">boundary_small</span> <span class="o">=</span> <span class="n">binary_image</span> <span class="o">-</span> <span class="n">eroded_small</span>
+<span class="n">boundary_small</span><span class="p">[</span><span class="n">boundary_small</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
-<span class="c1"># Create an empty binary image to draw contours on</span>
-<span class="n">boundary_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">binary_image</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="n">eroded_large</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">erode</span><span class="p">(</span><span class="n">binary_image</span><span class="p">,</span> <span class="n">kernel_large</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">boundary_large</span> <span class="o">=</span> <span class="n">binary_image</span> <span class="o">-</span> <span class="n">eroded_large</span>
+<span class="n">boundary_large</span><span class="p">[</span><span class="n">boundary_large</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
-<span class="c1"># Draw contours on the binary image (boundary = white)</span>
-<span class="k">for</span> <span class="n">contour</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">:</span>
-    <span class="n">contour</span> <span class="o">=</span> <span class="n">contour</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># Convert to integer coordinates</span>
-    <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">contour</span><span class="p">:</span>
-        <span class="n">boundary_image</span><span class="p">[</span><span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">point</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Set boundary pixels to 1 (white)</span>
+<span class="c1"># Apply burgundy background</span>
+<span class="n">boundary_small_burgundy</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">boundary_small</span><span class="p">)</span>
+<span class="n">boundary_large_burgundy</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">boundary_large</span><span class="p">)</span>
 
-<span class="c1"># Apply the burgundy background</span>
-<span class="n">boundary_image_burgundy</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">boundary_image</span><span class="p">)</span>
-
-<span class="c1"># Convert the image from [0, 1] back to [0, 255] for saving and viewing</span>
-<span class="n">boundary_image_burgundy</span> <span class="o">=</span> <span class="p">(</span><span class="n">boundary_image_burgundy</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-
-<span class="c1"># Visualize the boundary image with burgundy background</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">boundary_image_burgundy</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Extracted Boundary&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="c1"># Display side by side</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">boundary_small_burgundy</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Boundary - Small SE&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">boundary_large_burgundy</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Boundary - Large SE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Function to save a NumPy RGB image as PDF</span>
+<span class="k">def</span> <span class="nf">save_as_pdf</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>  <span class="c1"># image should be RGB</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1"># Save boundaries as PDF</span>
+<span class="n">save_as_pdf</span><span class="p">(</span><span class="n">boundary_small_burgundy</span><span class="p">,</span> <span class="s2">&quot;boundary_SE5.pdf&quot;</span><span class="p">)</span>
+<span class="n">save_as_pdf</span><span class="p">(</span><span class="n">boundary_large_burgundy</span><span class="p">,</span> <span class="s2">&quot;boundary_SE25.pdf&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/d38b39ae70fb512bd439868c0a5228f1980954c83614d5d836a7b5ae9b6d1628.png" src="_images/d38b39ae70fb512bd439868c0a5228f1980954c83614d5d836a7b5ae9b6d1628.png" />
+<img alt="_images/3dbf853a98ac4e7257dc2ebd6a6f7a7352699ac255720c2704e0ec9ad1fd74af.png" src="_images/3dbf853a98ac4e7257dc2ebd6a6f7a7352699ac255720c2704e0ec9ad1fd74af.png" />
 </div>
 </div>
 </section>
@@ -1215,51 +1223,10 @@ document.write(`
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Skeletonization and Thinning</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Skeletonization, Thinning, and Thickening (true definition, with burgundy background and PDF saving)</span>
 <span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">skeletonize</span><span class="p">,</span> <span class="n">thin</span>
 <span class="kn">import</span> <span class="nn">cv2</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="c1"># Load the image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/suyolu_color.png&quot;</span>  
-<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
-
-<span class="c1"># Convert the high-res image to binary (thresholding)</span>
-<span class="n">_</span><span class="p">,</span> <span class="n">binary_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">threshold</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">THRESH_BINARY</span><span class="p">)</span>
-<span class="n">binary_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">bitwise_not</span><span class="p">(</span><span class="n">binary_image</span><span class="p">)</span>
-
-<span class="c1"># Convert binary image from [0, 255] to [0, 1]</span>
-<span class="n">binary_image</span> <span class="o">=</span> <span class="n">binary_image</span> <span class="o">/</span> <span class="mi">255</span>  <span class="c1"># Now values are in range [0, 1]</span>
-
-<span class="c1"># Perform skeletonization and thinning</span>
-<span class="n">skeleton</span> <span class="o">=</span> <span class="n">skeletonize</span><span class="p">(</span><span class="n">binary_image</span><span class="p">)</span>
-<span class="n">thinned</span> <span class="o">=</span> <span class="n">thin</span><span class="p">(</span><span class="n">binary_image</span><span class="p">)</span>
-<span class="n">partial_thinned</span> <span class="o">=</span> <span class="n">thin</span><span class="p">(</span><span class="n">binary_image</span> <span class="o">/</span> <span class="mi">255</span><span class="p">,</span> <span class="n">max_num_iter</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>  <span class="c1"># Ensure image is also in [0, 1] range</span>
-
-<span class="c1"># Display results</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">141</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">binary_image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Binary Image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">142</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">skeleton</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Skeletonization&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">143</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">thinned</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Thinning&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">144</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">partial_thinned</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Partial Thinning&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/9152aed8838c696d81a6ea5968cb96323a9af12c7079c752641d7539c32d5024.png" src="_images/9152aed8838c696d81a6ea5968cb96323a9af12c7079c752641d7539c32d5024.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">skeletonize</span><span class="p">,</span> <span class="n">thin</span>
-<span class="kn">import</span> <span class="nn">cv2</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c1"># Function to apply burgundy background</span>
@@ -1268,130 +1235,209 @@ document.write(`
     <span class="n">burgundy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">128</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>  <span class="c1"># RGB color for burgundy</span>
     <span class="n">white</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>  <span class="c1"># RGB color for white</span>
 
-    <span class="c1"># Create a 3-channel image</span>
+    <span class="c1"># Convert to 3-channel RGB image</span>
     <span class="n">color_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-
-    <span class="c1"># Assign colors: Foreground → White, Background → Burgundy</span>
-    <span class="n">color_image</span><span class="p">[</span><span class="n">binary_img</span> <span class="o">==</span> <span class="mi">255</span><span class="p">]</span> <span class="o">=</span> <span class="n">white</span>  
-    <span class="n">color_image</span><span class="p">[</span><span class="n">binary_img</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">burgundy</span>  
-
+    <span class="n">color_image</span><span class="p">[</span><span class="n">binary_img</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">burgundy</span>
+    <span class="n">color_image</span><span class="p">[</span><span class="n">binary_img</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">white</span>
     <span class="k">return</span> <span class="n">color_image</span>
 
 <span class="c1"># Load the image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/cropped_kilim_image.png&quot;</span>  
-<span class="n">rgb_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/suyolu_color.png&quot;</span>  
+<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
 
-<span class="c1"># Split the RGB image into its channels</span>
-<span class="n">blue_channel</span><span class="p">,</span> <span class="n">green_channel</span><span class="p">,</span> <span class="n">red_channel</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">rgb_image</span><span class="p">)</span>
-
-<span class="c1"># Convert the blue channel to binary (thresholding)</span>
-<span class="n">_</span><span class="p">,</span> <span class="n">binary_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">threshold</span><span class="p">(</span><span class="n">blue_channel</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">THRESH_BINARY</span><span class="p">)</span>
+<span class="c1"># Convert the high-res image to binary (thresholding)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">binary_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">threshold</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">THRESH_BINARY</span><span class="p">)</span>
+<span class="n">binary_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">bitwise_not</span><span class="p">(</span><span class="n">binary_image</span><span class="p">)</span>  <span class="c1"># invert foreground/background</span>
 
 <span class="c1"># Convert binary image from [0, 255] to [0, 1]</span>
-<span class="n">binary_image</span> <span class="o">=</span> <span class="n">binary_image</span> <span class="o">/</span> <span class="mi">255</span>  <span class="c1"># Now values are in range [0, 1]</span>
+<span class="n">binary_image</span> <span class="o">=</span> <span class="n">binary_image</span> <span class="o">//</span> <span class="mi">255</span>  <span class="c1"># integers 0/1</span>
 
-<span class="c1"># Perform skeletonization and thinning</span>
+<span class="c1"># Skeletonization and thinning</span>
 <span class="n">skeleton</span> <span class="o">=</span> <span class="n">skeletonize</span><span class="p">(</span><span class="n">binary_image</span><span class="p">)</span>
 <span class="n">thinned</span> <span class="o">=</span> <span class="n">thin</span><span class="p">(</span><span class="n">binary_image</span><span class="p">)</span>
-<span class="n">partial_thinned</span> <span class="o">=</span> <span class="n">thin</span><span class="p">(</span><span class="n">binary_image</span><span class="p">,</span> <span class="n">max_num_iter</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># Ensure image is also in [0, 1] range</span>
 
-<span class="c1"># Convert back to uint8 for saving with cv2</span>
-<span class="n">binary_image</span> <span class="o">=</span> <span class="p">(</span><span class="n">binary_image</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-<span class="n">skeleton</span> <span class="o">=</span> <span class="p">(</span><span class="n">skeleton</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-<span class="n">thinned</span> <span class="o">=</span> <span class="p">(</span><span class="n">thinned</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-<span class="n">partial_thinned</span> <span class="o">=</span> <span class="p">(</span><span class="n">partial_thinned</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="c1"># True thickening:</span>
+<span class="n">binary_complement</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">binary_image</span>
+<span class="n">thinned_complement</span> <span class="o">=</span> <span class="n">thin</span><span class="p">(</span><span class="n">binary_complement</span><span class="p">)</span>
+<span class="n">thickened</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">thinned_complement</span>
 
-<span class="c1"># Apply burgundy background to each image</span>
-<span class="n">binary_image_burgundy</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">binary_image</span><span class="p">)</span>
+<span class="c1"># Apply burgundy background</span>
+<span class="n">binary_burgundy</span>   <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">binary_image</span><span class="p">)</span>
 <span class="n">skeleton_burgundy</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">skeleton</span><span class="p">)</span>
-<span class="n">thinned_burgundy</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">thinned</span><span class="p">)</span>
-<span class="n">partial_thinned_burgundy</span> <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">partial_thinned</span><span class="p">)</span>
+<span class="n">thinned_burgundy</span>  <span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">thinned</span><span class="p">)</span>
+<span class="n">thickened_burgundy</span><span class="o">=</span> <span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">thickened</span><span class="p">)</span>
 
-<span class="c1"># Convert images to RGB before saving</span>
-<span class="c1">#binary_image_burgundy = cv2.cvtColor(binary_image_burgundy, cv2.COLOR_BGR2RGB)</span>
-<span class="c1">#skeleton_burgundy = cv2.cvtColor(skeleton_burgundy, cv2.COLOR_BGR2RGB)</span>
-<span class="c1">#thinned_burgundy = cv2.cvtColor(thinned_burgundy, cv2.COLOR_BGR2RGB)</span>
-<span class="c1">#partial_thinned_burgundy = cv2.cvtColor(partial_thinned_burgundy, cv2.COLOR_BGR2RGB)</span>
-
-<span class="c1"># Display results</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">141</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">binary_image_burgundy</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="c1"># Display combined results (optional)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">141</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">binary_burgundy</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Binary Image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">142</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">skeleton_burgundy</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">142</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">skeleton_burgundy</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Skeletonization&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">143</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">thinned_burgundy</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">143</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">thinned_burgundy</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Thinning&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">144</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">partial_thinned_burgundy</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Partial Thinning&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">144</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">thickened_burgundy</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Thickening&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/423c153b50e4b58eceb2e517838d60753022f7f5a2f9264aa338dd259bc43d6b.png" src="_images/423c153b50e4b58eceb2e517838d60753022f7f5a2f9264aa338dd259bc43d6b.png" />
+<img alt="_images/e6c3c1d4f6b340788d793acfffae67417a5b57e7c83841a113ae569a84fc2ccf.png" src="_images/e6c3c1d4f6b340788d793acfffae67417a5b57e7c83841a113ae569a84fc2ccf.png" />
 </div>
 </div>
 </section>
-<section id="programming-exercise-10-9">
-<h2>Programming exercise 10.9:<a class="headerlink" href="#programming-exercise-10-9" title="Permalink to this heading">#</a></h2>
+<section id="programming-exercises-10-9">
+<h2>Programming exercises 10.9<a class="headerlink" href="#programming-exercises-10-9" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following code to see the output of applying dilation on each bit plane and reconstruction.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
+<span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="kn">import</span> <span class="n">binary_dilation</span>
+
+<span class="c1"># ---------------- Load grayscale image ----------------</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/cropped_kilim_image.png&quot;</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()))</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span>  <span class="c1"># Convert to grayscale</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>  <span class="c1"># 8-bit grayscale</span>
+
+<span class="c1"># ---------------- Bit-plane decomposition ----------------</span>
+<span class="n">bit_planes</span> <span class="o">=</span> <span class="p">[(</span><span class="n">image</span> <span class="o">&gt;&gt;</span> <span class="n">i</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)]</span>  <span class="c1"># Each bit plane contains 0s and 1s</span>
+
+<span class="c1"># ---------------- Function to apply burgundy background ----------------</span>
+<span class="k">def</span> <span class="nf">apply_burgundy_background</span><span class="p">(</span><span class="n">binary_img</span><span class="p">):</span>
+    <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">binary_img</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">burgundy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">128</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>  <span class="c1"># RGB color for burgundy</span>
+    <span class="n">white</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>  <span class="c1"># RGB color for white</span>
+    <span class="n">color_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+    <span class="n">color_image</span><span class="p">[</span><span class="n">binary_img</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">burgundy</span>
+    <span class="n">color_image</span><span class="p">[</span><span class="n">binary_img</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">white</span>
+    <span class="k">return</span> <span class="n">color_image</span>
+
+<span class="c1"># ---------------- Apply small dilation to each bit plane ----------------</span>
+<span class="n">dilated_planes</span> <span class="o">=</span> <span class="p">[</span><span class="n">binary_dilation</span><span class="p">(</span><span class="n">bp</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span> <span class="k">for</span> <span class="n">bp</span> <span class="ow">in</span> <span class="n">bit_planes</span><span class="p">]</span>
+
+<span class="c1"># ---------------- Reconstruct image from dilated bit planes ----------------</span>
+<span class="n">reconstructed_dilated</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">dilated_planes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+<span class="c1"># ---------------- Plot original and dilated bit planes ----------------</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+    <span class="c1"># Original bit plane</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">bit_planes</span><span class="p">[</span><span class="mi">7</span><span class="o">-</span><span class="n">i</span><span class="p">]))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Orig </span><span class="si">{</span><span class="mi">7</span><span class="o">-</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="c1"># Dilated bit plane</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">apply_burgundy_background</span><span class="p">(</span><span class="n">dilated_planes</span><span class="p">[</span><span class="mi">7</span><span class="o">-</span><span class="n">i</span><span class="p">]))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Dilate </span><span class="si">{</span><span class="mi">7</span><span class="o">-</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># ---------------- Show reconstructed image ----------------</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">reconstructed_dilated</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Reconstructed Image after Dilation&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/965fe4fdfdf5092adf9cc983f0a2d7215f662246c25f03af35e938c59c0020bb.png" src="_images/965fe4fdfdf5092adf9cc983f0a2d7215f662246c25f03af35e938c59c0020bb.png" />
+<img alt="_images/baa6983bfd6510a527186e8a528323cdcbc6510a270b3aaab723c1e3b4647ec3.png" src="_images/baa6983bfd6510a527186e8a528323cdcbc6510a270b3aaab723c1e3b4647ec3.png" />
+</div>
+</div>
+</section>
+<section id="programming-exercise-10-10">
+<h2>Programming exercise 10.10:<a class="headerlink" href="#programming-exercise-10-10" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Run the following code to see the output of several morphological operations on the example grayscale image.</p></li>
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Grayscale morphology</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Morphology comparison 5x2 (small vs large SE) with grayscale in filenames</span>
 <span class="kn">import</span> <span class="nn">cv2</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">dilation</span><span class="p">,</span> <span class="n">erosion</span><span class="p">,</span> <span class="n">opening</span><span class="p">,</span> <span class="n">closing</span><span class="p">,</span> <span class="n">white_tophat</span><span class="p">,</span> <span class="n">black_tophat</span><span class="p">,</span> <span class="n">square</span>
+<span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">dilation</span><span class="p">,</span> <span class="n">erosion</span><span class="p">,</span> <span class="n">opening</span><span class="p">,</span> <span class="n">closing</span><span class="p">,</span> <span class="n">square</span>
 
-<span class="c1"># Load the RGB image as a color image</span>
-<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/cropped_kilim_image.png&quot;</span>  <span class="c1"># Replace with your image path</span>
-<span class="n">color_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>  <span class="c1"># Load as color image (BGR format)</span>
+<span class="c1"># Helper function to save an image as PDF</span>
+<span class="k">def</span> <span class="nf">save_image_pdf</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-<span class="c1"># Convert BGR to RGB</span>
+<span class="c1"># Load images</span>
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/cropped_kilim_image.png&quot;</span>
+<span class="n">color_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
 <span class="n">color_image_rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">color_image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
-
-<span class="c1"># Convert the color image to grayscale</span>
 <span class="n">gray_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">color_image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
 
-<span class="c1"># Resize the grayscale image to high resolution (scale = 4)</span>
-<span class="n">scale_factor</span> <span class="o">=</span> <span class="mi">4</span>
-<span class="n">new_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gray_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale_factor</span><span class="p">)</span>
-<span class="n">new_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gray_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale_factor</span><span class="p">)</span>
-<span class="n">high_res_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="p">(</span><span class="n">new_width</span><span class="p">,</span> <span class="n">new_height</span><span class="p">),</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">INTER_CUBIC</span><span class="p">)</span>
+<span class="c1"># Define structuring elements</span>
+<span class="n">se_small</span> <span class="o">=</span> <span class="n">square</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">se_large</span> <span class="o">=</span> <span class="n">square</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
 
-<span class="c1"># Create a structuring element</span>
-<span class="n">se</span> <span class="o">=</span> <span class="n">square</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+<span class="c1"># Morphological operations</span>
+<span class="n">dilation_small</span> <span class="o">=</span> <span class="n">dilation</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">se_small</span><span class="p">)</span>
+<span class="n">dilation_large</span> <span class="o">=</span> <span class="n">dilation</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">se_large</span><span class="p">)</span>
 
-<span class="c1"># Perform morphological operations</span>
-<span class="n">white_tophat_output</span> <span class="o">=</span> <span class="n">white_tophat</span><span class="p">(</span><span class="n">high_res_image</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
-<span class="n">black_tophat_output</span> <span class="o">=</span> <span class="n">black_tophat</span><span class="p">(</span><span class="n">high_res_image</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
-<span class="n">dilation_output</span> <span class="o">=</span> <span class="n">dilation</span><span class="p">(</span><span class="n">high_res_image</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
-<span class="n">erosion_output</span> <span class="o">=</span> <span class="n">erosion</span><span class="p">(</span><span class="n">high_res_image</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
-<span class="n">opening_output</span> <span class="o">=</span> <span class="n">opening</span><span class="p">(</span><span class="n">high_res_image</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
-<span class="n">closing_output</span> <span class="o">=</span> <span class="n">closing</span><span class="p">(</span><span class="n">high_res_image</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
+<span class="n">erosion_small</span> <span class="o">=</span> <span class="n">erosion</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">se_small</span><span class="p">)</span>
+<span class="n">erosion_large</span> <span class="o">=</span> <span class="n">erosion</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">se_large</span><span class="p">)</span>
 
-<span class="c1"># Display results</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">241</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">color_image_rgb</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original Color Image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">242</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">high_res_image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original Grayscale Image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">243</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">white_tophat_output</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;White Tophat&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">244</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">black_tophat_output</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Black Tophat&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">245</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">dilation_output</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Dilation&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">246</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">erosion_output</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Erosion&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">247</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">opening_output</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Opening&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">248</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">closing_output</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Closing&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">opening_small</span> <span class="o">=</span> <span class="n">opening</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">se_small</span><span class="p">)</span>
+<span class="n">opening_large</span> <span class="o">=</span> <span class="n">opening</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">se_large</span><span class="p">)</span>
 
+<span class="n">closing_small</span> <span class="o">=</span> <span class="n">closing</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">se_small</span><span class="p">)</span>
+<span class="n">closing_large</span> <span class="o">=</span> <span class="n">closing</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">se_large</span><span class="p">)</span>
+
+<span class="c1"># Row-wise images and PDF filenames</span>
+<span class="n">images</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="n">color_image_rgb</span><span class="p">,</span> <span class="n">gray_image</span><span class="p">,</span> <span class="s2">&quot;Original_Color.pdf&quot;</span><span class="p">,</span> <span class="s2">&quot;Grayscale_Image.pdf&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">dilation_small</span><span class="p">,</span> <span class="n">dilation_large</span><span class="p">,</span> <span class="s2">&quot;Dilation_Grayscale_Small.pdf&quot;</span><span class="p">,</span> <span class="s2">&quot;Dilation_Grayscale_Large.pdf&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">erosion_small</span><span class="p">,</span> <span class="n">erosion_large</span><span class="p">,</span> <span class="s2">&quot;Erosion_Grayscale_Small.pdf&quot;</span><span class="p">,</span> <span class="s2">&quot;Erosion_Grayscale_Large.pdf&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">opening_small</span><span class="p">,</span> <span class="n">opening_large</span><span class="p">,</span> <span class="s2">&quot;Opening_Grayscale_Small.pdf&quot;</span><span class="p">,</span> <span class="s2">&quot;Opening_Grayscale_Large.pdf&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">closing_small</span><span class="p">,</span> <span class="n">closing_large</span><span class="p">,</span> <span class="s2">&quot;Closing_Grayscale_Small.pdf&quot;</span><span class="p">,</span> <span class="s2">&quot;Closing_Grayscale_Large.pdf&quot;</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="c1"># Save all images as PDFs</span>
+<span class="k">for</span> <span class="n">row_imgs</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
+    <span class="n">save_image_pdf</span><span class="p">(</span><span class="n">row_imgs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">row_imgs</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">save_image_pdf</span><span class="p">(</span><span class="n">row_imgs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">row_imgs</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+<span class="c1"># Optional: visualize 5x2 figure</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<span class="n">titles</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">&quot;Original Color&quot;</span><span class="p">,</span> <span class="s2">&quot;Grayscale Image&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;Dilation Grayscale Small SE&quot;</span><span class="p">,</span> <span class="s2">&quot;Dilation Grayscale Large SE&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;Erosion Grayscale Small SE&quot;</span><span class="p">,</span> <span class="s2">&quot;Erosion Grayscale Large SE&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;Opening Grayscale Small SE&quot;</span><span class="p">,</span> <span class="s2">&quot;Opening Grayscale Large SE&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;Closing Grayscale Small SE&quot;</span><span class="p">,</span> <span class="s2">&quot;Closing Grayscale Large SE&quot;</span><span class="p">]</span>
+<span class="p">]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">images</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">titles</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1399,88 +1445,248 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/bb0e311dfa2f7a80c343f6cf119a0db5603730c7a1f1817cc379a52e2c855cc3.png" src="_images/bb0e311dfa2f7a80c343f6cf119a0db5603730c7a1f1817cc379a52e2c855cc3.png" />
+<img alt="_images/ba579c305f492ed0707262d2f1b9f5d7da1fd17f634a4419744740223c999872.png" src="_images/ba579c305f492ed0707262d2f1b9f5d7da1fd17f634a4419744740223c999872.png" />
 </div>
 </div>
-</section>
-<section id="programming-exercise-10-10">
-<h2>Programming exercise 10.10:<a class="headerlink" href="#programming-exercise-10-10" title="Permalink to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p>Run the following code to see the output of morphological smoothing.</p></li>
-</ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Morphological smoothing</span>
-<span class="n">se</span> <span class="o">=</span> <span class="n">square</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
-<span class="n">opening_output</span> <span class="o">=</span> <span class="n">opening</span><span class="p">(</span><span class="n">high_res_image</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
-<span class="n">smoothing_output</span> <span class="o">=</span> <span class="n">closing</span><span class="p">(</span><span class="n">opening_output</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">131</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">high_res_image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original Grayscale Image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">132</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">opening_output</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Opening Output&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">133</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">smoothing_output</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Smoothing Output&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">white_tophat</span><span class="p">,</span> <span class="n">black_tophat</span><span class="p">,</span> <span class="n">square</span>
+<span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">io</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">img_as_ubyte</span>
+
+<span class="c1"># Helper function to save image as PDF</span>
+<span class="k">def</span> <span class="nf">save_image_pdf</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1"># Load coins image and convert to grayscale</span>
+<span class="n">im_color</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;coins.jpeg&#39;</span><span class="p">)</span>  <span class="c1"># Replace with path if needed</span>
+<span class="n">gray_image</span> <span class="o">=</span> <span class="n">img_as_ubyte</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">rgb2gray</span><span class="p">(</span><span class="n">im_color</span><span class="p">))</span>
+
+<span class="c1"># Resize image by factor 1/16 to reduce processing load</span>
+<span class="n">scale_factor</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">16</span>
+<span class="n">new_h</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gray_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale_factor</span><span class="p">)</span>
+<span class="n">new_w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gray_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale_factor</span><span class="p">)</span>
+<span class="n">gray_resized</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="p">(</span><span class="n">new_w</span><span class="p">,</span> <span class="n">new_h</span><span class="p">),</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">INTER_AREA</span><span class="p">)</span>
+<span class="n">color_resized</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">im_color</span><span class="p">,</span> <span class="p">(</span><span class="n">new_w</span><span class="p">,</span> <span class="n">new_h</span><span class="p">),</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">INTER_AREA</span><span class="p">)</span>
+
+<span class="c1"># Invert grayscale image</span>
+<span class="n">gray_inverted</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">-</span> <span class="n">gray_resized</span>
+
+<span class="c1"># Define structuring element</span>
+<span class="n">se</span> <span class="o">=</span> <span class="n">square</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># Morphological operations</span>
+<span class="n">tophat</span> <span class="o">=</span> <span class="n">white_tophat</span><span class="p">(</span><span class="n">gray_resized</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
+<span class="n">bothat</span> <span class="o">=</span> <span class="n">black_tophat</span><span class="p">(</span><span class="n">gray_resized</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
+
+<span class="c1"># Apply top-hat on inverted image</span>
+<span class="n">tophat_inverted_input</span> <span class="o">=</span> <span class="n">white_tophat</span><span class="p">(</span><span class="n">gray_inverted</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
+
+<span class="c1"># Save PDFs</span>
+<span class="n">save_image_pdf</span><span class="p">(</span><span class="n">color_resized</span><span class="p">,</span> <span class="s2">&quot;coins_color_resized.pdf&quot;</span><span class="p">)</span>
+<span class="n">save_image_pdf</span><span class="p">(</span><span class="n">gray_resized</span><span class="p">,</span> <span class="s2">&quot;coins_grayscale_resized.pdf&quot;</span><span class="p">)</span>
+<span class="n">save_image_pdf</span><span class="p">(</span><span class="n">tophat</span><span class="p">,</span> <span class="s2">&quot;coins_tophat_resized.pdf&quot;</span><span class="p">)</span>
+<span class="n">save_image_pdf</span><span class="p">(</span><span class="n">bothat</span><span class="p">,</span> <span class="s2">&quot;coins_bothat_resized.pdf&quot;</span><span class="p">)</span>
+<span class="n">save_image_pdf</span><span class="p">(</span><span class="n">gray_inverted</span><span class="p">,</span> <span class="s2">&quot;coins_grayscale_inverted_resized.pdf&quot;</span><span class="p">)</span>
+<span class="n">save_image_pdf</span><span class="p">(</span><span class="n">tophat_inverted_input</span><span class="p">,</span> <span class="s2">&quot;coins_tophat_on_inverted_resized.pdf&quot;</span><span class="p">)</span>
+
+<span class="c1"># Visualize</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">18</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">color_resized</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Original Color&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">gray_resized</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Grayscale&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">bothat</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Bottom-hat&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">gray_inverted</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Grayscale Inverted&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">tophat_inverted_input</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Top-hat on Inverted Image&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="o">.</span><span class="n">ravel</span><span class="p">():</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/8e55f1b9d9d917524f8cf7a6fcafe192af784c27d09551955a16f2688dc1e834.png" src="_images/8e55f1b9d9d917524f8cf7a6fcafe192af784c27d09551955a16f2688dc1e834.png" />
+<img alt="_images/b27c7da88d6d47186169dbd1deb4c609cb5ca8ae49350a8f999859169529cfbd.png" src="_images/b27c7da88d6d47186169dbd1deb4c609cb5ca8ae49350a8f999859169529cfbd.png" />
 </div>
 </div>
 </section>
 <section id="programming-exercise-10-11">
 <h2>Programming exercise 10.11:<a class="headerlink" href="#programming-exercise-10-11" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
-<li><p>Run the following code to see the output of morphological gradient.</p></li>
+<li><p>Run the following code to see the output of morphological smoothing.</p></li>
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Morphological gradient</span>
-<span class="n">se</span> <span class="o">=</span> <span class="n">square</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">dilation_output</span> <span class="o">=</span> <span class="n">dilation</span><span class="p">(</span><span class="n">high_res_image</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
-<span class="n">erosion_output</span> <span class="o">=</span> <span class="n">erosion</span><span class="p">(</span><span class="n">high_res_image</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
-<span class="n">diff</span> <span class="o">=</span> <span class="n">dilation_output</span> <span class="o">-</span> <span class="n">erosion_output</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">131</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">dilation_output</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Dilation&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">132</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">erosion_output</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Erosion&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">133</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Difference (morphological gradient)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Morphological smoothing with PDF saving</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">opening</span><span class="p">,</span> <span class="n">closing</span><span class="p">,</span> <span class="n">square</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+
+<span class="c1"># Load the grayscale image</span>
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/cropped_kilim_image.png&quot;</span>
+<span class="n">gray_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
+
+<span class="c1"># Define two structuring elements</span>
+<span class="n">se_small</span> <span class="o">=</span> <span class="n">square</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">se_large</span> <span class="o">=</span> <span class="n">square</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>
+
+<span class="c1"># Morphological smoothing (opening followed by closing)</span>
+<span class="c1"># Small SE</span>
+<span class="n">opening_small</span> <span class="o">=</span> <span class="n">opening</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">se_small</span><span class="p">)</span>
+<span class="n">smoothing_small</span> <span class="o">=</span> <span class="n">closing</span><span class="p">(</span><span class="n">opening_small</span><span class="p">,</span> <span class="n">se_small</span><span class="p">)</span>
+
+<span class="c1"># Large SE</span>
+<span class="n">opening_large</span> <span class="o">=</span> <span class="n">opening</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">se_large</span><span class="p">)</span>
+<span class="n">smoothing_large</span> <span class="o">=</span> <span class="n">closing</span><span class="p">(</span><span class="n">opening_large</span><span class="p">,</span> <span class="n">se_large</span><span class="p">)</span>
+
+<span class="c1"># Function to save a grayscale image as PDF</span>
+<span class="k">def</span> <span class="nf">save_as_pdf</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1"># Save each output as PDF</span>
+<span class="n">save_as_pdf</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="s2">&quot;Original_Grayscale.pdf&quot;</span><span class="p">)</span>
+<span class="n">save_as_pdf</span><span class="p">(</span><span class="n">opening_small</span><span class="p">,</span> <span class="s2">&quot;Opening_SE5.pdf&quot;</span><span class="p">)</span>
+<span class="n">save_as_pdf</span><span class="p">(</span><span class="n">smoothing_small</span><span class="p">,</span> <span class="s2">&quot;Smoothing_SE5.pdf&quot;</span><span class="p">)</span>
+<span class="n">save_as_pdf</span><span class="p">(</span><span class="n">opening_large</span><span class="p">,</span> <span class="s2">&quot;Opening_SE11.pdf&quot;</span><span class="p">)</span>
+<span class="n">save_as_pdf</span><span class="p">(</span><span class="n">smoothing_large</span><span class="p">,</span> <span class="s2">&quot;Smoothing_SE11.pdf&quot;</span><span class="p">)</span>
+
+<span class="c1"># Optional: display combined figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original Grayscale&#39;</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">opening_small</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Opening (SE 5)&#39;</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">smoothing_small</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Smoothing (SE 5)&#39;</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">opening_large</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Opening (SE 11)&#39;</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">smoothing_large</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Smoothing (SE 11)&#39;</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/32c41ce6ba5a5f5d9c3ae8a78a710c8fc1a4e0cc6c8cc1bbcd278d7e21ddff72.png" src="_images/32c41ce6ba5a5f5d9c3ae8a78a710c8fc1a4e0cc6c8cc1bbcd278d7e21ddff72.png" />
+<img alt="_images/88f2d18c509c0d54f8aeba32340f55d74702d3c1d4fb8d92586f011e1e19284b.png" src="_images/88f2d18c509c0d54f8aeba32340f55d74702d3c1d4fb8d92586f011e1e19284b.png" />
 </div>
 </div>
 </section>
 <section id="programming-exercise-10-12">
 <h2>Programming exercise 10.12:<a class="headerlink" href="#programming-exercise-10-12" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
+<li><p>Run the following code to see the output of morphological gradient.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">dilation</span><span class="p">,</span> <span class="n">erosion</span><span class="p">,</span> <span class="n">square</span>
+<span class="kn">from</span> <span class="nn">skimage.filters</span> <span class="kn">import</span> <span class="n">sobel</span>
+
+<span class="c1"># Load the grayscale image</span>
+<span class="n">image_path</span> <span class="o">=</span> <span class="s2">&quot;images/cropped_kilim_image.png&quot;</span>
+<span class="n">gray_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
+
+<span class="c1"># Define two structuring elements</span>
+<span class="n">se_small</span> <span class="o">=</span> <span class="n">square</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">se_large</span> <span class="o">=</span> <span class="n">square</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="c1"># Function to compute inverted morphological gradient and save PDF</span>
+<span class="k">def</span> <span class="nf">save_inverted_gradient</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">se</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="n">dilation_output</span> <span class="o">=</span> <span class="n">dilation</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
+    <span class="n">erosion_output</span> <span class="o">=</span> <span class="n">erosion</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
+    <span class="n">gradient</span> <span class="o">=</span> <span class="n">dilation_output</span> <span class="o">-</span> <span class="n">erosion_output</span>
+    <span class="n">gradient_inv</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">-</span> <span class="n">gradient</span>  <span class="c1"># invert for visualization</span>
+
+    <span class="c1"># Save PDF</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">gradient_inv</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1"># Save inverted gradients</span>
+<span class="n">save_inverted_gradient</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">se_small</span><span class="p">,</span> <span class="s2">&quot;Morphological_Gradient_SE3.pdf&quot;</span><span class="p">)</span>
+<span class="n">save_inverted_gradient</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">se_large</span><span class="p">,</span> <span class="s2">&quot;Morphological_Gradient_SE7.pdf&quot;</span><span class="p">)</span>
+
+<span class="c1"># Compute Sobel edge detection</span>
+<span class="n">sobel_edges</span> <span class="o">=</span> <span class="n">sobel</span><span class="p">(</span><span class="n">gray_image</span><span class="p">)</span>
+<span class="n">sobel_edges</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">-</span> <span class="n">sobel_edges</span>
+
+<span class="c1"># Save Sobel result as PDF</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">sobel_edges</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;Sobel.pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1"># Optional: visualize all</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">141</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Grayscale Image&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">142</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="mi">255</span> <span class="o">-</span> <span class="p">(</span><span class="n">dilation</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">se_small</span><span class="p">)</span> <span class="o">-</span> <span class="n">erosion</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">se_small</span><span class="p">)),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Morphological Gradient SE 3&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">143</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="mi">255</span> <span class="o">-</span> <span class="p">(</span><span class="n">dilation</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">se_large</span><span class="p">)</span> <span class="o">-</span> <span class="n">erosion</span><span class="p">(</span><span class="n">gray_image</span><span class="p">,</span> <span class="n">se_large</span><span class="p">)),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Morphological Gradient SE 7&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">144</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">sobel_edges</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Sobel Edge Detection&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/3c97466bfa68eede3ae87720a9bb02daaad1fabf55248b9c59ee6bf390ea2f20.png" src="_images/3c97466bfa68eede3ae87720a9bb02daaad1fabf55248b9c59ee6bf390ea2f20.png" />
+</div>
+</div>
+</section>
+<section id="programming-exercise-10-13">
+<h2>Programming exercise 10.13:<a class="headerlink" href="#programming-exercise-10-13" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
 <li><p>Run the following code to perform morphological segmentation.</p></li>
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Morphological segmentation with Watershed algorithm</span>
-<span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">io</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">color</span>
-<span class="kn">from</span> <span class="nn">skimage.util</span> <span class="kn">import</span> <span class="n">img_as_ubyte</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="kn">import</span> <span class="n">binary_fill_holes</span>
-<span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">square</span><span class="p">,</span> <span class="n">disk</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">io</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">img_as_ubyte</span>
+<span class="kn">from</span> <span class="nn">skimage.filters</span> <span class="kn">import</span> <span class="n">sobel</span>
+<span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">disk</span><span class="p">,</span> <span class="n">dilation</span>
 <span class="kn">from</span> <span class="nn">skimage.filters.rank</span> <span class="kn">import</span> <span class="n">median</span>
 <span class="kn">from</span> <span class="nn">skimage.transform</span> <span class="kn">import</span> <span class="n">rescale</span>
-<span class="kn">from</span> <span class="nn">skimage.filters</span> <span class="kn">import</span> <span class="n">sobel</span>
 <span class="kn">from</span> <span class="nn">skimage.measure</span> <span class="kn">import</span> <span class="n">label</span>
 <span class="kn">from</span> <span class="nn">skimage.segmentation</span> <span class="kn">import</span> <span class="n">watershed</span>
-<span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">dilation</span>
-
-<span class="c1"># Download the image</span>
-<span class="o">!</span>wget -cq https://raw.githubusercontent.com/hazalmogultay/466Images/master/W12/coins.jpeg
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c1"># Load the color image</span>
 <span class="n">im_color</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;coins.jpeg&#39;</span><span class="p">)</span>
@@ -1507,34 +1713,51 @@ document.write(`
 <span class="n">markers</span><span class="p">[</span><span class="n">im</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">label_img2</span> <span class="o">=</span> <span class="n">label</span><span class="p">(</span><span class="n">markers</span><span class="p">)</span>
 
-<span class="c1"># Apply Watershed algorithm on the image gradient using the markers to perform segmentation </span>
+<span class="c1"># Apply Watershed algorithm</span>
 <span class="n">labels1</span> <span class="o">=</span> <span class="n">watershed</span><span class="p">(</span><span class="n">im_gradient</span><span class="p">,</span> <span class="n">markers</span><span class="o">=</span><span class="n">label_img2</span><span class="p">)</span>
 
-<span class="c1"># Display results</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
+<span class="c1"># Function to save an image as PDF</span>
+<span class="k">def</span> <span class="nf">save_pdf</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1"># Save each image as PDF</span>
+<span class="n">save_pdf</span><span class="p">(</span><span class="n">im_color</span><span class="p">,</span> <span class="s2">&quot;coins_color.pdf&quot;</span><span class="p">)</span>          <span class="c1"># Original color</span>
+<span class="n">save_pdf</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="s2">&quot;coins_inverted.pdf&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> <span class="c1"># Inverted</span>
+<span class="n">save_pdf</span><span class="p">(</span><span class="n">im_gradient</span><span class="p">,</span> <span class="s2">&quot;coins_gradient.pdf&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> <span class="c1"># Gradient</span>
+<span class="n">save_pdf</span><span class="p">(</span><span class="n">markers</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span> <span class="s2">&quot;coins_markers.pdf&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> <span class="c1"># Markers</span>
+<span class="n">save_pdf</span><span class="p">(</span><span class="n">labels1</span><span class="p">,</span> <span class="s2">&quot;coins_watershed.pdf&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span> <span class="c1"># Watershed result</span>
+
+<span class="c1"># Display all images</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">151</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im_color</span><span class="p">)</span>  <span class="c1"># Display the original color image</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original Color Image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im_color</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original Color Image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">152</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Inverted Image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Inverted Image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">153</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im_gradient</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Image Gradient&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Image Gradient&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">154</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">markers</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Markers&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">markers</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Markers&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">155</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">labels1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Results of Watershed&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Watershed Result&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
@@ -1543,61 +1766,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/f8a18b8344df0535a0b9e0d397873d2ec128d5cc76c704923f1961dba86e64ca.png" src="_images/f8a18b8344df0535a0b9e0d397873d2ec128d5cc76c704923f1961dba86e64ca.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cv2</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">skimage.morphology</span> <span class="kn">import</span> <span class="n">opening</span><span class="p">,</span> <span class="n">erosion</span><span class="p">,</span> <span class="n">dilation</span><span class="p">,</span> <span class="n">disk</span><span class="p">,</span> <span class="n">closing</span>
-
-<span class="c1"># Load Image</span>
-<span class="c1">#image_color = cv2.imread(&quot;coins2.jpg&quot;)</span>
-<span class="c1">#image_color = cv2.cvtColor(image_color, cv2.COLOR_BGR2RGB)</span>
-<span class="c1">#image_color = cv2.resize(image_color, None, fx=0.125, fy=0.125, interpolation=cv2.INTER_AREA)</span>
-<span class="c1">#image_color = image_color[115:, :]</span>
-<span class="c1">#cv2.imwrite(&quot;coins3.png&quot;, cv2.cvtColor(image_color, cv2.COLOR_RGB2BGR))</span>
-
-
-<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;images/coins3.png&quot;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
-<span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">)</span>
-
-<span class="c1"># Apply Thresholding</span>
-<span class="n">_</span><span class="p">,</span> <span class="n">binary</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">threshold</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">THRESH_BINARY_INV</span><span class="p">)</span>  <span class="c1"># Invert for better processing</span>
-
-<span class="c1"># Remove Textures using Morphological Closing</span>
-<span class="n">closed</span> <span class="o">=</span> <span class="n">closing</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="n">disk</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># Adjust kernel size if needed</span>
-
-
-<span class="c1"># Remove Small Objects (Small Coins) using Erosion → Dilation</span>
-<span class="n">eroded</span> <span class="o">=</span> <span class="n">erosion</span><span class="p">(</span><span class="n">closed</span><span class="p">,</span> <span class="n">disk</span><span class="p">(</span><span class="mi">32</span><span class="p">))</span>
-<span class="n">dilated</span> <span class="o">=</span> <span class="n">dilation</span><span class="p">(</span><span class="n">eroded</span><span class="p">,</span> <span class="n">disk</span><span class="p">(</span><span class="mi">33</span><span class="p">))</span>
-
-
-<span class="c1"># Display the final image</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">151</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Input image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">152</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">closed</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Binary image&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">153</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">eroded</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Eroded&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">154</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">dilated</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Only large coins&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>389 378
-</pre></div>
-</div>
-<img alt="_images/0a7e07f9ffbed2b1f869c2a04b70a78d910a0acfe0cfae1a5f2c0961652246f4.png" src="_images/0a7e07f9ffbed2b1f869c2a04b70a78d910a0acfe0cfae1a5f2c0961652246f4.png" />
+<img alt="_images/0188d11863ec7ab9a1bd6175921abcdecb0bea6528defcf87a31fcafd649e3dd.png" src="_images/0188d11863ec7ab9a1bd6175921abcdecb0bea6528defcf87a31fcafd649e3dd.png" />
 </div>
 </div>
 </section>
@@ -1685,10 +1854,11 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-10-6">Programming exercise 10.6:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-10-7">Programming exercise 10.7:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercises-10-8">Programming exercises 10.8</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-10-9">Programming exercise 10.9:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercises-10-9">Programming exercises 10.9</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-10-10">Programming exercise 10.10:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-10-11">Programming exercise 10.11:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-10-12">Programming exercise 10.12:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-exercise-10-13">Programming exercise 10.13:</a></li>
 </ul>
   </nav></div>
 
