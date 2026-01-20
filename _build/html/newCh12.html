@@ -152,7 +152,7 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="intro.html">
-                    Welcome to your Jupyter Book
+                    Image Processing: Theory, Practice, and Deep Learning Approaches
                 </a>
             </li>
         </ul>
@@ -416,6 +416,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">color</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">measure</span><span class="p">,</span> <span class="n">morphology</span><span class="p">,</span> <span class="n">io</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+
 
 <span class="k">def</span> <span class="nf">perpendicular_distance</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">line_start</span><span class="p">,</span> <span class="n">line_end</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">line_start</span> <span class="o">==</span> <span class="n">line_end</span><span class="p">):</span>
@@ -446,6 +448,10 @@ document.write(`
     <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">split_polygon</span><span class="p">(</span><span class="n">boundary_points</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">boundary_points</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">boundary_points</span><span class="p">[</span><span class="n">result</span><span class="p">]</span>
+
+<span class="c1"># Download the image from the specified URL</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/20.jpg&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/20.jpg&quot;</span><span class="p">)</span>
 
 <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;images/20.jpg&quot;</span><span class="p">)</span>  
 <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">image_rgb</span><span class="p">[</span><span class="mi">500</span><span class="p">:</span><span class="mi">1350</span><span class="p">,</span> <span class="mi">600</span><span class="p">:</span><span class="mi">1400</span><span class="p">]</span>
@@ -510,6 +516,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">measure</span><span class="p">,</span> <span class="n">morphology</span><span class="p">,</span> <span class="n">io</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
 
 <span class="k">def</span> <span class="nf">least_squares_error</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Compute Least Squares Error for the set of points P fitting a line. &quot;&quot;&quot;</span>
@@ -550,7 +557,11 @@ document.write(`
     <span class="k">return</span> <span class="n">vertices</span>
 
 <span class="c1"># === MAIN PIPELINE ===</span>
-<span class="c1"># Load the horse image</span>
+
+<span class="c1"># Download the image from the specified URL</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/20.jpg&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/20.jpg&quot;</span><span class="p">)</span>
+
 <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;images/20.jpg&quot;</span><span class="p">)</span>  <span class="c1"># Replace with your local image path if needed</span>
 <span class="n">image_rgb</span> <span class="o">=</span> <span class="n">image_rgb</span><span class="p">[</span><span class="mi">500</span><span class="p">:</span><span class="mi">1350</span><span class="p">,</span> <span class="mi">600</span><span class="p">:</span><span class="mi">1400</span><span class="p">]</span>
 
@@ -958,12 +969,22 @@ document.write(`
 <span class="kn">from</span> <span class="nn">skimage.feature</span> <span class="kn">import</span> <span class="n">match_descriptors</span><span class="p">,</span> <span class="n">plot_matches</span><span class="p">,</span> <span class="n">SIFT</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+
 
 <span class="k">def</span> <span class="nf">read_rgb</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
     <span class="n">img</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
         <span class="n">img</span> <span class="o">=</span> <span class="n">rgba2rgb</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">img</span>
+
+<span class="c1"># Download the image from the specified URL</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/mushroom3.png&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/mushroom3.png&quot;</span><span class="p">)</span>
+
+<span class="c1"># Download the image from the specified URL</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/mushroom4.png&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/mushroom4.png&quot;</span><span class="p">)</span>
 
 <span class="c1"># Read images</span>
 <span class="n">image1</span> <span class="o">=</span> <span class="n">read_rgb</span><span class="p">(</span><span class="s1">&#39;images/mushroom3.png&#39;</span><span class="p">)</span>
@@ -1005,7 +1026,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/6c19c0cd4be1196ff9d33e006a8d933d7c8c1c2bf6db877d11923f8f3856160f.png" src="_images/6c19c0cd4be1196ff9d33e006a8d933d7c8c1c2bf6db877d11923f8f3856160f.png" />
+<img alt="_images/438d542b8489a85518f576f332d72200337ea352fef18c81873e66bfbf695e10.png" src="_images/438d542b8489a85518f576f332d72200337ea352fef18c81873e66bfbf695e10.png" />
 </div>
 </div>
 </section>
@@ -1021,11 +1042,23 @@ document.write(`
 <span class="kn">from</span> <span class="nn">skimage.color</span> <span class="kn">import</span> <span class="n">rgb2gray</span><span class="p">,</span> <span class="n">rgba2rgb</span>
 <span class="kn">from</span> <span class="nn">skimage.feature</span> <span class="kn">import</span> <span class="n">local_binary_pattern</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+
 
 <span class="c1"># Parameters</span>
 <span class="n">radius</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">n_points</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">radius</span>
 <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;uniform&#39;</span>
+
+<span class="c1"># Download the images from the specified URL</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/brick1.png&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/brick1.png&quot;</span><span class="p">)</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/brick2.png&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/brick2.png&quot;</span><span class="p">)</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/grass.png&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/grass.png&quot;</span><span class="p">)</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/bird.png&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/bird.png&quot;</span><span class="p">)</span>
 
 <span class="c1"># Images and titles</span>
 <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;images/brick1.png&#39;</span><span class="p">,</span> <span class="s1">&#39;images/brick2.png&#39;</span><span class="p">,</span> <span class="s1">&#39;images/grass.png&#39;</span><span class="p">,</span> <span class="s1">&#39;images/bird.png&#39;</span><span class="p">]</span>

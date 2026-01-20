@@ -152,7 +152,7 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="intro.html">
-                    Welcome to your Jupyter Book
+                    Image Processing: Theory, Practice, and Deep Learning Approaches
                 </a>
             </li>
         </ul>
@@ -421,6 +421,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+
 
 <span class="k">class</span> <span class="nc">Region</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
@@ -540,6 +542,9 @@ document.write(`
 <span class="k">if</span> <span class="n">kernel_sz</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
     <span class="n">kernel_sz</span> <span class="o">+=</span> <span class="mi">1</span>
 
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/input_split_merge.jpg&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/input_split_merge.jpg&quot;</span><span class="p">)</span>
+    
 <span class="c1"># Load and process image</span>
 <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;images/input_split_merge.jpg&quot;</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -561,7 +566,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2b0d558047eb780644875cdbff4d30c709c2cccc22e791c83a99ef9f26251258.png" src="_images/2b0d558047eb780644875cdbff4d30c709c2cccc22e791c83a99ef9f26251258.png" />
+<img alt="_images/03d9b1a39b7aec38bbc5602020cda06dbfa461eede62f78844cf8394010bd2b5.png" src="_images/03d9b1a39b7aec38bbc5602020cda06dbfa461eede62f78844cf8394010bd2b5.png" />
 </div>
 </div>
 </section>
@@ -583,9 +588,14 @@ document.write(`
 <span class="kn">import</span> <span class="nn">cv2</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+
 
 <span class="c1"># Parameters</span>
 <span class="n">k</span> <span class="o">=</span> <span class="mi">6</span>  <span class="c1"># You can change this to any number of segments you want</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/tulip2.jpeg&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/tulip2.jpeg&quot;</span><span class="p">)</span>
 
 <span class="c1"># Load the image</span>
 <span class="n">image_bgr</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;images/tulip2.jpeg&#39;</span><span class="p">)</span>
@@ -644,6 +654,11 @@ document.write(`
 <span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">MeanShift</span><span class="p">,</span> <span class="n">estimate_bandwidth</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="k">as</span> <span class="nn">pylab</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+
+
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/tulip2.jpeg&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/tulip2.jpeg&quot;</span><span class="p">)</span>
 
 <span class="c1"># Load image </span>
 <span class="n">image_bgr</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;images/tulip2.jpeg&#39;</span><span class="p">)</span>  <span class="c1"># BGR format</span>
@@ -775,10 +790,13 @@ Estimated bandwidth: 49.78323383001994
 <span class="kn">from</span> <span class="nn">skimage.transform</span> <span class="kn">import</span> <span class="n">rescale</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">img_as_ubyte</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
 
 
 <span class="c1"># Load image and convert it to grayscale</span>
-<span class="o">!</span>wget -cq https://raw.githubusercontent.com/hazalmogultay/466Images/master/W12/coins.jpeg
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/coins.jpeg&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/coins.jpeg&quot;</span><span class="p">)</span>
+
 <span class="n">im</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;coins.jpeg&#39;</span><span class="p">)</span>
 <span class="n">im_g</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">rgb2gray</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
 <span class="n">im_g</span> <span class="o">=</span> <span class="n">rescale</span><span class="p">(</span><span class="n">im_g</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">anti_aliasing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1077,9 +1095,14 @@ Video 6: Graph-based Image Segmentation
 <span class="kn">from</span> <span class="nn">skimage.transform</span> <span class="kn">import</span> <span class="n">hough_circle</span><span class="p">,</span> <span class="n">hough_circle_peaks</span>
 <span class="kn">from</span> <span class="nn">skimage.draw</span> <span class="kn">import</span> <span class="n">circle_perimeter</span>
 <span class="kn">from</span> <span class="nn">skimage.transform</span> <span class="kn">import</span> <span class="n">rescale</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+
 
 <span class="c1"># Load image and rescale it</span>
-<span class="o">!</span>wget -cq https://raw.githubusercontent.com/hazalmogultay/466Images/master/W13/paralar.jpeg
+
+
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/itironal/466Companion/main/images/paralar.jpeg&quot;</span>
+<span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;images/paralar.jpeg&quot;</span><span class="p">)</span>
 <span class="n">image</span> <span class="o">=</span> <span class="n">img_as_ubyte</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">rgb2gray</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s1">&#39;paralar.jpeg&#39;</span><span class="p">)))</span>
 <span class="n">image</span> <span class="o">=</span> <span class="n">rescale</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">anti_aliasing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
