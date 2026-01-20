@@ -1,6 +1,6 @@
-# Fundamentals of Image Processing with Python
+# Image Processing: Theory, Practice, and Deep Learning Approaches
 
-This is the companion e-book for “Fundamentals of Image Processing with Python”. In this e-book, you will find supporting material for the content presented in the print book. These include interactive code pieces that you can execute, and videos that facilitates your learning.
+This is the companion e-book for “Image Processing: Theory, Practice, and Deep Learning Approaches”. In this e-book, you will find supporting material for the content presented in the print book. These include interactive code pieces that you can execute, and videos that facilitates your learning.
 
 This e-book is presented as an HTML website, with videos that can be played directly in your web browser. For interactive programming content, we provide two options:
 
